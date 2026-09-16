@@ -812,6 +812,16 @@ footer {
   gap: 8px;
 }
 .footer-brand { color: var(--accent-dark); font-weight: 700; }
+.footer-disclaimer {
+  width: 100%;
+  text-align: center;
+  font-size: 11px;
+  color: var(--text-muted);
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+  opacity: 0.78;
+  line-height: 1.6;
+}
 
 /* ===== INDEX PAGE ===== */
 .hero {
