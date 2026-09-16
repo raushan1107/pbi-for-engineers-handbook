@@ -1,6 +1,6 @@
 # Power BI Data Analysis for Engineers
 
-**by Raushan Ranjan, Microsoft Certified Trainer**
+**by [Raushan Ranjan](https://raushan-ranjan.azurewebsites.net/), Microsoft Certified Trainer**
 
 A practical end-to-end handbook for learning Power BI — from connecting raw Excel files to
 publishing secured, interactive dashboards. Built around the fictional RR EngineerWorks
@@ -12,7 +12,7 @@ manufacturing and sales case study, which runs consistently across all 10 module
 
 ## About This Handbook
 
-This handbook is prepared as free personal training material by Raushan Ranjan, Microsoft
+This handbook is prepared as free personal training material by [Raushan Ranjan](https://raushan-ranjan.azurewebsites.net/), Microsoft
 Certified Trainer, for anyone learning Power BI. It reflects a simple belief: quality
 education should be available to everyone, regardless of ability to pay for it. This material
 is shared freely for learning purposes — it is not a commercial product, and it isn't for

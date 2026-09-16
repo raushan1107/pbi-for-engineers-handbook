@@ -53,6 +53,16 @@ body {
   min-height: 100vh;
 }
 a { color: inherit; }
+.author-link {
+  text-decoration: underline;
+  text-decoration-color: rgba(255,255,255,0.22);
+  text-underline-offset: 2px;
+  transition: color var(--transition), text-decoration-color var(--transition);
+}
+.author-link:hover {
+  color: var(--accent);
+  text-decoration-color: var(--accent);
+}
 img { max-width: 100%; }
 
 /* ===== TOP BAR ===== */
