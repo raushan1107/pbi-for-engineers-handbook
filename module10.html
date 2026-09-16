@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 10: Capstone — End-to-End Solution | Power BI Data Analysis for Engineers</title>
+  <link rel="stylesheet" href="css/handbook.css">
+</head>
+<body>
+
+  <canvas id="confetti-canvas"></canvas>
+
+  <div class="completion-overlay" id="completion-overlay">
+    <div class="completion-card">
+      <div class="completion-emoji">🏆</div>
+      <div class="completion-title">Handbook Complete!</div>
+      <div class="completion-message">Outstanding — you've completed all 10 modules of Power BI Data Analysis for Engineers. You're ready to build production-ready analytics solutions.</div>
+      <button class="btn-overlay-close" id="overlay-close">View Summary →</button>
+    </div>
+  </div>
+
+  <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+  <header class="topbar">
+    <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <a href="index.html" class="topbar-brand">
+      <div class="brand-icon">PB</div>
+      <span>Power BI for Engineers</span>
+    </a>
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="search" class="search-input" id="search-input"
+             placeholder="Search modules and topics…" autocomplete="off" spellcheck="false">
+      <div class="search-results" id="search-results"></div>
+    </div>
+    <div class="topbar-right">
+      <span class="topbar-byline">by <a href="https://raushan-ranjan.azurewebsites.net/" target="_blank" rel="noopener noreferrer" class="author-link">Raushan Ranjan</a>, MCT</span>
+    </div>
+  </header>
+
+  <nav class="sidebar" id="sidebar"></nav>
+
+  <div class="main-layout">
+    <main class="page-content">
+
+      <div class="page-header">
+        <span class="module-badge">Module 10</span>
+        <h1 class="page-title">Capstone: End-to-End Solution</h1>
+        <p class="page-subtitle">
+          This is where everything comes together. You choose a real analytical challenge,
+          build a complete Power BI solution from raw data to published report, and present
+          your findings using the storytelling techniques from Module 8. No scaffolding —
+          just your skills, the dataset, and a blank canvas.
+        </p>
+        <div class="module-meta">
+          <span class="meta-pill">⏱ <strong>~4–6 hours</strong></span>
+          <span class="meta-pill">📋 <strong>4 stages</strong> + presentation</span>
+          <span class="meta-pill">🎯 <strong>All modules applied</strong></span>
+          <span class="meta-pill">🏆 <strong>Final project</strong></span>
+        </div>
+      </div>
+
+      <!-- ================================================
+           TOPIC 1 — Choose Your Scenario
+           ================================================ -->
+      <section class="topic-section" id="scenarios">
+        <div class="topic-header">
+          <div class="topic-num">1</div>
+          <h2 class="topic-title">Choose Your Scenario</h2>
+        </div>
+        <div class="topic-rule"></div>
+
+        <div class="block">
+          <div class="block-label">How the Capstone Works</div>
+          <p>
+            You will build a completely new Power BI report against the
+            <strong>RR EngineerWorks</strong> semantic model from scratch — not extending
+            the report from previous modules, but starting a new <code>.pbix</code> file
+            connected to the same dataset. This simulates the real-world situation where a
+            new stakeholder asks for a fresh analytical view of data you already know.
+          </p>
+          <p>
+            Choose one of the three scenarios below. Each targets a different audience and
+            requires a different analytical focus, but all use the same underlying tables.
+            Pick the one that most closely matches your professional context or the one that
+            challenges you most.
+          </p>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Scenario A — Regional Sales Manager Dashboard</div>
+          <p>
+            <strong>Audience:</strong> 10 regional sales managers, each responsible for one region.
+          </p>
+          <p>
+            <strong>Business question:</strong> Which regions are on track against their
+            2024 sales targets, and what product mix is driving or dragging performance?
+          </p>
+          <p><strong>Required views:</strong></p>
+          <ul>
+            <li>Page 1: Region overview — KPI cards for Total Sales, Target, Variance to Target, and Attainment %; top 5 customers by revenue; month-on-month trend.</li>
+            <li>Page 2: Product breakdown — category and subcategory sales with conditional formatting to highlight underperformers; drill-through to product detail.</li>
+            <li>Page 3: Sales rep analysis — orders and revenue by SalesRepName; average order value; order status distribution.</li>
+          </ul>
+          <p><strong>Security requirement:</strong> Dynamic RLS — each manager sees only their own region's data using <code>USERPRINCIPALNAME()</code> and a <code>UserRegionMap</code> table.</p>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Scenario B — Production Operations Dashboard</div>
+          <p>
+            <strong>Audience:</strong> Plant managers and the operations director.
+          </p>
+          <p>
+            <strong>Business question:</strong> Are the three production plants operating
+            efficiently, and how does actual output compare to planned targets across products
+            and months?
+          </p>
+          <p><strong>Required views:</strong></p>
+          <ul>
+            <li>Page 1: Plant performance — production volume, efficiency %, and defect rate (ScrapQuantity ÷ QuantityProduced) per plant; gauge or KPI visual for efficiency against a 95% threshold.</li>
+            <li>Page 2: Product production trend — monthly QuantityProduced per product across all plants; production heatmap by plant and month.</li>
+            <li>Page 3: Sales vs production alignment — side-by-side comparison of units sold (Fact_Orders) vs units produced (Fact_Production) per product; flag where sales significantly exceed or underrun production.</li>
+          </ul>
+          <p><strong>New measure required:</strong> <code>Defect Rate % = DIVIDE(SUM(Fact_Production[ScrapQuantity]), SUM(Fact_Production[QuantityProduced]), 0)</code> formatted as a percentage.</p>
+          <p><strong>Security requirement:</strong> Static RLS — one role per plant, filtering <code>Fact_Production[PlantID]</code> so each plant manager sees only their own plant's data.</p>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Scenario C — Executive Operations Summary</div>
+          <p>
+            <strong>Audience:</strong> C-suite and senior leadership — one page per area,
+            high-level insights, minimal clutter.
+          </p>
+          <p>
+            <strong>Business question:</strong> How is the business performing holistically
+            across sales, production, and regional footprint — and what needs immediate
+            attention?
+          </p>
+          <p><strong>Required views:</strong></p>
+          <ul>
+            <li>Page 1: Executive summary — 6 headline KPI cards (Total Sales, Sales vs Target, YoY Growth %, Total Units Produced, Average Order Value, Active Customers); a smart narrative summary; Decomposition Tree for Total Sales.</li>
+            <li>Page 2: Trend dashboard — YTD Sales with PYTD comparison; MoM production trend; regional attainment heatmap.</li>
+            <li>Page 3: What-if scenario — Price increase % slicer; Adjusted Revenue and Adjusted Margin cards; commentary text box explaining the scenario.</li>
+          </ul>
+          <p><strong>Design constraint:</strong> All pages must follow the dark theme established in Module 7, use no more than three chart types per page, and include a dynamic report title reflecting active slicer selections.</p>
+          <p><strong>Security requirement:</strong> No RLS needed — executives see all data. Configure workspace App with Viewer access for leadership group only.</p>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Starting File Setup</div>
+          <p>
+            Create a new <code>.pbix</code> file. Connect it to the RR EngineerWorks
+            semantic model in one of two ways:
+          </p>
+          <ul>
+            <li>
+              <strong>Option 1 — Live Connection (recommended if published):</strong>
+              In the new file, click <strong>Home → Get data → Power BI datasets</strong>.
+              Select <strong>RR_EngineerWorks_v8</strong> from the Service. The model
+              connects live — all tables and measures are available, and you start with
+              a blank report canvas.
+            </li>
+            <li>
+              <strong>Option 2 — Copy and strip:</strong>
+              <strong>File → Save As</strong> on <code>RR_EngineerWorks_v8.pbix</code>
+              to create <code>RR_Capstone_[Scenario].pbix</code>. Delete all existing
+              report pages. The model remains intact.
+            </li>
+          </ul>
+          <p>
+            Name the file: <code>RR_Capstone_A.pbix</code>, <code>RR_Capstone_B.pbix</code>,
+            or <code>RR_Capstone_C.pbix</code> depending on your choice.
+          </p>
+        </div>
+      </section>
+
+      <!-- ================================================
+           TOPIC 2 — Stage 1: Transform
+           ================================================ -->
+      <section class="topic-section" id="build-transform">
+        <div class="topic-header">
+          <div class="topic-num">2</div>
+          <h2 class="topic-title">Stage 1 — Transform</h2>
+        </div>
+        <div class="topic-rule"></div>
+
+        <div class="block">
+          <div class="block-label">What to Do in This Stage</div>
+          <p>
+            If you used Option 2 (copy and strip), your Power Query transformations from
+            Modules 2 and 3 are already applied. If you used Option 1 (Live Connection to
+            the Service dataset), no Power Query access is needed — the model is already clean.
+          </p>
+          <p>
+            For <strong>Scenario A and C</strong>, no additional transformation is needed.
+          </p>
+          <p>
+            For <strong>Scenario B</strong>, create a new calculated column or apply the
+            additional steps below.
+          </p>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Scenario B — Additional Transform: Efficiency %</div>
+          <p>
+            The existing <code>Fact_Production</code> table has <code>QuantityProduced</code>
+            and <code>PlannedQuantity</code>. In Power Query (if using Option 2), add a
+            custom column:
+          </p>
+          <pre><code>= [QuantityProduced] / [PlannedQuantity]</code></pre>
+          <p>
+            Name the column <code>EfficiencyRatio</code>. Format as a percentage in the
+            data model. Alternatively, compute this as a DAX measure (preferred):
+          </p>
+          <pre><code>Efficiency % =
+DIVIDE(
+    SUM(Fact_Production[QuantityProduced]),
+    SUM(Fact_Production[PlannedQuantity]),
+    0
+)</code></pre>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Scenario A — Additional Table: UserRegionMap</div>
+          <p>
+            Dynamic RLS requires a <code>UserRegionMap</code> lookup table. Create it
+            using <strong>Enter Data</strong> (Home → Enter data):
+          </p>
+          <table class="data-table">
+            <thead><tr><th>UserEmail</th><th>RegionName</th></tr></thead>
+            <tbody>
+              <tr><td>sarah@yourdomain.com</td><td>North England</td></tr>
+              <tr><td>james@yourdomain.com</td><td>Midlands</td></tr>
+              <tr><td>your-own-email@domain.com</td><td>South England</td></tr>
+              <tr><td colspan="2" style="text-align:center; font-style:italic;">… one row per manager per region …</td></tr>
+            </tbody>
+          </table>
+          <p>
+            Name the table <code>UserRegionMap</code>. Use real email addresses
+            (Microsoft Entra UPNs) for production — for the capstone, you can use your
+            own email to test it. Do <em>not</em> create a relationship between this table
+            and Dim_Regions; it is used only inside the RLS DAX expression.
+          </p>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Stage 1 Checklist</div>
+          <ul>
+            <li>New file created: <code>RR_Capstone_[A/B/C].pbix</code></li>
+            <li>Model connected to the correct data (Live Connection or stripped copy)</li>
+            <li>Any scenario-specific tables or columns added (UserRegionMap for A; Efficiency measure for B)</li>
+            <li>Power Query applied and closed (no pending changes)</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ================================================
+           TOPIC 3 — Stage 2: Model
+           ================================================ -->
+      <section class="topic-section" id="build-model">
+        <div class="topic-header">
+          <div class="topic-num">3</div>
+          <h2 class="topic-title">Stage 2 — Model</h2>
+        </div>
+        <div class="topic-rule"></div>
+
+        <div class="block">
+          <div class="block-label">New Measures for Each Scenario</div>
+          <p>
+            All measures go into the <strong>_Measures</strong> table. Add only what your
+            scenario requires — do not copy all 25 measures from previous modules unless
+            you need them.
+          </p>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Scenario A — Required Measures</div>
+          <pre><code>-- Already built in Modules 5–6: use as-is
+Total Sales
+Total Target
+Variance to Target
+Attainment %
+Average Order Value
+MoM Sales Growth %
+
+-- New for Scenario A:
+Active Customers =
+DISTINCTCOUNT(Fact_Orders[CustomerID])
+
+Orders by Status =
+CALCULATE(
+    COUNTROWS(Fact_Orders),
+    ALLEXCEPT(Fact_Orders, Fact_Orders[OrderStatus])
+)</code></pre>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Scenario B — Required Measures</div>
+          <pre><code>Total Units Produced =
+SUM(Fact_Production[QuantityProduced])
+
+Total Planned =
+SUM(Fact_Production[PlannedQuantity])
+
+Efficiency % =
+DIVIDE([Total Units Produced], [Total Planned], 0)
+
+Defect Rate % =
+DIVIDE(
+    SUM(Fact_Production[ScrapQuantity]),
+    SUM(Fact_Production[QuantityProduced]),
+    0
+)
+
+-- Cross-table alignment (links production to sales by ProductCode):
+Units Sold =
+CALCULATE(
+    SUM(Fact_Orders[Quantity]),
+    Fact_Orders[OrderStatus] = "Completed"
+)
+
+Production vs Sales Gap =
+[Total Units Produced] - [Units Sold]</code></pre>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Scenario C — Required Measures</div>
+          <pre><code>-- From previous modules — confirm these exist:
+Total Sales, Total Target, Attainment %, YTD Sales,
+PYTD Sales, YoY Growth %, Average Order Value,
+Adjusted Revenue (using Price Increase % parameter)
+
+-- New for Scenario C:
+Active Customers =
+DISTINCTCOUNT(Fact_Orders[CustomerID])
+
+Chart Title =
+"Executive Summary" &amp;
+IF(
+    ISFILTERED(Dim_Date[Year]),
+    " — " &amp; SELECTEDVALUE(Dim_Date[Year], "All Years"),
+    " — 2024"
+)</code></pre>
+        </div>
+
+        <div class="block">
+          <div class="block-label">RLS Role Setup (Scenario A and B)</div>
+          <p>
+            <strong>Scenario A — Dynamic RLS:</strong> Create one role named
+            <code>Regional Manager</code>. In the <code>Dim_Regions</code> table filter:
+          </p>
+          <pre><code>[RegionName] IN
+CALCULATETABLE(
+    VALUES(UserRegionMap[RegionName]),
+    UserRegionMap[UserEmail] = USERPRINCIPALNAME()
+)</code></pre>
+          <p>
+            Test using <strong>Modeling → View as → Regional Manager</strong>. You will
+            see data for whatever region is mapped to your own email in the
+            <code>UserRegionMap</code> table.
+          </p>
+          <p>
+            <strong>Scenario B — Static RLS per plant:</strong> Create three roles —
+            <code>Plant_P01</code>, <code>Plant_P02</code>, <code>Plant_P03</code>.
+            For each, apply the filter to <code>Fact_Production</code>:
+          </p>
+          <pre><code>-- For Plant_P01:
+[PlantID] = "P01"</code></pre>
+          <p>
+            Test each role with View as to confirm the Production pages filter correctly.
+          </p>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Stage 2 Checklist</div>
+          <ul>
+            <li>All required measures created and stored in _Measures</li>
+            <li>Measures formatted correctly (currency £#,0.00 for financial; 0.0% for rates; 0 for counts)</li>
+            <li>RLS roles defined and tested in Desktop (Scenarios A and B)</li>
+            <li>Any new relationships verified in Model view (especially UserRegionMap — it should have NO relationship arrows)</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ================================================
+           TOPIC 4 — Stage 3: Visualize
+           ================================================ -->
+      <section class="topic-section" id="build-visualize">
+        <div class="topic-header">
+          <div class="topic-num">4</div>
+          <h2 class="topic-title">Stage 3 — Visualize</h2>
+        </div>
+        <div class="topic-rule"></div>
+
+        <div class="block">
+          <div class="block-label">Design Constraints for All Scenarios</div>
+          <ul>
+            <li>Exactly <strong>3 report pages</strong> as specified in your scenario.</li>
+            <li>Consistent colour palette across all pages — pick one from Module 7 or create your own.</li>
+            <li>Every page must have a <strong>page title text box</strong> with the page name and a subtitle explaining the audience or purpose.</li>
+            <li>At least one page must use <strong>conditional formatting</strong> (background colour, data bars, or icons) on a table or matrix.</li>
+            <li>At least one page must have a <strong>slicer</strong> connected to a meaningful dimension (Date, Region, or Category depending on scenario).</li>
+            <li>All measure-based visuals must use measures from <code>_Measures</code> — no implicit aggregations on raw columns in visuals.</li>
+          </ul>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Recommended Visual Choices by Scenario</div>
+          <table class="data-table">
+            <thead><tr><th>Visual need</th><th>Recommended visual</th><th>Avoid</th></tr></thead>
+            <tbody>
+              <tr><td>Single headline number</td><td>Card (new) or KPI visual</td><td>Gauge (too much space for one number)</td></tr>
+              <tr><td>Trend over time</td><td>Line chart with Date on X axis</td><td>Bar chart (obscures trend direction)</td></tr>
+              <tr><td>Category comparison</td><td>Clustered bar or column chart</td><td>Pie chart when more than 4 categories</td></tr>
+              <tr><td>Ranked list with context</td><td>Table with conditional formatting</td><td>Plain text slicer</td></tr>
+              <tr><td>Two-measure comparison</td><td>Clustered column; or Line and Column combo</td><td>Dual-axis scatter (confusing at a glance)</td></tr>
+              <tr><td>Drill-down exploration</td><td>Decomposition Tree or Drill-through page</td><td>Nested matrix with 5+ levels</td></tr>
+              <tr><td>Percentage of total</td><td>Stacked bar (not 100% stacked)</td><td>Donut chart for more than 3 segments</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Scenario A — Page-by-Page Guidance</div>
+          <p>
+            <strong>Page 1 (Region Overview):</strong> Four KPI cards in a row at the top
+            (Total Sales, Target, Variance to Target, Attainment %). Line chart below showing
+            monthly sales trend for the selected region. Bar chart showing Top 5 customers
+            by Total Sales. Slicer for Month (or Quarter).
+          </p>
+          <p>
+            <strong>Page 2 (Product Breakdown):</strong> Matrix with Category and SubCategory
+            on rows, Total Sales and Attainment % as values. Apply background colour conditional
+            formatting to Attainment % — red below 80%, yellow 80–100%, green above 100%.
+            Bar chart showing sales by category with a target reference line.
+          </p>
+          <p>
+            <strong>Page 3 (Sales Rep Analysis):</strong> Table showing SalesRepName,
+            total orders, Total Sales, Average Order Value — sorted by Total Sales descending.
+            Donut chart showing Order Status distribution (Completed vs Pending vs Cancelled).
+            Card showing Active Customers count.
+          </p>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Scenario B — Page-by-Page Guidance</div>
+          <p>
+            <strong>Page 1 (Plant Performance):</strong> Three KPI cards (one per plant) showing
+            Efficiency %. Use conditional formatting — below 90% = red, 90–95% = amber,
+            above 95% = green. A clustered bar showing Total Units Produced vs Total Planned
+            by PlantID. Card for overall Defect Rate %.
+          </p>
+          <p>
+            <strong>Page 2 (Production Trend):</strong> Line chart with Month on X axis,
+            Total Units Produced on Y — one line per plant (use legend = PlantID). Matrix with
+            ProductCode on rows, MonthName on columns, QuantityProduced as values —
+            this is the heatmap; apply background colour data bars to the values.
+          </p>
+          <p>
+            <strong>Page 3 (Sales vs Production):</strong> Clustered column chart with
+            ProductCode on X axis — two clustered columns: Units Sold and Total Units Produced.
+            Add a calculated measure <code>Production vs Sales Gap</code> as a line on a
+            secondary axis. Table below listing each product's gap value with conditional
+            formatting (positive gap = under-selling; negative = over-selling relative to production).
+          </p>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Scenario C — Page-by-Page Guidance</div>
+          <p>
+            <strong>Page 1 (Executive Summary):</strong> Six KPI cards in two rows of three:
+            Total Sales | Sales vs Target | YoY Growth % | Total Units Produced | Average Order Value | Active Customers.
+            Decomposition Tree with <code>[Total Sales]</code> as Analyze and Category,
+            RegionName, SalesChannel, MonthName as Explain by. Smart Narrative visual
+            (auto-generate and clean up the text).
+          </p>
+          <p>
+            <strong>Page 2 (Trend Dashboard):</strong> Combo line+column chart: monthly
+            Total Sales (columns) and PYTD Sales (line) side by side. KPI card for YTD Sales
+            with goal = PYTD Sales. Clustered bar chart showing Attainment % by region with
+            100% reference line and conditional formatting. Year and Quarter slicers.
+          </p>
+          <p>
+            <strong>Page 3 (What-If Scenario):</strong> Price Increase % slicer (slider).
+            Two cards: Adjusted Revenue and its delta from Total Sales. A commentary
+            text box explaining the scenario (format it as a "CEO brief" — two sentences
+            of context). Line chart showing Adjusted Revenue by month at the selected
+            uplift rate.
+          </p>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Stage 3 Checklist</div>
+          <ul>
+            <li>All 3 report pages built with visuals matching the scenario specification</li>
+            <li>Consistent theme applied across all pages</li>
+            <li>Each page has a title and subtitle text box</li>
+            <li>Conditional formatting applied on at least one visual</li>
+            <li>At least one slicer on at least one page</li>
+            <li>Cross-filtering tested between visuals on the same page</li>
+            <li>All measures referenced by name from _Measures (no implicit aggregations)</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ================================================
+           TOPIC 5 — Stage 4: Publish & Secure
+           ================================================ -->
+      <section class="topic-section" id="build-publish">
+        <div class="topic-header">
+          <div class="topic-num">5</div>
+          <h2 class="topic-title">Stage 4 — Publish &amp; Secure</h2>
+        </div>
+        <div class="topic-rule"></div>
+
+        <div class="block">
+          <div class="block-label">Apply the Module 9 Workflow</div>
+          <p>
+            This stage applies the skills from Module 9 to your capstone file.
+            Work through each step:
+          </p>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Step 1 — Publish</div>
+          <p>
+            <strong>File → Save</strong> as <code>RR_Capstone_[A/B/C].pbix</code>.
+            Click <strong>Home → Publish</strong>. Select the <strong>RR EngineerWorks
+            Analytics</strong> workspace created in Module 9 (or create a new workspace
+            named <code>RR Capstone</code>). Select and publish.
+          </p>
+          <p>
+            Confirm both artefacts appear in the workspace: the report and the semantic model.
+            Open the report in the browser and verify all three pages load correctly.
+          </p>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Step 2 — Assign RLS Members (Scenarios A and B)</div>
+          <p>
+            In the workspace, open the capstone semantic model's <strong>Security</strong> settings.
+            Assign users to the roles:
+          </p>
+          <ul>
+            <li><strong>Scenario A:</strong> Assign yourself or a test account to the <code>Regional Manager</code> role. Test with "Test as role" — confirm you see only the regions mapped to your email in UserRegionMap.</li>
+            <li><strong>Scenario B:</strong> Assign test accounts to <code>Plant_P01</code>, <code>Plant_P02</code>, <code>Plant_P03</code>. Test each with "Test as role" — confirm each shows only one plant's production data.</li>
+          </ul>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Step 3 — Scheduled Refresh</div>
+          <p>
+            Configure a daily scheduled refresh for the semantic model. Set a time slot,
+            time zone, and failure notification email. Click Apply. (Actual refresh will
+            succeed only if a gateway connects the source file — configure the Personal
+            Gateway if you want a live refresh.)
+          </p>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Step 4 — Publish App (Scenario C) or Share Report (A and B)</div>
+          <p>
+            <strong>Scenario C:</strong> Publish a workspace app named <code>RR Executive
+            Summary</code>. Set the audience to the leadership group or "All people in my
+            organisation." Publish.
+          </p>
+          <p>
+            <strong>Scenarios A and B:</strong> Use direct report sharing to share with the
+            test accounts you assigned to RLS roles. Confirm that when those accounts open the
+            report, the data is correctly filtered.
+          </p>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Stage 4 Checklist</div>
+          <ul>
+            <li>Capstone report published to the Power BI Service workspace</li>
+            <li>All three report pages load in the browser without errors</li>
+            <li>RLS roles assigned and tested in the Service (Scenarios A and B)</li>
+            <li>Scheduled refresh configured with at least one daily time slot</li>
+            <li>Report shared or App published to the intended audience</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ================================================
+           TOPIC 6 — Present Your Insights
+           ================================================ -->
+      <section class="topic-section" id="present">
+        <div class="topic-header">
+          <div class="topic-num">6</div>
+          <h2 class="topic-title">Present Your Insights</h2>
+        </div>
+        <div class="topic-rule"></div>
+
+        <div class="block">
+          <div class="block-label">Structure Your Presentation Using SCQA</div>
+          <p>
+            A data presentation without structure is just a gallery of charts.
+            Use the <strong>SCQA framework</strong> (from Module 8) to turn your capstone
+            report into a story:
+          </p>
+          <table class="data-table">
+            <thead><tr><th>Letter</th><th>What to say</th><th>Example for Scenario A</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>Situation</strong></td>
+                <td>Brief context — who is the audience, what is the data, what time period</td>
+                <td>"This dashboard covers 2024 sales performance across 10 regions for RR EngineerWorks."</td>
+              </tr>
+              <tr>
+                <td><strong>Complication</strong></td>
+                <td>The problem or tension the data reveals</td>
+                <td>"Three regions — South England, Wales, and Scotland — are more than 15% below target as of Q3."</td>
+              </tr>
+              <tr>
+                <td><strong>Question</strong></td>
+                <td>The key question the report answers</td>
+                <td>"What is driving the underperformance, and is it a category issue or a customer issue?"</td>
+              </tr>
+              <tr>
+                <td><strong>Answer</strong></td>
+                <td>What the report reveals — click through the visuals to show the answer</td>
+                <td>"Drilling into the product breakdown shows Industrial Equipment sales are 40% below target in all three regions, while Consumer Goods are on track. The top customer in each region has reduced order frequency since Q2."</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Live Demo Walkthrough</div>
+          <p>
+            When demoing the report to an audience — real or simulated — follow this sequence:
+          </p>
+          <ol>
+            <li><strong>Start at the summary page.</strong> Let the headline KPIs land before drilling in.</li>
+            <li><strong>Use slicers intentionally.</strong> Start with no filters, then apply one at a time to show how the story changes. Explain why you're filtering.</li>
+            <li><strong>Narrate the insight, not the visual.</strong> Don't say "here is a bar chart showing…" — say "South England is the only region where sales have declined quarter-over-quarter."</li>
+            <li><strong>Use drill-through or decomposition to answer the "why."</strong> Show the audience how they can do this themselves.</li>
+            <li><strong>End with a recommendation.</strong> Data without a next action is incomplete. Close with: "Based on this, I'd recommend we…"</li>
+          </ol>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Written Summary (Optional)</div>
+          <p>
+            As an optional deliverable, write a 200–300 word executive summary of your findings
+            using SCQA. This tests whether the data story is clear enough to be understood
+            without the visual — a good benchmark for quality.
+          </p>
+          <p>
+            Include: the key metric (what is it?), the key finding (what does it tell us?),
+            the key driver (why is it happening?), and the recommended action (what should we do?).
+          </p>
+        </div>
+      </section>
+
+      <!-- ================================================
+           TOPIC 7 — Deliverables Checklist
+           ================================================ -->
+      <section class="topic-section" id="deliverables">
+        <div class="topic-header">
+          <div class="topic-num">7</div>
+          <h2 class="topic-title">Deliverables Checklist</h2>
+        </div>
+        <div class="topic-rule"></div>
+
+        <div class="block">
+          <div class="block-label">Final Checklist — All Scenarios</div>
+          <p>
+            Use this checklist to self-assess before marking the module complete.
+            Every item is required. Items marked <em>(scenario-specific)</em> apply
+            to the stated scenario only.
+          </p>
+        </div>
+
+        <div class="verify-box">
+          <div class="verify-title">Power Query &amp; Model</div>
+          <ul class="verify-list">
+            <li>New capstone .pbix file created and saved with the correct name</li>
+            <li>Data model connected (live connection or stripped copy)</li>
+            <li><code>UserRegionMap</code> table with at least 3 rows entered (Scenario A)</li>
+            <li><code>Efficiency %</code> and <code>Defect Rate %</code> measures created (Scenario B)</li>
+            <li>All required scenario-specific measures added to <code>_Measures</code></li>
+            <li>All measures formatted: currency, percentage, or integer as appropriate</li>
+          </ul>
+        </div>
+
+        <div class="verify-box">
+          <div class="verify-title">Report Design</div>
+          <ul class="verify-list">
+            <li>Exactly 3 report pages, named and matching the scenario specification</li>
+            <li>Every page has a title and subtitle text box</li>
+            <li>Consistent colour theme applied across all pages</li>
+            <li>At least one visual uses conditional formatting</li>
+            <li>At least one slicer connected to a meaningful dimension</li>
+            <li>Cross-filtering tested — clicking one visual filters others on the same page</li>
+            <li>No implicit column aggregations in visuals — all values come from _Measures</li>
+            <li>Report saved as <code>RR_Capstone_[A/B/C].pbix</code></li>
+          </ul>
+        </div>
+
+        <div class="verify-box">
+          <div class="verify-title">Security</div>
+          <ul class="verify-list">
+            <li>Dynamic RLS role <code>Regional Manager</code> created using USERPRINCIPALNAME() (Scenario A)</li>
+            <li>Static RLS roles for Plant_P01, Plant_P02, Plant_P03 created and filtering Fact_Production (Scenario B)</li>
+            <li>All RLS roles tested in Desktop using "View as" before publishing</li>
+            <li>RLS members assigned in the Service; "Test as role" confirms correct data filtering</li>
+            <li>No RLS needed; workspace App published with correct audience (Scenario C)</li>
+          </ul>
+        </div>
+
+        <div class="verify-box">
+          <div class="verify-title">Publishing &amp; Sharing</div>
+          <ul class="verify-list">
+            <li>Report published to Power BI Service — both Report and Semantic model artefacts present</li>
+            <li>All three pages load in the browser without errors</li>
+            <li>Scheduled refresh configured with at least one daily time slot</li>
+            <li>Report shared via direct link or app with the intended audience</li>
+          </ul>
+        </div>
+
+        <div class="verify-box">
+          <div class="verify-title">Presentation</div>
+          <ul class="verify-list">
+            <li>SCQA structure prepared — Situation, Complication, Question, and Answer identified for your findings</li>
+            <li>Live demo walkthrough practised — start at summary, use slicers deliberately, narrate insights not visuals</li>
+            <li>At least one concrete recommendation stated ("Based on this data, I recommend…")</li>
+            <li>Written 200–300 word executive summary completed (optional)</li>
+          </ul>
+        </div>
+
+        <div class="block">
+          <div class="block-label">What You've Built Across This Handbook</div>
+          <table class="data-table">
+            <thead><tr><th>Module</th><th>Key skill demonstrated</th></tr></thead>
+            <tbody>
+              <tr><td>1 — Foundations</td><td>BI concepts, Power BI ecosystem, analytics workflow</td></tr>
+              <tr><td>2 — Data Sources</td><td>Multi-source connection, Import vs DirectQuery, privacy levels</td></tr>
+              <tr><td>3 — Power Query</td><td>Data cleaning, deduplication, column operations, M code</td></tr>
+              <tr><td>4 — Data Modelling</td><td>Star schema, 7 relationships, Dim_Date, RLS role definitions</td></tr>
+              <tr><td>5 — DAX Foundations</td><td>Measures, CALCULATE, filter context, core functions</td></tr>
+              <tr><td>6 — Advanced DAX</td><td>Time intelligence, YoY, YTD, PYTD, iterator functions</td></tr>
+              <tr><td>7 — Report Design</td><td>3-page dashboard, visual selection, conditional formatting</td></tr>
+              <tr><td>8 — Advanced Analytics</td><td>What-If, AI visuals, dynamic titles, performance tuning</td></tr>
+              <tr><td>9 — Publishing</td><td>Service workspace, RLS assignment, scheduled refresh, app</td></tr>
+              <tr><td>10 — Capstone</td><td>End-to-end independent solution built, secured, and presented</td></tr>
+            </tbody>
+          </table>
+          <p>
+            You have gone from raw Excel files to a published, secured, auto-refreshed Power BI
+            report with 25+ DAX measures, row-level security, time intelligence, and AI visuals —
+            the full production-ready stack. That is a meaningful capability.
+          </p>
+        </div>
+      </section>
+
+      <!-- ================================================
+           MARK COMPLETE
+           ================================================ -->
+      <div class="complete-zone" id="complete-zone">
+        <div class="complete-zone-title">Capstone complete — mark Module 10 to finish the handbook.</div>
+        <button class="btn-complete" id="btn-complete">Mark Module 10 Complete</button>
+        <p class="complete-hint">Completing this module marks the full handbook as finished.</p>
+        <p class="complete-done-msg">✓ Handbook complete — congratulations!</p>
+      </div>
+
+      <nav class="page-nav">
+        <a href="module9.html" class="page-nav-btn">← Module 9: Publishing &amp; Security</a>
+        <a href="index.html" class="page-nav-btn primary">Back to Handbook Home →</a>
+      </nav>
+
+    </main>
+
+    <footer>
+      <span>
+        <strong>Power BI Data Analysis for Engineers</strong> &nbsp;—&nbsp;
+        <span class="footer-brand">RR Skillverse</span>
+      </span>
+      <span>by <a href="https://raushan-ranjan.azurewebsites.net/" target="_blank" rel="noopener noreferrer" class="author-link">Raushan Ranjan</a>, MCT &nbsp;|&nbsp; © 2026</span>
+      <span class="footer-disclaimer">Free personal training material &mdash; shared in the belief that quality education should be available to everyone. Not for commercial use or resale.</span>
+    </footer>
+  </div>
+
+  <script>
+    window.CURRENT_MODULE_ID = 10;
+  </script>
+  <script src="js/handbook.js"></script>
+</body>
+</html>

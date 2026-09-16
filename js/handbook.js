@@ -106,7 +106,6 @@ const MODULES = [
   },
   {
     id: 9, title: "Publishing, Collaboration & Security", file: "module9.html",
-    comingSoon: true,
     topics: [
       { id: "publishing",        title: "Publishing to Power BI Service" },
       { id: "workspaces",        title: "Workspaces & Permissions" },
@@ -119,7 +118,6 @@ const MODULES = [
   },
   {
     id: 10, title: "Capstone: End-to-End Solution", file: "module10.html",
-    comingSoon: true,
     topics: [
       { id: "scenarios",         title: "Choose Your Scenario" },
       { id: "build-transform",   title: "Stage 1 — Transform" },
