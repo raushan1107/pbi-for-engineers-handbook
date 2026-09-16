@@ -431,7 +431,7 @@ function showOverlay(moduleId, isFinal) {
   const mod = MODULES.find(m => m.id === moduleId);
   overlay.querySelector('.completion-emoji').textContent   = isFinal ? '🏆' : '🎉';
   overlay.querySelector('.completion-title').textContent   = isFinal
-    ? 'Course Complete!'
+    ? 'Handbook Complete!'
     : `Module ${moduleId} Complete!`;
   overlay.querySelector('.completion-message').textContent = isFinal
     ? `Outstanding — you've completed all 10 modules of Power BI Data Analysis for Engineers. You're ready to build production-ready analytics solutions.`

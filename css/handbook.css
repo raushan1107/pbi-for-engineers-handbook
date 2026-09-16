@@ -339,7 +339,7 @@ body.sidebar-closed .main-layout { margin-left: 0 !important; }
 /* ===== MAIN LAYOUT ===== */
 .main-layout {
   margin-left: var(--sidebar-w);
-  margin-top: var(--topbar-h);
+  margin-top: calc(var(--topbar-h) + 8px);
   transition: margin-left var(--transition);
   min-height: calc(100vh - var(--topbar-h));
   display: flex;
@@ -347,7 +347,7 @@ body.sidebar-closed .main-layout { margin-left: 0 !important; }
 }
 .page-content {
   flex: 1;
-  max-width: 880px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 44px 44px 80px;
   width: 100%;
