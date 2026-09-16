@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 7: Report Design &amp; Visualization | Power BI Data Analysis for Engineers</title>
+  <link rel="stylesheet" href="css/handbook.css">
+</head>
+<body>
+
+  <canvas id="confetti-canvas"></canvas>
+
+  <div class="completion-overlay" id="completion-overlay">
+    <div class="completion-card">
+      <div class="completion-emoji">🎉</div>
+      <div class="completion-title">Module 7 Complete!</div>
+      <div class="completion-message">Three-page dashboard built and formatted. You've turned 585 order rows, 288 production records, and 120 target rows into a report that engineers and managers can actually read. Module 8 makes it smarter.</div>
+      <button class="btn-overlay-close" id="overlay-close">Continue →</button>
+    </div>
+  </div>
+
+  <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+  <header class="topbar">
+    <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <a href="index.html" class="topbar-brand">
+      <div class="brand-icon">PB</div>
+      <span>Power BI for Engineers</span>
+    </a>
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="search" class="search-input" id="search-input"
+             placeholder="Search modules and topics…" autocomplete="off" spellcheck="false">
+      <div class="search-results" id="search-results"></div>
+    </div>
+    <div class="topbar-right">
+      <span class="topbar-byline">by Raushan Ranjan, MCT</span>
+    </div>
+  </header>
+
+  <nav class="sidebar" id="sidebar"></nav>
+
+  <div class="main-layout">
+    <main class="page-content">
+
+      <div class="page-header">
+        <span class="module-badge">Module 7</span>
+        <h1 class="page-title">Report Design &amp; Visualization</h1>
+        <p class="page-subtitle">
+          A model full of correct measures does no good if the report is confusing, slow,
+          or misleading. Effective report design is about matching the right visual to the
+          right question, arranging information so the most important insight appears
+          first, and building interactivity that feels intuitive — not cluttered. This
+          module covers the principles and then applies them to build a three-page
+          RR EngineerWorks dashboard.
+        </p>
+        <div class="module-meta">
+          <span class="meta-pill">⏱ <strong>~3 hours</strong></span>
+          <span class="meta-pill">📋 <strong>6 topics</strong> + 1 lab</span>
+          <span class="meta-pill">🎯 <strong>Workflow stage:</strong> Visualize</span>
+          <span class="meta-pill">📊 <strong>Builds 3-page dashboard</strong></span>
+        </div>
+      </div>
+
+      <!-- ================================================
+           TOPIC 1 — Choosing the Right Visual
+           ================================================ -->
+      <section class="topic-section" id="right-visual">
+        <div class="topic-header">
+          <div class="topic-num">1</div>
+          <h2 class="topic-title">Choosing the Right Visual</h2>
+        </div>
+        <div class="topic-rule"></div>
+
+        <div class="block">
+          <div class="block-label">Match the Visual to the Question</div>
+          <table class="data-table">
+            <thead><tr><th>Question type</th><th>Best visual</th><th>Avoid</th></tr></thead>
+            <tbody>
+              <tr>
+                <td>How much? (single KPI)</td>
+                <td>Card, KPI</td>
+                <td>Bar chart for a single number</td>
+              </tr>
+              <tr>
+                <td>How does it change over time?</td>
+                <td>Line chart, Area chart</td>
+                <td>Pie chart — hides the time dimension</td>
+              </tr>
+              <tr>
+                <td>How do categories compare?</td>
+                <td>Bar chart (vertical for &lt;8 items), Column chart</td>
+                <td>Pie/donut for more than 5 segments</td>
+              </tr>
+              <tr>
+                <td>Part-to-whole (few segments)</td>
+                <td>Donut chart, Stacked bar</td>
+                <td>Pie with 10+ slices</td>
+              </tr>
+              <tr>
+                <td>Two measures by category</td>
+                <td>Clustered bar, Combo chart (bar + line)</td>
+                <td>Side-by-side lines with different scales</td>
+              </tr>
+              <tr>
+                <td>Distribution / spread</td>
+                <td>Scatter chart, Histogram (via custom visual)</td>
+                <td>Bar chart with too many bins</td>
+              </tr>
+              <tr>
+                <td>Ranking with detail</td>
+                <td>Table, Matrix</td>
+                <td>A visual alone when exact numbers matter</td>
+              </tr>
+              <tr>
+                <td>Geographic data</td>
+                <td>Map visual, Filled Map</td>
+                <td>Bar chart when spatial pattern is the insight</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="block">
+          <div class="block-label">The Engineer's Default: Tables Are Not a Last Resort</div>
+          <p>
+            Engineers often prefer tables — exact numbers over approximate chart readings.
+            This is correct for technical audiences. For executive or operations audiences,
+            charts communicate trends and comparisons faster. A well-designed dashboard
+            uses both: a summary visual at the top for quick scanning, a detailed table
+            at the bottom for drill-down.
+          </p>
+        </div>
+      </section>
+
+      <!-- ================================================
+           TOPIC 2 — Core Visuals Reference
+           ================================================ -->
+      <section class="topic-section" id="core-visuals">
+        <div class="topic-header">
+          <div class="topic-num">2</div>
+          <h2 class="topic-title">Core Visuals Reference</h2>
+        </div>
+        <div class="topic-rule"></div>
+
+        <div class="block">
+          <div class="block-label">The Visuals Pane</div>
+          <p>
+            In Report view, the <strong>Visualizations pane</strong> on the right contains
+            all built-in visuals (and any custom visuals you've imported). Click a visual
+            icon to add it to the canvas, then drag fields from the Fields pane into the
+            visual's field wells (Axis, Values, Legend, etc.).
+          </p>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Key Built-In Visuals</div>
+          <table class="data-table">
+            <thead><tr><th>Visual</th><th>Field wells</th><th>Best used for</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Card</strong></td><td>Fields (single measure)</td><td>KPI display — one number, large font</td></tr>
+              <tr><td><strong>KPI</strong></td><td>Value, Trend axis, Target</td><td>Measure vs target with trend indicator</td></tr>
+              <tr><td><strong>Line chart</strong></td><td>X axis, Y axis, Secondary Y, Legend</td><td>Time trends</td></tr>
+              <tr><td><strong>Bar chart</strong></td><td>Y axis (category), X axis (value), Legend</td><td>Category comparison (horizontal bars)</td></tr>
+              <tr><td><strong>Column chart</strong></td><td>X axis (category), Y axis (value)</td><td>Category comparison (vertical bars)</td></tr>
+              <tr><td><strong>Clustered bar/column</strong></td><td>Axis, Values (multiple), Legend</td><td>Comparing two measures by category</td></tr>
+              <tr><td><strong>Combo chart</strong></td><td>Shared axis, Column values, Line values</td><td>Volume + trend (e.g. orders + growth rate)</td></tr>
+              <tr><td><strong>Table</strong></td><td>Columns (fields list)</td><td>Exact values, multiple dimensions + measures</td></tr>
+              <tr><td><strong>Matrix</strong></td><td>Rows, Columns, Values</td><td>Cross-tab / pivot; supports drill-down</td></tr>
+              <tr><td><strong>Slicer</strong></td><td>Field (category or date)</td><td>Interactive filter on the page</td></tr>
+              <tr><td><strong>Donut chart</strong></td><td>Legend (category), Values</td><td>Part-to-whole (≤5 segments)</td></tr>
+              <tr><td><strong>Scatter chart</strong></td><td>X value, Y value, Legend, Size, Details</td><td>Correlation between two measures</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ================================================
+           TOPIC 3 — Layout & Design Principles
+           ================================================ -->
+      <section class="topic-section" id="layout-principles">
+        <div class="topic-header">
+          <div class="topic-num">3</div>
+          <h2 class="topic-title">Layout &amp; Design Principles</h2>
+        </div>
+        <div class="topic-rule"></div>
+
+        <div class="block">
+          <div class="block-label">The Z-Pattern and F-Pattern</div>
+          <p>
+            Readers scan screens in a Z-pattern (top-left → top-right → bottom-left →
+            bottom-right) or an F-pattern (horizontal scan at top, then vertical scan down
+            the left side). Place the most important KPIs in the top-left zone and
+            supporting detail lower and to the right.
+          </p>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Layout Rules for Power BI Reports</div>
+          <ul>
+            <li><strong>Top strip (10–15% of height):</strong> Page title, period selector slicer, high-level KPI cards</li>
+            <li><strong>Left column or top-left quadrant:</strong> Primary chart (the main analytical view)</li>
+            <li><strong>Right column or top-right:</strong> Secondary charts or breakdown</li>
+            <li><strong>Bottom section:</strong> Detail table for drill-down</li>
+            <li><strong>Slicers:</strong> Either top-right or a dedicated left panel — never scattered across the canvas</li>
+          </ul>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Formatting Essentials</div>
+          <table class="data-table">
+            <thead><tr><th>Setting</th><th>Where</th><th>Recommendation</th></tr></thead>
+            <tbody>
+              <tr><td>Canvas background</td><td>View → Canvas background</td><td>Light grey (#F5F5F5) reduces glare vs. pure white</td></tr>
+              <tr><td>Visual borders</td><td>Format pane → General → Effects → Shadow</td><td>Subtle shadow instead of heavy borders</td></tr>
+              <tr><td>Data labels</td><td>Format pane → Data labels</td><td>Enable for bar/column charts; disable for line charts with many points</td></tr>
+              <tr><td>Axis titles</td><td>Format pane → X-axis / Y-axis → Title</td><td>Remove when the visual title makes the axis obvious</td></tr>
+              <tr><td>Legend</td><td>Format pane → Legend</td><td>Move to Top when space allows; disable when only one series</td></tr>
+              <tr><td>Gridlines</td><td>Format pane → Gridlines</td><td>Reduce opacity to 30–40%; delete vertical gridlines on bar charts</td></tr>
+              <tr><td>Colour palette</td><td>Format pane → Colors</td><td>Pick 2–3 brand colours; use accent colour for the highlighted measure only</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ================================================
+           TOPIC 4 — Drill-Down, Tooltips & Bookmarks
+           ================================================ -->
+      <section class="topic-section" id="interactivity">
+        <div class="topic-header">
+          <div class="topic-num">4</div>
+          <h2 class="topic-title">Drill-Down, Tooltips &amp; Bookmarks</h2>
+        </div>
+        <div class="topic-rule"></div>
+
+        <div class="block">
+          <div class="block-label">Drill-Down with Hierarchies</div>
+          <p>
+            When a hierarchy is on a visual's axis, the drill-down arrows appear in the
+            visual header (the double-down arrow). Clicking drills into the next level
+            <em>for the selected data point</em>. Clicking the down-arrow at the header
+            expands <em>all</em> data points to the next level simultaneously.
+          </p>
+          <p>
+            For example: a line chart with the Date Hierarchy (Year → Quarter → MonthName
+            → Date) on the X axis can drill from annual summary down to daily detail
+            without changing the report layout.
+          </p>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Tooltips</div>
+          <p>
+            By default, hovering over a data point shows the axis and value fields.
+            You can add more fields to the <strong>Tooltips</strong> field well of a visual
+            to show additional context on hover — without cluttering the visible chart.
+          </p>
+          <p>
+            <strong>Tooltip pages:</strong> Create a dedicated report page, set its size
+            to "Tooltip" in Page information (e.g. 320×240), mark it as a Tooltip page,
+            and assign it to any visual via Format pane → Tooltips → Page. This creates
+            rich mini-reports that appear on hover.
+          </p>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Bookmarks</div>
+          <p>
+            <strong>Bookmarks</strong> capture the current state of a report page — which
+            visuals are visible, which slicers are active, the current drill level — as a
+            named snapshot. You can assign a bookmark to a button to create navigation or
+            "reset filters" functionality without building a separate page.
+          </p>
+          <p>
+            Common pattern: a "Reset All Filters" button that triggers a bookmark of the
+            page with all slicers cleared, allowing users to get back to the default view
+            with one click.
+          </p>
+        </div>
+      </section>
+
+      <!-- ================================================
+           TOPIC 5 — Conditional Formatting
+           ================================================ -->
+      <section class="topic-section" id="conditional-fmt">
+        <div class="topic-header">
+          <div class="topic-num">5</div>
+          <h2 class="topic-title">Conditional Formatting</h2>
+        </div>
+        <div class="topic-rule"></div>
+
+        <div class="block">
+          <div class="block-label">Where to Apply It</div>
+          <p>
+            In a <strong>Table</strong> or <strong>Matrix</strong> visual, select a value
+            column → in the Format pane, expand the column's settings → click
+            <strong>Conditional formatting</strong>. You can apply formatting to:
+          </p>
+          <ul>
+            <li><strong>Background colour:</strong> Colour the cell based on the value</li>
+            <li><strong>Font colour:</strong> Change text colour based on value</li>
+            <li><strong>Data bars:</strong> Horizontal bar within the cell proportional to the value</li>
+            <li><strong>Icons:</strong> Traffic lights, arrows, or custom icon sets</li>
+          </ul>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Rules vs Gradient vs Field Value</div>
+          <table class="data-table">
+            <thead><tr><th>Method</th><th>When to use</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>Gradient</strong></td>
+                <td>Continuous range where low-to-high maps to colour scale</td>
+                <td>Heat map of sales by region: white → dark green</td>
+              </tr>
+              <tr>
+                <td><strong>Rules</strong></td>
+                <td>Discrete thresholds with specific colours</td>
+                <td>Red if &lt; 0, yellow if 0–10%, green if &gt; 10%</td>
+              </tr>
+              <tr>
+                <td><strong>Field value</strong></td>
+                <td>A measure or column controls the colour via a hex code string</td>
+                <td>A DAX measure that returns "#FF4444" for negative, "#22AA44" for positive</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ================================================
+           TOPIC 6 — Sales & Finance Report Design
+           ================================================ -->
+      <section class="topic-section" id="use-cases">
+        <div class="topic-header">
+          <div class="topic-num">6</div>
+          <h2 class="topic-title">Sales &amp; Finance Report Design</h2>
+        </div>
+        <div class="topic-rule"></div>
+
+        <div class="block">
+          <div class="block-label">Standard Sales Report Structure</div>
+          <p>
+            A well-designed sales report answers four questions in sequence:
+          </p>
+          <ol>
+            <li><strong>Are we on track?</strong> — KPI cards for Total Sales vs Target, period YTD</li>
+            <li><strong>Where are we winning or losing?</strong> — Bar chart comparing regions or products</li>
+            <li><strong>What is the trend?</strong> — Line chart of monthly sales and a YTD line</li>
+            <li><strong>What exactly happened?</strong> — Detail table with row-level values for investigation</li>
+          </ol>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Report for Engineers vs Report for Managers</div>
+          <table class="data-table">
+            <thead><tr><th></th><th>Engineering audience</th><th>Management audience</th></tr></thead>
+            <tbody>
+              <tr><td>Prefers</td><td>Tables, exact numbers, scatter plots, technical labels</td><td>Cards, bar charts, trend lines, plain English labels</td></tr>
+              <tr><td>Context needed</td><td>Data source, sample size, methodology notes</td><td>Period covered, comparison baseline, target line</td></tr>
+              <tr><td>Interaction</td><td>Drill to row level; export to Excel</td><td>Slicers for period and region; guided drill-down</td></tr>
+              <tr><td>Page count</td><td>1–2 dense pages acceptable</td><td>3–4 focused pages preferred</td></tr>
+            </tbody>
+          </table>
+          <p>
+            The RR EngineerWorks report is designed for both — a Management Summary page
+            at a high level, and detailed Sales Performance and Production Overview pages
+            for the operations team.
+          </p>
+        </div>
+      </section>
+
+      <!-- ================================================
+           TOPIC 7 — Lab 7: Build the RR Dashboard
+           ================================================ -->
+      <section class="topic-section" id="lab-reports">
+        <div class="topic-header">
+          <div class="topic-num">7</div>
+          <h2 class="topic-title">Hands-On: Build the RR Dashboard</h2>
+        </div>
+        <div class="topic-rule"></div>
+
+        <p>
+          You will build a three-page report in <code>RR_EngineerWorks_v6.pbix</code>:
+          <strong>Sales Performance</strong>, <strong>Production Overview</strong>, and
+          <strong>Management Summary</strong>. Each lab builds one page. Follow the steps
+          in order — some visuals on later pages re-use formats from earlier pages.
+        </p>
+
+        <!-- ---- Lab 7A: Sales Performance ---- -->
+        <div class="lab-box" id="lab-7a">
+          <div class="lab-title">Lab 7A — Page 1: Sales Performance</div>
+
+          <div class="step">
+            <div class="step-n">1</div>
+            <div class="step-body">
+              <div class="step-title">Rename the default page and set canvas size</div>
+              <p>
+                Open <code>RR_EngineerWorks_v6.pbix</code>. At the bottom, double-click
+                <strong>Page 1</strong> → rename it to <code>Sales Performance</code>.
+              </p>
+              <p>
+                In the <strong>View</strong> tab, confirm Canvas size is set to
+                <strong>16:9</strong> (the default, 1280×720).
+              </p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-n">2</div>
+            <div class="step-body">
+              <div class="step-title">Add the page title text box</div>
+              <p>
+                <strong>Insert → Text box</strong>. Type <code>Sales Performance</code>.
+                Format: font size 20, bold. Position at top-left. Add a sub-label text box:
+                <code>RR EngineerWorks — 2024 Full Year</code>, font size 11.
+              </p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-n">3</div>
+            <div class="step-body">
+              <div class="step-title">Add three KPI Card visuals (top strip)</div>
+              <p>
+                Add three <strong>Card</strong> visuals across the top of the canvas:
+              </p>
+              <ul>
+                <li><strong>Card 1:</strong> Field = <code>[Total Sales]</code>. Title: "Total Sales 2024"</li>
+                <li><strong>Card 2:</strong> Field = <code>[Total Orders]</code>. Title: "Total Orders"</li>
+                <li><strong>Card 3:</strong> Field = <code>[Sales vs Target %]</code>. Title: "vs Target"</li>
+              </ul>
+              <p>
+                For each card: Format pane → Callout value → font size 28. General →
+                Title → On, text as above, font size 11.
+              </p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-n">4</div>
+            <div class="step-body">
+              <div class="step-title">Add a Line chart: Monthly Sales trend</div>
+              <p>
+                Add a <strong>Line chart</strong>. Configure field wells:
+              </p>
+              <ul>
+                <li><strong>X axis:</strong> Dim_Date[MonthName] (use the MonthName field, not the hierarchy — it sorts by Month automatically because of the Sort by Column setting from Module 4)</li>
+                <li><strong>Y axis:</strong> [Total Sales]</li>
+                <li><strong>Secondary Y axis:</strong> [Total Sales YTD]</li>
+              </ul>
+              <p>
+                Format: enable Data labels for the primary series (monthly sales). Add a
+                title: "Monthly Sales and YTD". Enable the legend to distinguish the two
+                series.
+              </p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-n">5</div>
+            <div class="step-body">
+              <div class="step-title">Add a Clustered Bar chart: Sales vs Target by Region</div>
+              <p>
+                Add a <strong>Clustered bar chart</strong>. Configure:
+              </p>
+              <ul>
+                <li><strong>Y axis (category):</strong> Dim_Regions[RegionName]</li>
+                <li><strong>X axis (values):</strong> [Total Sales] and [Total Target]</li>
+              </ul>
+              <p>
+                Sort the bars by Total Sales descending: click the <strong>…</strong> menu
+                on the visual → <strong>Sort axis → Total Sales</strong> →
+                <strong>Sort descending</strong>. Title: "Sales vs Target by Region".
+              </p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-n">6</div>
+            <div class="step-body">
+              <div class="step-title">Add a detail Table</div>
+              <p>
+                Add a <strong>Table</strong> visual at the bottom. Add these columns in order:
+              </p>
+              <ul>
+                <li>Dim_Regions[RegionName]</li>
+                <li>[Total Sales]</li>
+                <li>[Total Target]</li>
+                <li>[Sales vs Target]</li>
+                <li>[Sales vs Target %]</li>
+                <li>[Region Sales Rank]</li>
+              </ul>
+              <p>
+                Sort by Region Sales Rank ascending (rank 1 = top region at the top of the table).
+              </p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-n">7</div>
+            <div class="step-body">
+              <div class="step-title">Apply conditional formatting to Sales vs Target</div>
+              <p>
+                In the Table visual, click on the <strong>[Sales vs Target]</strong> column
+                header → Format pane → scroll to that column's settings → expand
+                <strong>Conditional formatting</strong> → enable <strong>Background colour</strong>.
+              </p>
+              <p>
+                Set up Rules-based formatting:
+              </p>
+              <ul>
+                <li>If value is &lt; 0 → background colour Red (#FF6B6B)</li>
+                <li>If value is ≥ 0 → background colour Green (#6BCC88)</li>
+              </ul>
+              <p>
+                Also enable <strong>Data bars</strong> on the [Total Sales] column with
+                a dark blue fill colour.
+              </p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-n">8</div>
+            <div class="step-body">
+              <div class="step-title">Add slicers</div>
+              <p>
+                Add two <strong>Slicer</strong> visuals:
+              </p>
+              <ul>
+                <li><strong>Slicer 1:</strong> Field = Dim_Products[Category]. Style: Dropdown (Format pane → Slicer settings → Style → Dropdown). Title: "Filter by Category"</li>
+                <li><strong>Slicer 2:</strong> Field = Dim_Date[QuarterName]. Style: Tile. Title: "Quarter"</li>
+              </ul>
+              <p>
+                Position both slicers to the right of the line chart or in a row below
+                the KPI cards.
+              </p>
+            </div>
+          </div>
+
+          <div class="verify-box">
+            <div class="verify-title">✓ Lab 7A Complete</div>
+            <ul class="verify-list">
+              <li>3 KPI cards show Total Sales, Total Orders (585), and Sales vs Target % values</li>
+              <li>Line chart shows 12 monthly bars/points with an increasing YTD secondary line</li>
+              <li>Clustered bar shows 10 regions, each with a Sales bar and a Target bar, sorted by Sales descending</li>
+              <li>Detail table shows 10 rows, green/red conditional formatting on Sales vs Target column</li>
+              <li>Category slicer filters all visuals simultaneously when a Category is selected</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- ---- Lab 7B: Production Overview ---- -->
+        <div class="lab-box" id="lab-7b">
+          <div class="lab-title">Lab 7B — Page 2: Production Overview</div>
+
+          <div class="step">
+            <div class="step-n">1</div>
+            <div class="step-body">
+              <div class="step-title">Add a new page and rename it</div>
+              <p>
+                Click the <strong>+</strong> at the bottom to add a new page. Rename it
+                <code>Production Overview</code>.
+              </p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-n">2</div>
+            <div class="step-body">
+              <div class="step-title">Add KPI cards (top strip)</div>
+              <p>
+                Add three <strong>Card</strong> visuals:
+              </p>
+              <ul>
+                <li><strong>Card 1:</strong> [Total Actual Units] — Title: "Actual Units Produced"</li>
+                <li><strong>Card 2:</strong> [Total Planned Units] — Title: "Planned Units"</li>
+                <li><strong>Card 3:</strong> [Production Efficiency %] — Title: "Production Efficiency"</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-n">3</div>
+            <div class="step-body">
+              <div class="step-title">Add a Clustered Column chart: Planned vs Actual by Category</div>
+              <p>
+                Add a <strong>Clustered column chart</strong>. Configure:
+              </p>
+              <ul>
+                <li><strong>X axis:</strong> Dim_Products[Category]</li>
+                <li><strong>Y axis:</strong> [Total Planned Units] and [Total Actual Units]</li>
+              </ul>
+              <p>
+                Title: "Planned vs Actual Production by Category". Enable data labels.
+              </p>
+              <p class="block-note">
+                <strong>Note:</strong> Fact_Production links to Dim_Products via ProductCode.
+                Dim_Products has a Category column (split from Category_SubCategory in
+                Module 3). Only <em>physical products</em> appear in Fact_Production —
+                the generator excludes service products from production runs. Expect ~4–5
+                categories in this visual, not all product categories.
+              </p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-n">4</div>
+            <div class="step-body">
+              <div class="step-title">Add a Line chart: Production Efficiency by Month</div>
+              <p>
+                Add a <strong>Line chart</strong>. Configure:
+              </p>
+              <ul>
+                <li><strong>X axis:</strong> Dim_Date[MonthName]</li>
+                <li><strong>Y axis:</strong> [Production Efficiency %]</li>
+              </ul>
+              <p>
+                Format: Y axis minimum = 0.5 (50%), maximum = 1.2 (120%), to focus the
+                view on the meaningful range. Add a constant line at Y = 1.0 (100% efficiency)
+                via Analytics pane → Constant line → Value: 1. Title: "Production Efficiency by Month".
+              </p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-n">5</div>
+            <div class="step-body">
+              <div class="step-title">Add a detail Table: Production by Product</div>
+              <p>
+                Add a <strong>Table</strong> visual with:
+              </p>
+              <ul>
+                <li>Dim_Products[ProductName]</li>
+                <li>Dim_Products[Category]</li>
+                <li>[Total Planned Units]</li>
+                <li>[Total Actual Units]</li>
+                <li>[Production Efficiency %]</li>
+              </ul>
+              <p>
+                Apply conditional formatting on [Production Efficiency %]: gradient from
+                red (0%) through yellow (80%) to green (100%+). Sort by Efficiency
+                descending.
+              </p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-n">6</div>
+            <div class="step-body">
+              <div class="step-title">Add a Slicer for Plant</div>
+              <p>
+                Fact_Production has a <strong>Plant</strong> column (text field with values
+                like "Manchester Plant", "Birmingham Plant", "Edinburgh Plant"). Add a
+                <strong>Slicer</strong> with Fact_Production[Plant] and title "Filter by Plant".
+              </p>
+              <p class="block-note">
+                This slicer filters Fact_Production directly. Since Plant is not in a
+                dimension table, it is not hidden — this is a fact table column used as
+                a slicer, which is acceptable when the column has low cardinality (3 distinct values).
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ---- Lab 7C: Management Summary ---- -->
+        <div class="lab-box" id="lab-7c">
+          <div class="lab-title">Lab 7C — Page 3: Management Summary</div>
+
+          <div class="step">
+            <div class="step-n">1</div>
+            <div class="step-body">
+              <div class="step-title">Add a third page: Management Summary</div>
+              <p>
+                Click <strong>+</strong> → rename to <code>Management Summary</code>.
+                This page is a one-glance overview. Keep it sparse — fewer visuals,
+                larger text.
+              </p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-n">2</div>
+            <div class="step-body">
+              <div class="step-title">Add four large KPI Cards</div>
+              <p>
+                Create four <strong>Card</strong> visuals in a 2×2 grid in the top-left:
+              </p>
+              <ul>
+                <li>[Total Sales] — "2024 Revenue"</li>
+                <li>[Total Target] — "2024 Target"</li>
+                <li>[Production Efficiency %] — "Production Efficiency"</li>
+                <li>[Sales vs Target %] — "Sales vs Target"</li>
+              </ul>
+              <p>Callout value font size: 36 for all four cards.</p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-n">3</div>
+            <div class="step-body">
+              <div class="step-title">Add a Matrix: Sales by Category and Region</div>
+              <p>
+                Add a <strong>Matrix</strong> visual. Configure:
+              </p>
+              <ul>
+                <li><strong>Rows:</strong> Dim_Products[Category]</li>
+                <li><strong>Columns:</strong> Dim_Regions[RegionName]</li>
+                <li><strong>Values:</strong> [Total Sales]</li>
+              </ul>
+              <p>
+                Enable <strong>Row subtotals</strong> and <strong>Column subtotals</strong>
+                in Format pane → Row subtotals / Column subtotals → On. Apply conditional
+                formatting (gradient) on the values to create a heat map effect.
+              </p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-n">4</div>
+            <div class="step-body">
+              <div class="step-title">Add a Bar chart: Region Sales Rank</div>
+              <p>
+                Add a <strong>Bar chart</strong>. Configure:
+              </p>
+              <ul>
+                <li><strong>Y axis:</strong> Dim_Regions[RegionName]</li>
+                <li><strong>X axis:</strong> [Total Sales]</li>
+              </ul>
+              <p>
+                Sort bars by Total Sales descending. Add data labels showing the sales
+                value. Title: "Revenue by Region". This gives management a quick
+                regional league table.
+              </p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-n">5</div>
+            <div class="step-body">
+              <div class="step-title">Add a Quarter slicer and a "Reset" button</div>
+              <p>
+                Add a <strong>Slicer</strong> with Dim_Date[QuarterName] (tile style).
+                Then: capture a bookmark of this page with no slicers selected
+                (<strong>View → Bookmarks → Add</strong>; name it "Reset Filters").
+              </p>
+              <p>
+                <strong>Insert → Button → Reset</strong> (or any button). In the
+                Format pane → Action → On → Type: Bookmark → Bookmark: Reset Filters.
+                Label the button "Reset Filters". Now clicking this button returns all
+                slicers on the page to their default (all selected) state.
+              </p>
+            </div>
+          </div>
+
+          <div class="verify-box">
+            <div class="verify-title">✓ Lab 7C Complete</div>
+            <ul class="verify-list">
+              <li>Management Summary shows 4 large KPI cards with unambiguous labels</li>
+              <li>Matrix shows a Category × Region sales heat map with subtotals</li>
+              <li>Bar chart lists all 10 regions sorted by revenue</li>
+              <li>Quarter slicer filters all three visuals on the page</li>
+              <li>Reset Filters button clears the slicer and restores the default view</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Final save -->
+        <div class="lab-box" id="lab-7d">
+          <div class="lab-title">Lab 7D — Save</div>
+
+          <div class="step">
+            <div class="step-n">1</div>
+            <div class="step-body">
+              <div class="step-title">Save as RR_EngineerWorks_v7.pbix</div>
+              <p>
+                <strong>File → Save As</strong> → name it
+                <code>RR_EngineerWorks_v7.pbix</code>. This three-page report is the
+                starting point for Module 8 (Advanced Analytics &amp; Performance).
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Full verify checklist -->
+        <div class="verify-box">
+          <div class="verify-title">✓ Module 7 Complete Verification</div>
+          <ul class="verify-list">
+            <li>Three report pages exist: Sales Performance, Production Overview, Management Summary</li>
+            <li>Sales Performance: 3 KPI cards, line chart (monthly + YTD), clustered bar (10 regions × 2 measures), detail table with conditional formatting, 2 slicers</li>
+            <li>Production Overview: 3 KPI cards, clustered column (planned vs actual by category), line chart (efficiency by month with 100% constant line), detail table with gradient formatting, plant slicer</li>
+            <li>Management Summary: 4 KPI cards, matrix (Category × Region with subtotals), region bar chart, quarter slicer, Reset Filters button</li>
+            <li>All slicers cross-filter all visuals on their respective pages</li>
+            <li>File saved as <code>RR_EngineerWorks_v7.pbix</code></li>
+          </ul>
+        </div>
+
+      </section><!-- /lab-reports -->
+
+      <!-- ================================================
+           MARK COMPLETE
+           ================================================ -->
+      <div class="complete-zone" id="complete-zone">
+        <div class="complete-zone-title">Three-page dashboard complete — mark Module 7 done.</div>
+        <button class="btn-complete" id="btn-complete">Mark Module 7 Complete</button>
+        <p class="complete-hint">Your progress is saved in this browser session.</p>
+        <p class="complete-done-msg">✓ Module 7 complete — dashboard ready for advanced features!</p>
+      </div>
+
+      <nav class="page-nav">
+        <a href="module6.html" class="page-nav-btn">← Module 6: Advanced DAX</a>
+        <a href="module8.html" class="page-nav-btn primary">Module 8: Advanced Analytics →</a>
+      </nav>
+
+    </main>
+
+    <footer>
+      <span>
+        <strong>Power BI Data Analysis for Engineers</strong> &nbsp;—&nbsp;
+        <span class="footer-brand">RR Skillverse</span>
+      </span>
+      <span>by Raushan Ranjan, MCT &nbsp;|&nbsp; © 2026</span>
+    </footer>
+  </div>
+
+  <script>
+    window.CURRENT_MODULE_ID = 7;
+  </script>
+  <script src="js/handbook.js"></script>
+</body>
+</html>

@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Additional Sample Datasets | Power BI for Engineers</title>
+  <link rel="stylesheet" href="css/handbook.css">
+  <style>
+    .resources-grid {
+      margin-top: 8px;
+    }
+
+    .resource-card {
+      min-height: 220px;
+      justify-content: space-between;
+    }
+
+    .resource-top {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .resource-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: rgba(242, 200, 17, 0.14);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: inset 0 0 0 1px rgba(242, 200, 17, 0.2);
+    }
+
+    .resource-card .card-title {
+      font-size: 15px;
+    }
+
+    .resource-card .card-meta {
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .resource-download {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      margin-top: 8px;
+      padding: 10px 14px;
+      background: var(--accent);
+      color: #000;
+      font-weight: 700;
+      font-size: 12.5px;
+      border-radius: 8px;
+      text-decoration: none;
+      box-shadow: 0 2px 8px var(--accent-glow);
+      transition: background var(--transition), transform var(--transition);
+    }
+
+    .resource-download:hover {
+      background: var(--accent-dark);
+      transform: translateY(-1px);
+    }
+  </style>
+</head>
+<body>
+  <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+  <header class="topbar">
+    <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <a href="index.html" class="topbar-brand">
+      <div class="brand-icon">PB</div>
+      <span>Power BI for Engineers</span>
+    </a>
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input
+        type="search"
+        class="search-input"
+        id="search-input"
+        placeholder="Search modules and topics…"
+        autocomplete="off"
+        spellcheck="false"
+      >
+      <div class="search-results" id="search-results"></div>
+    </div>
+    <div class="topbar-right">
+      <span class="topbar-byline">by Raushan Ranjan, MCT</span>
+    </div>
+  </header>
+
+  <nav class="sidebar" id="sidebar"></nav>
+
+  <div class="main-layout">
+    <main class="page-content">
+      <div class="page-header">
+        <span class="module-badge">Resources</span>
+        <h1 class="page-title">Additional Sample Datasets</h1>
+        <p class="page-subtitle">
+          These files are ready-to-use practice datasets for Power Query cleaning, data modeling,
+          DAX calculations, map visualizations, and dashboard design exercises.
+        </p>
+      </div>
+
+      <div class="modules-grid resources-grid">
+        <div class="module-card resource-card">
+          <div class="resource-top">
+            <div class="resource-icon">📊</div>
+            <div class="card-num">Excel workbook</div>
+            <div class="card-title">Company Sales &amp; Operations Demo</div>
+            <div class="card-meta">
+              This dataset contains department, sales, product, employee, region, and color tables suited to star-schema modeling, data relationship cleanup, and sales trend analysis.
+            </div>
+          </div>
+          <a class="resource-download" href="assets/AdditionalReferences/CompanyDemoData.xlsx" download>Download</a>
+        </div>
+
+        <div class="module-card resource-card">
+          <div class="resource-top">
+            <div class="resource-icon">🗺️</div>
+            <div class="card-num">Text coordinates</div>
+            <div class="card-title">Dubai Mall Latitude/Longitude Points</div>
+            <div class="card-meta">
+              A small coordinate table for Dubai mall locations that is useful for geospatial plotting, map-based visuals, and custom territory exercises.
+            </div>
+          </div>
+          <a class="resource-download" href="assets/AdditionalReferences/dubaimallMap-LogandLati.txt" download>Download</a>
+        </div>
+
+        <div class="module-card resource-card">
+          <div class="resource-top">
+            <div class="resource-icon">👥</div>
+            <div class="card-num">Excel workbook</div>
+            <div class="card-title">Employee Access &amp; RLS Sample</div>
+            <div class="card-meta">
+              This employee file includes names, locations, and email data that can be used to practice row-level security, access mapping, and organizational hierarchy design.
+            </div>
+          </div>
+          <a class="resource-download" href="assets/AdditionalReferences/Employees_RLS.xlsx" download>Download</a>
+        </div>
+
+        <div class="module-card resource-card">
+          <div class="resource-top">
+            <div class="resource-icon">🖼️</div>
+            <div class="card-num">CSV</div>
+            <div class="card-title">Country-to-Image Reference</div>
+            <div class="card-meta">
+              A simple country and image URL dataset for practicing URL handling, image-based dashboard building, and data enrichment workflows.
+            </div>
+          </div>
+          <a class="resource-download" href="assets/AdditionalReferences/Image-dataset.csv" download>Download</a>
+        </div>
+
+        <div class="module-card resource-card">
+          <div class="resource-top">
+            <div class="resource-icon">📈</div>
+            <div class="card-num">Excel workbook</div>
+            <div class="card-title">KPI Trend Dataset</div>
+            <div class="card-meta">
+              Yearly sales and target values make this a good source for KPI scorecards, variance analysis, and trend comparison reporting.
+            </div>
+          </div>
+          <a class="resource-download" href="assets/AdditionalReferences/KPI-dataset.xlsx" download>Download</a>
+        </div>
+
+        <div class="module-card resource-card">
+          <div class="resource-top">
+            <div class="resource-icon">📍</div>
+            <div class="card-num">CSV</div>
+            <div class="card-title">Latitude/Longitude Reference</div>
+            <div class="card-meta">
+              A compact geospatial reference file with coordinate pairs that is ideal for map visuals, plotting exercises, and location enrichment work.
+            </div>
+          </div>
+          <a class="resource-download" href="assets/AdditionalReferences/lat-lon.csv" download>Download</a>
+        </div>
+
+        <div class="module-card resource-card">
+          <div class="resource-top">
+            <div class="resource-icon">🧾</div>
+            <div class="card-num">Excel workbook</div>
+            <div class="card-title">US Superstore 2015 Sales Data</div>
+            <div class="card-meta">
+              Order, return, and user tables cover sales, profit, shipping, product segments, and geography for a realistic retail dashboard and model-building practice set.
+            </div>
+          </div>
+          <a class="resource-download" href="assets/AdditionalReferences/Map-SuperStoreUS-2015.xlsx" download>Download</a>
+        </div>
+
+        <div class="module-card resource-card">
+          <div class="resource-top">
+            <div class="resource-icon">🛠️</div>
+            <div class="card-num">Excel workbook</div>
+            <div class="card-title">Power Query Learning Worksheet</div>
+            <div class="card-meta">
+              A training workbook centered on a Power Query transformation scenario, useful for practicing column splits, merges, and clean-up steps.
+            </div>
+          </div>
+          <a class="resource-download" href="assets/AdditionalReferences/one-skill-you-should-focus-on.xlsx" download>Download</a>
+        </div>
+
+        <div class="module-card resource-card">
+          <div class="resource-top">
+            <div class="resource-icon">🌍</div>
+            <div class="card-num">Excel workbook</div>
+            <div class="card-title">World Population Data (1980–1990)</div>
+            <div class="card-meta">
+              Country-level population values across the 1980s give learners a hands-on opportunity to unpivot time-based data and compare historical trends.
+            </div>
+          </div>
+          <a class="resource-download" href="assets/AdditionalReferences/Population raw data 1980 - 1990.xlsx" download>Download</a>
+        </div>
+
+        <div class="module-card resource-card">
+          <div class="resource-top">
+            <div class="resource-icon">🌍</div>
+            <div class="card-num">Excel workbook</div>
+            <div class="card-title">World Population Data (1991–2000)</div>
+            <div class="card-meta">
+              This country-by-year population workbook is ideal for reshaping wide annual data into a usable time-series model for charts and comparisons.
+            </div>
+          </div>
+          <a class="resource-download" href="assets/AdditionalReferences/Population Raw Data 1991 - 2000.xlsx" download>Download</a>
+        </div>
+
+        <div class="module-card resource-card">
+          <div class="resource-top">
+            <div class="resource-icon">🌍</div>
+            <div class="card-num">Excel workbook</div>
+            <div class="card-title">World Population Data (2001–2010)</div>
+            <div class="card-meta">
+              This global population file captures the 2000s with many year columns and missing values, making it valuable for cleaning and trend analysis practice.
+            </div>
+          </div>
+          <a class="resource-download" href="assets/AdditionalReferences/Population raw data 2001 - 2010.xlsx" download>Download</a>
+        </div>
+
+        <div class="module-card resource-card">
+          <div class="resource-top">
+            <div class="resource-icon">🌍</div>
+            <div class="card-num">Excel workbook</div>
+            <div class="card-title">World Population Data (2010–2020)</div>
+            <div class="card-meta">
+              A recent country population dataset designed for year-over-year trend analysis, data shaping, and multi-country dashboard storytelling.
+            </div>
+          </div>
+          <a class="resource-download" href="assets/AdditionalReferences/Population raw data 2010 - 2020.xlsx" download>Download</a>
+        </div>
+
+        <div class="module-card resource-card">
+          <div class="resource-top">
+            <div class="resource-icon">📊</div>
+            <div class="card-num">Excel workbook</div>
+            <div class="card-title">Retail Performance Dataset</div>
+            <div class="card-meta">
+              Sales rows with retailer, city, region, delivery, price, units sold, and operating profit metrics are ideal for KPI dashboards and profitability analysis.
+            </div>
+          </div>
+          <a class="resource-download" href="assets/AdditionalReferences/Power BI Dataset.xlsx" download>Download</a>
+        </div>
+
+        <div class="module-card resource-card">
+          <div class="resource-top">
+            <div class="resource-icon">👩‍💼</div>
+            <div class="card-num">CSV</div>
+            <div class="card-title">RR Analytics Dataset</div>
+            <div class="card-meta">
+              A rich employee dataset covering attrition, role, department, income, tenure, and satisfaction is excellent for segmentation, churn analysis, and DAX measures.
+            </div>
+          </div>
+          <a class="resource-download" href="assets/AdditionalReferences/RRAnalytics.csv" download>Download</a>
+        </div>
+
+        <div class="module-card resource-card">
+          <div class="resource-top">
+            <div class="resource-icon">🍫</div>
+            <div class="card-num">Excel workbook</div>
+            <div class="card-title">Chocolate Sales &amp; Calendar Data</div>
+            <div class="card-meta">
+              Shipment, product, geography, and date tables allow practice with calendar intelligence, sales performance tracking, and fulfillment status analysis.
+            </div>
+          </div>
+          <a class="resource-download" href="assets/AdditionalReferences/sample-chocolate-sales-data-all.xlsx" download>Download</a>
+        </div>
+
+        <div class="module-card resource-card">
+          <div class="resource-top">
+            <div class="resource-icon">🧪</div>
+            <div class="card-num">GitHub repository</div>
+            <div class="card-title">Microsoft PL-300 Lab Repository</div>
+            <div class="card-meta">
+              Official Microsoft learning labs and reference materials for PL-300, including hands-on exercises and supporting files to revisit and reuse in your own Power BI practice.
+            </div>
+          </div>
+          <a class="resource-download" href="https://github.com/MicrosoftLearning/PL-300-Microsoft-Power-BI-Data-Analyst" target="_blank" rel="noopener noreferrer">Open repository</a>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <span>
+        <strong>Power BI Data Analysis for Engineers</strong> &nbsp;—&nbsp;
+        <span class="footer-brand">RR Skillverse</span>
+      </span>
+      <span>by Raushan Ranjan, MCT &nbsp;|&nbsp; © 2026</span>
+    </footer>
+  </div>
+
+  <script>
+    window.CURRENT_MODULE_ID = 'resources';
+  </script>
+  <script src="js/handbook.js"></script>
+</body>
+</html>

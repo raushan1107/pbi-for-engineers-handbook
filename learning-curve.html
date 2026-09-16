@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Power Learning Curve | Power BI Data Analysis for Engineers</title>
+  <link rel="stylesheet" href="css/handbook.css">
+</head>
+<body>
+
+  <!-- Sidebar backdrop (mobile) -->
+  <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+  <!-- ===== TOP BAR ===== -->
+  <header class="topbar">
+    <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <a href="index.html" class="topbar-brand">
+      <div class="brand-icon">PB</div>
+      <span>Power BI for Engineers</span>
+    </a>
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input
+        type="search"
+        class="search-input"
+        id="search-input"
+        placeholder="Search modules and topics…"
+        autocomplete="off"
+        spellcheck="false"
+      >
+      <div class="search-results" id="search-results"></div>
+    </div>
+    <div class="topbar-right">
+      <span class="topbar-byline">by Raushan Ranjan, MCT</span>
+    </div>
+  </header>
+
+  <!-- ===== SIDEBAR (rendered by handbook.js) ===== -->
+  <nav class="sidebar" id="sidebar"></nav>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <div class="main-layout">
+    <main class="page-content">
+
+      <!-- Page header -->
+      <div class="page-header">
+        <span class="module-badge">Resource</span>
+        <h1 class="page-title">Power Learning Curve</h1>
+        <p class="page-subtitle">
+          Curated learning resources for your Power BI journey — from beginner story-based blog posts
+          through official Microsoft Learn paths to hands-on labs. Follow the sections in order or
+          jump straight to the level that matches where you are right now.
+        </p>
+        <div class="module-meta">
+          <span class="meta-pill">📖 <strong>3 sections</strong></span>
+          <span class="meta-pill">🔗 <strong>Curated external links</strong></span>
+          <span class="meta-pill">by Raushan Ranjan, MCT</span>
+        </div>
+      </div>
+
+      <!-- ================================================
+           SECTION 1 — Blog Series
+           ================================================ -->
+      <section class="lc-section">
+        <h2 class="section-heading">Blog Series</h2>
+        <p class="lc-section-intro">
+          A story-based beginner series written by Raushan Ranjan — no jargon, just practical Power BI
+          concepts told through real-world scenarios. Start here if you're new to BI or want a refreshing
+          non-technical on-ramp.
+        </p>
+
+        <div class="lc-path">
+          <div class="lc-path-header" onclick="togglePath(this)">
+            <div class="lc-path-info">
+              <div class="lc-path-title">Your Story-Based Power BI Learning Journey</div>
+              <div class="lc-path-meta">Blog Series &bull; 4 Chapters &bull; Beginner Friendly</div>
+            </div>
+            <i class="lc-chevron">›</i>
+          </div>
+          <div class="lc-path-body">
+            <ul class="lc-link-list">
+              <li><a href="https://rreducationpowerbi.blogspot.com/2025/04/power-bi-journey-begins.html" target="_blank">Chapter 1: Your Power BI Journey Begins</a></li>
+              <li><a href="https://rreducationpowerbi.blogspot.com/2025/04/chapter-2-first-dashboard.html" target="_blank">Chapter 2: The First Dashboard</a></li>
+              <li><a href="https://rreducationpowerbi.blogspot.com/2025/04/chapter-3-sharing-and-collaborating.html" target="_blank">Chapter 3: Sharing and Collaborating</a></li>
+              <li>
+                <div class="lc-sub-path">
+                  <div class="lc-sub-header" onclick="toggleSub(this)">
+                    <i class="lc-sub-chevron">›</i>
+                    Chapter 4: Advanced Features – Power BI
+                  </div>
+                  <div class="lc-sub-body">
+                    <ul class="lc-link-list">
+                      <li><a href="https://rreducationpowerbi.blogspot.com/2025/04/chapter-4-advanced-features-power-bi.html" target="_blank">Chapter 4.0: Advanced Features</a></li>
+                      <li><a href="https://rreducationpowerbi.blogspot.com/2025/04/data-connectivity-modes.html" target="_blank">Chapter 4.1: Data Connectivity Modes</a></li>
+                      <li><a href="https://rreducationpowerbi.blogspot.com/2025/04/Data-Exploration-Options-Column-Quality-Distribution-and-Profiling.html" target="_blank">Chapter 4.2 – Data Exploration Options</a></li>
+                      <li><a href="https://rreducationpowerbi.blogspot.com/2025/04/data-connectivity-modes.html" target="_blank">Chapter 4.3: Data Transformation in Power BI</a></li>
+                      <li><a href="https://rreducationpowerbi.blogspot.com/2025/04/data-connectivity-modes.html" target="_blank">Chapter 4.4: Data Modeling in Power BI</a></li>
+                      <li><a href="https://rreducationpowerbi.blogspot.com/2025/04/dax-basics-in-power-bi.html" target="_blank">Chapter 4.5: DAX Basics in Power BI</a></li>
+                      <li><a href="https://rreducationpowerbi.blogspot.com/2025/04/data-connectivity-modes.html" target="_blank">Chapter 4.6: Data Connectivity Modes</a></li>
+                      <li><a href="https://rreducationpowerbi.blogspot.com/2025/04/data-connectivity-modes.html" target="_blank">Chapter 4.7: Data Connectivity Modes</a></li>
+                      <li><a href="https://rreducationpowerbi.blogspot.com/2025/04/data-connectivity-modes.html" target="_blank">Chapter 4.8: Data Connectivity Modes</a></li>
+                      <li><a href="https://rreducationpowerbi.blogspot.com/2025/04/data-connectivity-modes.html" target="_blank">Chapter 4.9: Data Connectivity Modes</a></li>
+                    </ul>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================
+           SECTION 2 — Microsoft Learn Path
+           ================================================ -->
+      <section class="lc-section">
+        <h2 class="section-heading">Official Microsoft Learn Path</h2>
+        <p class="lc-section-intro">
+          The authoritative module-by-module learning sequence from Microsoft. Follow these paths
+          in order for structured progression from data concepts through publishing and security.
+        </p>
+
+        <!-- Path 1 -->
+        <div class="lc-path">
+          <div class="lc-path-header" onclick="togglePath(this)">
+            <div class="lc-path-info">
+              <div class="lc-path-title">1. Introduction to Data &amp; Analytics</div>
+              <div class="lc-path-meta">Learning Path &bull; 3 modules</div>
+            </div>
+            <i class="lc-chevron">›</i>
+          </div>
+          <div class="lc-path-body">
+            <ul class="lc-link-list">
+              <li><a href="https://learn.microsoft.com/en-us/training/modules/understand-concepts-of-data-analytics/4-understand-types-of-data-data-storage" target="_blank">Understand types of data and data storage</a></li>
+              <li><a href="https://learn.microsoft.com/en-us/training/modules/data-analytics-microsoft/3-roles" target="_blank">Roles in data</a></li>
+              <li><a href="https://learn.microsoft.com/en-us/training/modules/data-analytics-microsoft/1-introduction" target="_blank">Introduction to data analytics</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Path 2 -->
+        <div class="lc-path">
+          <div class="lc-path-header" onclick="togglePath(this)">
+            <div class="lc-path-info">
+              <div class="lc-path-title">2. Types of Data Analysis &amp; Analyst Tasks</div>
+              <div class="lc-path-meta">Learning Path &bull; 4 modules</div>
+            </div>
+            <i class="lc-chevron">›</i>
+          </div>
+          <div class="lc-path-body">
+            <ul class="lc-link-list">
+              <li><a href="https://learn.microsoft.com/en-us/training/modules/data-analytics-microsoft/2-data-analysis" target="_blank">Get started with Microsoft data analytics</a></li>
+              <li><a href="https://learn.microsoft.com/en-us/training/modules/understand-concepts-of-data-analytics/2-understand-data-analytics-types" target="_blank">Understand data analytics types</a></li>
+              <li><a href="https://learn.microsoft.com/en-us/training/modules/understand-concepts-of-data-analytics/3-explore-data-analytics-process" target="_blank">Explore the data analytics process</a></li>
+              <li><a href="https://learn.microsoft.com/en-us/training/modules/data-analytics-microsoft/4-tasks" target="_blank">Tasks of a data analyst</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Path 3 -->
+        <div class="lc-path">
+          <div class="lc-path-header" onclick="togglePath(this)">
+            <div class="lc-path-info">
+              <div class="lc-path-title">3. Power BI Components &amp; Building Blocks</div>
+              <div class="lc-path-meta">Learning Path &bull; 3 modules</div>
+            </div>
+            <i class="lc-chevron">›</i>
+          </div>
+          <div class="lc-path-body">
+            <ul class="lc-link-list">
+              <li><a href="https://learn.microsoft.com/en-us/training/modules/get-started-with-power-bi/1-introduction" target="_blank">Introduction to Power BI</a></li>
+              <li><a href="https://learn.microsoft.com/en-us/training/modules/get-started-with-power-bi/2-using-power-bi" target="_blank">Describe the capabilities of Microsoft Power BI (Components of PBI)</a></li>
+              <li><a href="https://learn.microsoft.com/en-us/training/modules/get-started-with-power-bi/3-building-blocks-of-power-bi" target="_blank">Building blocks of Power BI</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Path 4 -->
+        <div class="lc-path">
+          <div class="lc-path-header" onclick="togglePath(this)">
+            <div class="lc-path-info">
+              <div class="lc-path-title">4. Prepare Data (Load, Explore, Transform)</div>
+              <div class="lc-path-meta">Learning Path &bull; 3 modules</div>
+            </div>
+            <i class="lc-chevron">›</i>
+          </div>
+          <div class="lc-path-body">
+            <ul class="lc-link-list">
+              <li>
+                <div class="lc-sub-path">
+                  <div class="lc-sub-header" onclick="toggleSub(this)">
+                    <i class="lc-sub-chevron">›</i>
+                    📘 Get data in Power BI
+                  </div>
+                  <div class="lc-sub-body">
+                    <ul class="lc-link-list">
+                      <li><a href="https://learn.microsoft.com/en-us/training/modules/get-data/2-data-files" target="_blank">Get data from files</a></li>
+                      <li><a href="https://learn.microsoft.com/en-us/training/modules/get-data/3-relational-data" target="_blank">Get data from relational data sources</a></li>
+                      <li><a href="https://learn.microsoft.com/en-us/training/modules/get-data/4-nosql-database" target="_blank">Get data from a NoSQL database</a></li>
+                      <li><a href="https://learn.microsoft.com/en-us/training/modules/get-data/5-online-services" target="_blank">Get data from online services</a></li>
+                      <li><a href="https://learn.microsoft.com/en-us/training/modules/get-data/7-azure-analysis-services" target="_blank">Get data from Azure Analysis Services</a></li>
+                      <li><a href="https://learn.microsoft.com/en-us/training/modules/get-data/7-azure-analysis-services" target="_blank">Get data from Azure Analysis Services</a></li>
+                    </ul>
+                  </div>
+                </div>
+              </li>
+              <li><a href="https://learn.microsoft.com/en-us/training/modules/clean-data-power-bi/6-profile-data" target="_blank">Explore / Profile data in Power BI</a></li>
+              <li>
+                <div class="lc-sub-path">
+                  <div class="lc-sub-header" onclick="toggleSub(this)">
+                    <i class="lc-sub-chevron">›</i>
+                    📘 Clean and transform data in Power BI
+                  </div>
+                  <div class="lc-sub-body">
+                    <ul class="lc-link-list">
+                      <li><a href="https://learn.microsoft.com/en-us/training/modules/get-data/2-data-files" target="_blank">Shape the initial data</a></li>
+                      <li><a href="https://learn.microsoft.com/en-us/training/modules/clean-data-power-bi/3-data-structure" target="_blank">Simplify the data structure</a></li>
+                      <li><a href="https://learn.microsoft.com/en-us/training/modules/clean-data-power-bi/4-column-data-types" target="_blank">Evaluate and change column data types</a></li>
+                      <li><a href="https://learn.microsoft.com/en-us/training/modules/clean-data-power-bi/5-combine-tables" target="_blank">Combine multiple tables into a single table</a></li>
+                      <li><a href="https://learn.microsoft.com/en-us/training/modules/get-data/7-azure-analysis-services" target="_blank">Get data from Azure Analysis Services</a></li>
+                    </ul>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Path 5 -->
+        <div class="lc-path">
+          <div class="lc-path-header" onclick="togglePath(this)">
+            <div class="lc-path-info">
+              <div class="lc-path-title">5. Model Data (Fact/Dim, Relationships, DAX)</div>
+              <div class="lc-path-meta">Learning Path &bull; 5 modules</div>
+            </div>
+            <i class="lc-chevron">›</i>
+          </div>
+          <div class="lc-path-body">
+            <ul class="lc-link-list">
+              <li><a href="https://learn.microsoft.com/en-us/kusto/concepts/fact-and-dimension-tables?view=microsoft-fabric" target="_blank">Fact and dimension tables</a></li>
+              <li><a href="https://learn.microsoft.com/en-us/training/modules/model-data-power-bi/1-overview-power-bi" target="_blank">Introduction to modeling your data</a></li>
+              <li><a href="https://learn.microsoft.com/en-us/training/modules/model-data-power-bi/2-how-to-manage-data-relationships" target="_blank">How to manage your data relationships</a></li>
+              <li><a href="https://learn.microsoft.com/en-us/training/modules/model-data-power-bi/4-optimize-data-models" target="_blank">Optimize data models</a></li>
+              <li><a href="https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-relationships-understand" target="_blank">Model relationships in Power BI Desktop</a></li>
+              <li>
+                <div class="lc-sub-path">
+                  <div class="lc-sub-header" onclick="toggleSub(this)">
+                    <i class="lc-sub-chevron">›</i>
+                    📘 DAX
+                  </div>
+                  <div class="lc-sub-body">
+                    <ul class="lc-link-list">
+                      <li><a href="https://learn.microsoft.com/en-us/dax/dax-overview" target="_blank">DAX overview</a></li>
+                      <li><a href="https://learn.microsoft.com/en-us/dax/dax-learn-videos" target="_blank">Videos</a></li>
+                      <li><a href="https://learn.microsoft.com/en-us/dax/dax-syntax-reference" target="_blank">DAX syntax</a></li>
+                      <li><a href="https://learn.microsoft.com/en-us/dax/dax-queries" target="_blank">DAX queries (Query view)</a></li>
+                      <li><a href="https://learn.microsoft.com/en-us/training/modules/model-data-power-bi/4b-create-calculated-measures" target="_blank">Create measures</a></li>
+                      <li><a href="https://learn.microsoft.com/en-us/training/modules/model-data-power-bi/3-create-calculated-columns" target="_blank">Create calculated columns</a></li>
+                      <li><a href="https://learn.microsoft.com/en-us/training/modules/model-data-power-bi/5-create-calculated-tables" target="_blank">Create calculated tables</a></li>
+                      <li><a href="https://learn.microsoft.com/en-us/dax/dax-function-reference" target="_blank">DAX function reference</a></li>
+                    </ul>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Path 6 -->
+        <div class="lc-path">
+          <div class="lc-path-header" onclick="togglePath(this)">
+            <div class="lc-path-info">
+              <div class="lc-path-title">6. Visualize Data (Effective Visuals, Formatting, Layout)</div>
+              <div class="lc-path-meta">Learning Path &bull; 5 modules</div>
+            </div>
+            <i class="lc-chevron">›</i>
+          </div>
+          <div class="lc-path-body">
+            <ul class="lc-link-list">
+              <li><a href="https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-types-for-reports-and-q-and-a" target="_blank">Visualization types in Power BI</a></li>
+              <li><a href="https://learn.microsoft.com/en-us/power-bi/visuals/service-getting-started-with-color-formatting-and-axis-properties" target="_blank">Get started formatting report visualizations</a></li>
+              <li><a href="https://learn.microsoft.com/en-us/power-bi/visuals/service-tips-and-tricks-for-color-formatting?tabs=powerbi-desktop" target="_blank">Tips and tricks for formatting in reports</a></li>
+              <li><a href="https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-customize-title-background-and-legend" target="_blank">Customize visualization titles, backgrounds, labels, and legends</a></li>
+              <li><a href="https://learn.microsoft.com/en-us/training/modules/visuals-in-power-bi/12-formatting" target="_blank">Page layout and formatting</a></li>
+              <li><a href="https://powerbi.tips/tools/layouts-5/" target="_blank">Layout Designing</a></li>
+              <li><a href="https://learn.microsoft.com/en-us/training/modules/visuals-in-power-bi/4-create-slicers" target="_blank">Create slicers</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Path 7 -->
+        <div class="lc-path">
+          <div class="lc-path-header" onclick="togglePath(this)">
+            <div class="lc-path-info">
+              <div class="lc-path-title">7. Analyze with Power BI (AI, Advanced Visuals)</div>
+              <div class="lc-path-meta">Learning Path &bull; 8 modules</div>
+            </div>
+            <i class="lc-chevron">›</i>
+          </div>
+          <div class="lc-path-body">
+            <ul class="lc-link-list">
+              <li><a href="https://learn.microsoft.com/en-us/power-bi/consumer/end-user-analyze-visuals" target="_blank">Use the Analyze feature to explain fluctuations in report visuals</a></li>
+              <li><a href="https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-smart-narrative" target="_blank">Create smart narrative summaries</a></li>
+              <li><a href="https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-influencers?tabs=powerbi-desktop" target="_blank">Create key influencers visualizations</a></li>
+              <li><a href="https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-decomposition-tree" target="_blank">Create and view decomposition tree visuals in Power BI</a></li>
+              <li><a href="https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-anomaly-detection" target="_blank">Anomaly detection</a></li>
+              <li><a href="https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-ai-insights" target="_blank">Use AI Insights in Power BI Desktop</a></li>
+              <li><a href="https://learn.microsoft.com/en-us/power-bi/consumer/end-user-q-and-a" target="_blank">Q&amp;A for Power BI business users</a></li>
+              <li><a href="https://learn.microsoft.com/en-us/power-bi/consumer/end-user-q-and-a-tips" target="_blank">Tips for asking questions in Power BI Q&amp;A</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Path 8 -->
+        <div class="lc-path">
+          <div class="lc-path-header" onclick="togglePath(this)">
+            <div class="lc-path-info">
+              <div class="lc-path-title">8. Manage Power BI Environment (Workspaces, Refresh, RLS)</div>
+              <div class="lc-path-meta">Learning Path &bull; 10 modules</div>
+            </div>
+            <i class="lc-chevron">›</i>
+          </div>
+          <div class="lc-path-body">
+            <ul class="lc-link-list">
+              <li><a href="https://learn.microsoft.com/en-us/power-bi/collaborate-share/service-new-workspaces" target="_blank">Workspaces in Power BI</a></li>
+              <li><a href="https://learn.microsoft.com/en-us/power-bi/collaborate-share/service-create-the-new-workspaces" target="_blank">Create a workspace in Power BI</a></li>
+              <li><a href="https://learn.microsoft.com/en-us/power-bi/collaborate-share/service-roles-new-workspaces" target="_blank">Roles in workspaces in Power BI</a></li>
+              <li><a href="https://learn.microsoft.com/en-us/power-bi/collaborate-share/service-modern-usage-metrics" target="_blank">Monitor usage metrics in the workspaces</a></li>
+              <li><a href="https://learn.microsoft.com/en-us/power-bi/create-reports/service-dashboards" target="_blank">Introduction to dashboards for Power BI designers</a></li>
+              <li><a href="https://learn.microsoft.com/en-us/power-bi/create-reports/service-dashboard-create" target="_blank">Create a Power BI dashboard from a report</a></li>
+              <li><a href="https://learn.microsoft.com/en-us/power-bi/create-reports/service-dashboard-pin-live-tile-from-report" target="_blank">Pin an entire report page to a Power BI dashboard as a live tile</a></li>
+              <li><a href="https://learn.microsoft.com/en-us/power-bi/create-reports/service-dashboards-design-tips" target="_blank">Tips for designing a great Power BI dashboard</a></li>
+              <li><a href="https://learn.microsoft.com/en-us/fabric/security/service-admin-row-level-security" target="_blank">Implement row-level security (RLS)</a></li>
+              <li><a href="https://learn.microsoft.com/en-us/fabric/security/service-admin-object-level-security?tabs=table" target="_blank">Implement object-level security (OLS)</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Path 9 -->
+        <div class="lc-path">
+          <div class="lc-path-header" onclick="togglePath(this)">
+            <div class="lc-path-info">
+              <div class="lc-path-title">9. Additional Learning</div>
+              <div class="lc-path-meta">Learning Path &bull; 4 modules</div>
+            </div>
+            <i class="lc-chevron">›</i>
+          </div>
+          <div class="lc-path-body">
+            <ul class="lc-link-list">
+              <li><a href="https://learn.microsoft.com/en-us/training/modules/power-bi-copilot/" target="_blank">Create interactive reports using Copilot for Power BI</a></li>
+              <li><a href="https://learn.microsoft.com/en-us/training/modules/clean-data-power-bi/7-advanced-editor" target="_blank">Use Advanced Editor to modify M code</a></li>
+              <li><a href="https://learn.microsoft.com/en-us/dax/dax-copilot" target="_blank">Write DAX queries with Copilot</a></li>
+              <li><a href="https://learn.microsoft.com/en-us/training/modules/row-level-security-power-bi/" target="_blank">Implement row-level security (RLS)</a></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================
+           SECTION 3 — Hands-on Labs
+           ================================================ -->
+      <section class="lc-section">
+        <h2 class="section-heading">Hands-on Labs</h2>
+        <p class="lc-section-intro">
+          Official Microsoft Learn lab exercises — practice every major skill from loading raw data
+          through publishing secure reports. Each lab has a guided walkthrough and a sandbox environment.
+        </p>
+
+        <div class="lc-path">
+          <div class="lc-path-header" onclick="togglePath(this)">
+            <div class="lc-path-info">
+              <div class="lc-path-title">Power BI Labs Collection</div>
+              <div class="lc-path-meta">Labs &bull; Beginner to Intermediate</div>
+            </div>
+            <i class="lc-chevron">›</i>
+          </div>
+          <div class="lc-path-body">
+            <ul class="lc-link-list">
+              <li><a href="https://learn.microsoft.com/en-us/training/modules/get-data/lab-prepare" target="_blank">Load &amp; Explore Data in Power BI</a></li>
+              <li><a href="https://learn.microsoft.com/en-us/training/modules/clean-data-power-bi/8-lab" target="_blank">Transform Data in Power BI</a></li>
+              <li><a href="https://learn.microsoft.com/en-us/training/modules/configure-semantic-model-power-bi/8-lab" target="_blank">Modeling in Power BI (Relationships, Hierarchies, Quick Measures)</a></li>
+              <li><a href="https://learn.microsoft.com/en-us/training/modules/dax-power-bi-create-calculations/7-lab" target="_blank">DAX Calculations (Measures, Columns, Tables)</a></li>
+              <li><a href="https://learn.microsoft.com/en-us/training/modules/dax-power-bi-time-intelligence/3b-lab" target="_blank">Advanced DAX (Time Intelligence)</a></li>
+              <li><a href="https://learn.microsoft.com/en-us/training/modules/power-bi-visual-calculations/5-exercise" target="_blank">Create visual calculations in Power BI Desktop</a></li>
+              <li><a href="https://learn.microsoft.com/en-us/training/modules/power-bi-effective-reports/9-lab" target="_blank">Visualizing Reports in Power BI</a></li>
+              <li><a href="https://learn.microsoft.com/en-us/training/modules/power-bi-effective-user-experience/10-lab" target="_blank">Enhancing Report UX</a></li>
+              <li><a href="https://learn.microsoft.com/en-us/training/modules/perform-analytics-power-bi/10-lab" target="_blank">Analyzing Data in Power BI</a></li>
+              <li><a href="https://learn.microsoft.com/en-us/training/modules/enforce-power-bi-model-security/4a-exercise-enforce-model-security" target="_blank">Managing Security with RLS &amp; Workspaces</a></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer>
+      <span>
+        <strong>Power BI Data Analysis for Engineers</strong> &nbsp;—&nbsp;
+        <span class="footer-brand">RR Skillverse</span>
+      </span>
+      <span>by Raushan Ranjan, MCT &nbsp;|&nbsp; © 2026</span>
+    </footer>
+  </div>
+
+  <script>
+    window.CURRENT_MODULE_ID = 'learning-curve';
+
+    function togglePath(header) {
+      header.closest('.lc-path').classList.toggle('open');
+    }
+    function toggleSub(header) {
+      header.closest('.lc-sub-path').classList.toggle('open');
+    }
+  </script>
+  <script src="js/handbook.js"></script>
+</body>
+</html>

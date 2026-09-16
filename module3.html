@@ -1,0 +1,1836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 3: Data Transformation with Power Query | Power BI Data Analysis for Engineers</title>
+  <link rel="stylesheet" href="css/handbook.css">
+</head>
+<body>
+
+  <canvas id="confetti-canvas"></canvas>
+
+  <div class="completion-overlay" id="completion-overlay">
+    <div class="completion-card">
+      <div class="completion-emoji">🎉</div>
+      <div class="completion-title">Module 3 Complete!</div>
+      <div class="completion-message">Your RR EngineerWorks data is clean, shaped, and ready for modelling. Every issue from the Module 2 log is resolved. Module 4 is where the star schema comes together.</div>
+      <button class="btn-overlay-close" id="overlay-close">Continue →</button>
+    </div>
+  </div>
+
+  <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+  <header class="topbar">
+    <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <a href="index.html" class="topbar-brand">
+      <div class="brand-icon">PB</div>
+      <span>Power BI for Engineers</span>
+    </a>
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="search" class="search-input" id="search-input"
+             placeholder="Search modules and topics…" autocomplete="off" spellcheck="false">
+      <div class="search-results" id="search-results"></div>
+    </div>
+    <div class="topbar-right">
+      <span class="topbar-byline">by Raushan Ranjan, MCT</span>
+    </div>
+  </header>
+
+  <nav class="sidebar" id="sidebar"></nav>
+
+  <div class="main-layout">
+    <main class="page-content">
+
+      <div class="page-header">
+        <span class="module-badge">Module 3</span>
+        <h1 class="page-title">Data Transformation with Power Query</h1>
+        <p class="page-subtitle">
+          This is where raw, messy source data becomes analysis-ready. By the end of this
+          module you will have resolved all fourteen issues in your Module 2 issues log —
+          using Power Query's repeatable, auditable, no-code ETL tools. Every transformation
+          you apply is recorded as a step you can inspect, edit, or undo at any time.
+        </p>
+        <div class="module-meta">
+          <span class="meta-pill">⏱ <strong>~3 hours</strong></span>
+          <span class="meta-pill">📋 <strong>8 topics</strong> + 7 focused labs</span>
+          <span class="meta-pill">🎯 <strong>Workflow stage:</strong> Transform</span>
+          <span class="meta-pill">🔧 <strong>Fixes 14 dataset issues</strong></span>
+        </div>
+      </div>
+
+      <!-- ================================================
+           TOPIC 1 — Power Query Interface & Applied Steps
+           ================================================ -->
+      <section class="topic-section" id="pq-interface">
+        <div class="topic-header">
+          <div class="topic-num">1</div>
+          <h2 class="topic-title">Power Query Interface &amp; Applied Steps</h2>
+        </div>
+        <div class="topic-rule"></div>
+
+        <div class="block">
+          <div class="block-label">Definition</div>
+          <p>
+            <strong>Power Query Editor</strong> is Power BI's built-in ETL tool. Every
+            action you take — filtering, renaming, splitting, replacing — is recorded as
+            an <strong>Applied Step</strong> in a sequential list on the right side of
+            the editor. Each step is a line of <strong>M code</strong> (the language that
+            Power Query compiles your clicks into) that you can read, edit, or delete.
+          </p>
+        </div>
+
+        <div class="block">
+          <div class="block-label">The Four Panels</div>
+          <table class="data-table">
+            <thead><tr><th>Panel</th><th>Location</th><th>What it contains</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>Queries pane</strong></td><td>Left</td>
+                <td>All queries in the project. Right-click to rename, duplicate, reference, enable/disable load, or move to a group.</td>
+              </tr>
+              <tr>
+                <td><strong>Data preview</strong></td><td>Centre</td>
+                <td>First 1,000 rows of the current query at the selected Applied Step. Column headers show the detected data-type icon.</td>
+              </tr>
+              <tr>
+                <td><strong>Applied Steps</strong></td><td>Right (Query Settings)</td>
+                <td>Every transformation in order. Click any step to preview data at that point. The gear icon to the right of a step reopens its dialog for editing.</td>
+              </tr>
+              <tr>
+                <td><strong>Formula bar</strong></td><td>Top (toggle in View)</td>
+                <td>Shows the M expression for the selected step. You can type M directly here — every UI action is just a shortcut for writing M.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Applied Steps: Your Audit Trail</div>
+          <p>
+            Applied Steps are the most important concept in Power Query. They make your
+            transformation pipeline <em>transparent</em> (every action is visible),
+            <em>reproducible</em> (the same steps run on every refresh), and
+            <em>reversible</em> (delete a step to undo it without affecting earlier steps).
+          </p>
+          <p>
+            This is fundamentally different from editing data directly in Excel — in Excel,
+            there is no record of what you changed or when. In Power Query, every change
+            is documented, dated, and repeatable.
+          </p>
+        </div>
+
+        <div class="block">
+          <div class="block-label">The Auto-Type Step Problem</div>
+          <p>
+            When you load any file, Power Query automatically adds two steps:
+            <code>Source</code> (connects to the file) and <code>Changed Type</code>
+            (guesses data types from the first few rows). The <code>Changed Type</code>
+            step is helpful for clean data but <strong>dangerous for messy data</strong>
+            — it will convert rows it can't parse into <code>Error</code> values.
+          </p>
+          <p>
+            <strong>Rule:</strong> For any table with data quality issues, <em>delete the
+            auto-generated Changed Type step first</em>. Clean the data. Then add the
+            correct type step manually at the end. This gives you control over which
+            errors you handle and which you convert.
+          </p>
+        </div>
+
+        <div class="block">
+          <div class="block-label">M Code: What's Happening Behind the Clicks</div>
+          <p>
+            Every step you create via the ribbon has an M expression. For example,
+            removing duplicate rows generates:
+          </p>
+          <pre><code>= Table.Distinct(#"Previous Step Name", {"OrderID"})</code></pre>
+          <p>
+            You don't need to write M from scratch for most operations — but reading it
+            tells you exactly what happened. In complex cases (mixed date formats,
+            conditional logic) you'll need to edit M directly. The formula bar is where
+            you do that.
+          </p>
+        </div>
+
+        <div class="callout callout-analogy">
+          <div class="callout-head">🔧 Analogy — Recipe Card for Your Data</div>
+          <p>
+            A recipe card lists every preparation step in order: "peel the onion →
+            dice into 1cm cubes → sauté on medium heat for 5 minutes." You can follow
+            the recipe exactly, swap out a step (dice → slice), or add a new step
+            between existing ones. Applied Steps are the same thing for your data — an
+            ordered recipe that runs every time the report refreshes, producing the same
+            clean output from the same raw input.
+          </p>
+        </div>
+
+        <div class="callout callout-key">
+          <div class="callout-head">⭐ Key Takeaway</div>
+          <p>
+            Never edit data directly — always create a new Applied Step. The step list
+            is your documentation, your undo history, and your refresh logic all in one.
+            Delete the auto-type step on any messy table, clean first, type last.
+          </p>
+        </div>
+      </section>
+
+      <!-- ================================================
+           TOPIC 2 — Filter, Sort, Group, Replace, Deduplication
+           ================================================ -->
+      <section class="topic-section" id="basic-transforms">
+        <div class="topic-header">
+          <div class="topic-num">2</div>
+          <h2 class="topic-title">Filter, Sort, Group, Replace &amp; Remove Duplicates</h2>
+        </div>
+        <div class="topic-rule"></div>
+
+        <div class="block">
+          <div class="block-label">Definition</div>
+          <p>
+            These five operations cover the majority of row-level and value-level
+            cleaning tasks. Together they can resolve most data quality issues in a
+            fact table before a single column-level transform is needed.
+          </p>
+        </div>
+
+        <table class="data-table">
+          <thead>
+            <tr><th>Operation</th><th>Where to find it</th><th>Common use in RR EngineerWorks</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Filter Rows</strong></td>
+              <td>Column header dropdown arrow → Text/Number/Date filters</td>
+              <td>Remove cancelled orders from Fact_Orders if they should be excluded from analysis; remove test rows.</td>
+            </tr>
+            <tr>
+              <td><strong>Remove Duplicates</strong></td>
+              <td>Home → Remove Rows → Remove Duplicates</td>
+              <td>Eliminate the 15 duplicate OrderID rows in Fact_Orders. Always specify which columns define "duplicate" — usually the primary key.</td>
+            </tr>
+            <tr>
+              <td><strong>Replace Values</strong></td>
+              <td>Transform → Replace Values (or right-click column)</td>
+              <td>Standardise ProductCode formats (<code>PRD001</code> → <code>PRD-001</code>); replace null RegionIDs with <code>"Unknown"</code>.</td>
+            </tr>
+            <tr>
+              <td><strong>Sort</strong></td>
+              <td>Column header dropdown → Sort Ascending/Descending</td>
+              <td>Sort Fact_Orders by OrderDate before loading — makes the Data view easier to navigate and can improve compression slightly.</td>
+            </tr>
+            <tr>
+              <td><strong>Group By</strong></td>
+              <td>Transform → Group By</td>
+              <td>Aggregate production records to monthly summaries; count orders per customer for a customer-level fact table.</td>
+            </tr>
+            <tr>
+              <td><strong>Remove Errors</strong></td>
+              <td>Home → Remove Rows → Remove Errors</td>
+              <td>Last resort — remove rows where critical columns (e.g. OrderDate) could not be parsed. Better than silently loading nulls.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="block">
+          <div class="block-label">Remove Duplicates: Primary Key vs All Columns</div>
+          <p>
+            "Remove Duplicates" by default checks <em>all columns</em> — two rows must
+            be identical in every column to be considered duplicates. In Fact_Orders, the
+            duplicate rows are exact copies, so this works. But the safer pattern is to
+            select <em>only the primary key column</em> (OrderID) and remove duplicates
+            on that alone. This way, two rows with the same OrderID but slightly different
+            values (data-entry corrections) will still be caught.
+          </p>
+          <p>
+            <strong>To deduplicate on a specific column:</strong> Select the column header → Home → Remove Rows → Remove Duplicates.
+            The generated M is: <code>= Table.Distinct(#"Previous Step", {"OrderID"})</code>
+          </p>
+        </div>
+
+        <div class="callout callout-analogy">
+          <div class="callout-head">🔧 Analogy — Quality Control Inspector</div>
+          <p>
+            A QC inspector on a production line doesn't rebuild faulty products —
+            they filter them out, log them, and return clean units to the next station.
+            Power Query's Remove Rows operations do the same: they isolate and remove
+            bad data (duplicates, errors, blanks that shouldn't be there) so only
+            clean rows pass through to the model.
+          </p>
+        </div>
+
+        <div class="callout callout-key">
+          <div class="callout-head">⭐ Key Takeaway</div>
+          <p>
+            Remove Duplicates on the primary key column, not all columns — it's more
+            robust to minor data variations. Always check the row count before and after
+            to confirm you removed the right number.
+          </p>
+        </div>
+      </section>
+
+      <!-- ================================================
+           TOPIC 3 — Column Operations
+           ================================================ -->
+      <section class="topic-section" id="column-ops">
+        <div class="topic-header">
+          <div class="topic-num">3</div>
+          <h2 class="topic-title">Column Operations: Split, Merge, Extract &amp; Format</h2>
+        </div>
+        <div class="topic-rule"></div>
+
+        <div class="block">
+          <div class="block-label">Definition</div>
+          <p>
+            Column operations reshape data at the column level — splitting combined
+            values into separate columns, formatting text for consistency, or extracting
+            substrings. These are the most visible transforms because they change the
+            shape of the table itself.
+          </p>
+        </div>
+
+        <table class="data-table">
+          <thead>
+            <tr><th>Operation</th><th>How to access</th><th>RR EngineerWorks use</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Split Column by Delimiter</strong></td>
+              <td>Select column → Transform → Split Column → By Delimiter</td>
+              <td>Split <code>Category_SubCategory</code> ("Electronics|Sensors") on "|" → creates <code>Category</code> and <code>SubCategory</code> columns.</td>
+            </tr>
+            <tr>
+              <td><strong>Split Column by Character Transition</strong></td>
+              <td>Transform → Split Column → By Character Transition</td>
+              <td>Split codes like "PRD001" where letters transition to digits — useful for inconsistent ID formats.</td>
+            </tr>
+            <tr>
+              <td><strong>Merge Columns</strong></td>
+              <td>Select columns → Transform → Merge Columns</td>
+              <td>Combine FirstName + LastName into FullName; build a composite key for matching.</td>
+            </tr>
+            <tr>
+              <td><strong>Format: UPPERCASE / lowercase / Capitalize Each Word</strong></td>
+              <td>Transform → Format → (choose option)</td>
+              <td>Fix City casing in Dim_Customers; standardise ContactName to Title Case.</td>
+            </tr>
+            <tr>
+              <td><strong>Format: Trim</strong></td>
+              <td>Transform → Format → Trim</td>
+              <td>Remove leading/trailing spaces from CompanyName and SalesRepName.</td>
+            </tr>
+            <tr>
+              <td><strong>Format: Clean</strong></td>
+              <td>Transform → Format → Clean</td>
+              <td>Remove non-printable characters (line breaks, tabs) that sometimes appear in CSV exports.</td>
+            </tr>
+            <tr>
+              <td><strong>Extract</strong></td>
+              <td>Transform → Extract → (First N Characters, Last N, Between Delimiters, etc.)</td>
+              <td>Extract year from a date-text like "2024-Q1-Data" without writing M manually.</td>
+            </tr>
+            <tr>
+              <td><strong>Add Column from Examples</strong></td>
+              <td>Add Column → Column from Examples</td>
+              <td>Type the expected output for a few rows and let Power BI infer the M formula. Excellent for tricky string patterns.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="block">
+          <div class="block-label">Splitting a Column: What Happens to Your Headers</div>
+          <p>
+            When you split a column Power BI creates new columns named
+            <code>OriginalName.1</code>, <code>OriginalName.2</code>, etc. Always rename
+            these immediately — add a "Rename Columns" step right after every split.
+            This keeps the Applied Steps list readable and prevents confusion when you
+            return to the query weeks later.
+          </p>
+          <p>
+            The M code for a split on "|" looks like:
+          </p>
+          <pre><code>= Table.SplitColumn(#"Previous Step", "Category_SubCategory",
+    Splitter.SplitTextByDelimiter("|", QuoteStyle.Csv),
+    {"Category", "SubCategory"})</code></pre>
+          <p>
+            Notice you can pass the target column names directly in the M code,
+            skipping the manual rename step.
+          </p>
+        </div>
+
+        <div class="callout callout-analogy">
+          <div class="callout-head">🔧 Analogy — Shipping Container Labelling</div>
+          <p>
+            A shipping container arrives labelled "Electronics/Sensors/HighPressure" —
+            three attributes jammed into one label. A dock worker peels off the combined
+            label and replaces it with three separate, scannable labels. Split Column does
+            the same: one overcrowded column becomes several clean, targeted columns that
+            can be filtered, grouped, and joined independently.
+          </p>
+        </div>
+
+        <div class="callout callout-key">
+          <div class="callout-head">⭐ Key Takeaway</div>
+          <p>
+            Rename immediately after every Split. The auto-generated
+            <code>ColumnName.1</code> names will flow through every downstream step and
+            make your Applied Steps unreadable. Rename as part of the same split
+            transaction using M, or add a Rename step right after.
+          </p>
+        </div>
+      </section>
+
+      <!-- ================================================
+           TOPIC 4 — Appending & Merging Queries
+           ================================================ -->
+      <section class="topic-section" id="append-merge">
+        <div class="topic-header">
+          <div class="topic-num">4</div>
+          <h2 class="topic-title">Appending &amp; Merging Queries</h2>
+        </div>
+        <div class="topic-rule"></div>
+
+        <div class="block">
+          <div class="block-label">Definition</div>
+          <p>
+            <strong>Append</strong> stacks rows from two or more tables on top of each
+            other (equivalent to SQL <code>UNION ALL</code>). <strong>Merge</strong>
+            joins columns from a second table into the first based on a matching key
+            (equivalent to SQL <code>JOIN</code>).
+          </p>
+        </div>
+
+        <table class="data-table">
+          <thead>
+            <tr><th>Operation</th><th>Analogy</th><th>When to use</th><th>When NOT to use</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Append Queries</strong></td>
+              <td>Stacking pages of paper from two printers into one pile</td>
+              <td>Combining monthly CSV exports into one fact table; unioning 2023 and 2024 orders after migrating to a new system.</td>
+              <td>When the tables have different schemas or represent different entities — appending Fact_Orders and Dim_Products makes no sense.</td>
+            </tr>
+            <tr>
+              <td><strong>Merge Queries (Left Outer)</strong></td>
+              <td>Looking up a part number in a catalogue to get its description</td>
+              <td>Bringing a lookup value into a table for cleaning — e.g. adding RegionName to Fact_Orders so you can filter by name during QA. OR fixing a key mismatch by merging on a partially-matching column.</td>
+              <td>When the join should live in the model as a Relationship — don't merge dimension data into fact tables for analytical purposes. Keep them separate and let DAX traverse the relationship.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="block">
+          <div class="block-label">Merge Join Types</div>
+          <table class="data-table">
+            <thead><tr><th>Join Type</th><th>Keeps</th><th>Use for</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Left Outer</strong></td><td>All rows from left table; matched rows from right</td><td>Enriching a fact table — keep all orders even if the product isn't in the catalogue</td></tr>
+              <tr><td><strong>Inner</strong></td><td>Only rows with a match in both tables</td><td>Filtering — keep only orders for products that exist in the master catalogue</td></tr>
+              <tr><td><strong>Left Anti</strong></td><td>Rows in left that have NO match in right</td><td>Finding orphan records — orders with ProductCodes not in Dim_Products</td></tr>
+              <tr><td><strong>Full Outer</strong></td><td>All rows from both tables</td><td>Comparing two datasets to find gaps in either direction</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout callout-note">
+          <div class="callout-head">💡 Merge vs. Model Relationship</div>
+          <p>
+            Use <strong>Merge</strong> in Power Query when you need a value from another
+            table for the purpose of <em>cleaning</em> (e.g. looking up the correct
+            RegionID to fix a name mismatch). Use a <strong>Model Relationship</strong>
+            when you need the connection for <em>analysis</em> (e.g. slicing sales by
+            region). Merging for analysis creates a denormalised flat table that's
+            harder to maintain and more memory-intensive.
+          </p>
+        </div>
+
+        <div class="callout callout-key">
+          <div class="callout-head">⭐ Key Takeaway</div>
+          <p>
+            Merge for cleaning; relate for analysis. A merge in Power Query is a
+            permanent denormalisation. A model relationship is reversible, flexible,
+            and memory-efficient.
+          </p>
+        </div>
+      </section>
+
+      <!-- ================================================
+           TOPIC 5 — Conditional & Custom Columns
+           ================================================ -->
+      <section class="topic-section" id="custom-columns">
+        <div class="topic-header">
+          <div class="topic-num">5</div>
+          <h2 class="topic-title">Conditional Columns, Custom Columns &amp; Column from Examples</h2>
+        </div>
+        <div class="topic-rule"></div>
+
+        <div class="block">
+          <div class="block-label">Definition</div>
+          <p>
+            These three tools let you <em>add new columns</em> to a table derived from
+            existing columns. They differ in how you define the logic:
+          </p>
+          <table class="data-table">
+            <thead><tr><th>Tool</th><th>Logic defined by</th><th>Best for</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>Conditional Column</strong></td>
+                <td>Point-and-click if/else UI (no M required)</td>
+                <td>Simple bucketing: "If ListPrice &gt; 200 then 'Premium', else if &gt; 50 then 'Mid-range', else 'Budget'"</td>
+              </tr>
+              <tr>
+                <td><strong>Custom Column</strong></td>
+                <td>M expression you write in the formula box</td>
+                <td>Complex calculations, date parsing, multi-condition logic, combining columns</td>
+              </tr>
+              <tr>
+                <td><strong>Column from Examples</strong></td>
+                <td>You type expected values for a few rows; Power BI infers the M formula</td>
+                <td>Tricky text patterns where you know the output but not the M syntax</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Key Power Query Custom Column Patterns</div>
+          <pre><code>// Text manipulation
+= Text.Upper([ProductCode])                     // "prd-001" → "PRD-001"
+= Text.Trim([CompanyName])                      // remove leading/trailing spaces
+= Text.Proper([ContactName])                    // "JOHN SMITH" → "John Smith"
+= Text.Replace([ProductCode], "PRD", "PRD-")   // "PRD001" → "PRD-001"
+
+// Date parsing with mixed formats
+= try Date.From([OrderDate])
+  otherwise try Date.FromText([OrderDate], [Format="yyyy-MM-dd"])
+  otherwise null
+
+// Bucketing (equivalent to Conditional Column)
+= if [ListPrice] > 200 then "Premium"
+  else if [ListPrice] > 50 then "Mid-range"
+  else "Budget"
+
+// Build a first-of-month date from "Jan_2024"
+= Date.From("01-" & Text.Replace([Attribute], "_", "-"))</code></pre>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Custom Column vs. Calculated Column (DAX)</div>
+          <p>
+            This is a common point of confusion. The rule is simple:
+          </p>
+          <ul>
+            <li><strong>Power Query Custom Column:</strong> Data is fixed when loaded. Use for cleaning, reshaping, building keys, parsing dates. Runs during refresh. Values are stored in the model.</li>
+            <li><strong>DAX Calculated Column:</strong> Calculated in the model after load. Can access other tables via relationships. Use for business logic that depends on the model structure (e.g. a column that looks up a value from a related table).</li>
+          </ul>
+          <p>
+            If it's purely about reshaping or parsing the source data → Custom Column in Power Query.
+            If it requires a relationship traversal or depends on filter context → Calculated Column in DAX.
+          </p>
+        </div>
+
+        <div class="callout callout-key">
+          <div class="callout-head">⭐ Key Takeaway</div>
+          <p>
+            Do as much column derivation as possible in Power Query — it runs during
+            refresh, before the model is loaded, and avoids inflating the model's
+            calculated column overhead. Keep DAX calculated columns for logic that
+            genuinely requires relationship traversal.
+          </p>
+        </div>
+      </section>
+
+      <!-- ================================================
+           TOPIC 6 — Handling Nulls, Blanks & Errors
+           ================================================ -->
+      <section class="topic-section" id="nulls-errors">
+        <div class="topic-header">
+          <div class="topic-num">6</div>
+          <h2 class="topic-title">Handling Nulls, Blanks &amp; Errors</h2>
+        </div>
+        <div class="topic-rule"></div>
+
+        <div class="block">
+          <div class="block-label">Definition — Three Different Things</div>
+          <table class="data-table">
+            <thead><tr><th>Value</th><th>What it is</th><th>Shown in preview as</th><th>Column Quality shows</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>null</strong></td>
+                <td>Absence of value — the cell truly has no data</td>
+                <td><em>null</em> (italic)</td>
+                <td>Empty %</td>
+              </tr>
+              <tr>
+                <td><strong>Blank ("")</strong></td>
+                <td>An empty text string — a value IS present, it just contains nothing</td>
+                <td>(empty cell — looks the same as null but isn't)</td>
+                <td>Valid % (it IS a value)</td>
+              </tr>
+              <tr>
+                <td><strong>Error</strong></td>
+                <td>A conversion or operation failed for this row</td>
+                <td><em>Error</em> (italic, red tint)</td>
+                <td>Error %</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>
+            This distinction matters because Replace Values only replaces <code>null</code>
+            by default. A blank string (<code>""</code>) will not be caught by
+            "Replace null with Unknown" — you need a separate step to handle blanks.
+          </p>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Handling Patterns</div>
+          <table class="data-table">
+            <thead><tr><th>Situation</th><th>Tool</th><th>M generated</th></tr></thead>
+            <tbody>
+              <tr>
+                <td>Replace null with a fixed value</td>
+                <td>Transform → Replace Values → tick "Replace null values"</td>
+                <td><code>Table.ReplaceValue(…, null, "Unknown", Replacer.ReplaceValue, {"Column"})</code></td>
+              </tr>
+              <tr>
+                <td>Replace blank string with null</td>
+                <td>Replace Values: Value to Find = "" (empty), Replace With = null</td>
+                <td><code>Table.ReplaceValue(…, "", null, Replacer.ReplaceText, {"Column"})</code></td>
+              </tr>
+              <tr>
+                <td>Convert errors to null</td>
+                <td>Right-click column → Replace Errors</td>
+                <td><code>Table.ReplaceErrorValues(…, {{"Column", null}})</code></td>
+              </tr>
+              <tr>
+                <td>Remove rows with errors in a specific column</td>
+                <td>Home → Remove Rows → Remove Errors</td>
+                <td><code>Table.RemoveRowsWithErrors(…, {"Column"})</code></td>
+              </tr>
+              <tr>
+                <td>Fill down (propagate value through consecutive nulls)</td>
+                <td>Transform → Fill → Down</td>
+                <td><code>Table.FillDown(…, {"Column"})</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="block">
+          <div class="block-label">The Correct Order for Type Conversion on Messy Columns</div>
+          <ol>
+            <li>Delete the auto-generated Changed Type step.</li>
+            <li>Replace Errors → null (so error rows become visible, not invisible).</li>
+            <li>Replace null with a meaningful default OR remove rows with null where appropriate.</li>
+            <li>Clean and standardise the column values (trim, format, replace).</li>
+            <li>Change Type to the correct final type (Int64, Date, Decimal, etc.).</li>
+          </ol>
+          <p>
+            Doing the type conversion last, after cleaning, means no cleaning step can
+            reintroduce errors. The type step runs on already-clean values.
+          </p>
+        </div>
+
+        <div class="callout callout-analogy">
+          <div class="callout-head">🔧 Analogy — Sorting Post at a Mail Room</div>
+          <p>
+            A mail-room worker sorts incoming packages: packages with complete addresses
+            go through (valid), packages with missing postcodes go to a "needs attention"
+            tray (null/blank), and packages with illegible labels go to the errors pile.
+            These are three separate handling processes, not one. Power Query treats nulls,
+            blanks, and errors the same way — each needs its own handling rule.
+          </p>
+        </div>
+
+        <div class="callout callout-key">
+          <div class="callout-head">⭐ Key Takeaway</div>
+          <p>
+            null, blank, and Error are different values that need different fixes.
+            Always check Column Quality (Empty % vs Error %) to know which you have
+            before writing a replacement rule.
+          </p>
+        </div>
+      </section>
+
+      <!-- ================================================
+           TOPIC 7 — Data Profiling
+           ================================================ -->
+      <section class="topic-section" id="data-profiling">
+        <div class="topic-header">
+          <div class="topic-num">7</div>
+          <h2 class="topic-title">Data Profiling: Column Quality, Distribution &amp; Profile</h2>
+        </div>
+        <div class="topic-rule"></div>
+
+        <div class="block">
+          <div class="block-label">Definition</div>
+          <p>
+            Data profiling is the practice of automatically analysing a column to
+            understand its characteristics before you transform it. Power Query
+            provides three views — accessible in the <strong>View</strong> ribbon — that
+            turn hundreds of rows into a one-glance quality assessment.
+          </p>
+        </div>
+
+        <table class="data-table">
+          <thead>
+            <tr><th>Profiling View</th><th>What it shows</th><th>Best for detecting</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Column Quality</strong></td>
+              <td>Three bars below each column header: Valid % (green), Error % (red), Empty % (grey)</td>
+              <td>Null RegionIDs (Empty %), text strings in numeric columns (Error %), missing phone numbers</td>
+            </tr>
+            <tr>
+              <td><strong>Column Distribution</strong></td>
+              <td>A frequency bar chart + Distinct count (number of different values) and Unique count (values that appear only once)</td>
+              <td>Casing variants of the same value (LONDON / London / london = 3 distinct but should be 1); ProductCode format mix; unexpected values</td>
+            </tr>
+            <tr>
+              <td><strong>Column Profile</strong></td>
+              <td>Detailed statistics for the selected column: min, max, average, standard deviation, value distribution table, null count</td>
+              <td>Outlier values (a ListPrice of 0 that should be excluded); impossible dates; column cardinality</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="block">
+          <div class="block-label">Profile Based on Entire Dataset</div>
+          <p>
+            By default, Power Query profiles only the <em>first 1,000 rows</em> of your
+            data. This is fast but misleading for large tables — a null at row 1,500 will
+            not appear in the Column Quality bars, making you think the column is clean
+            when it isn't.
+          </p>
+          <p>
+            <strong>Fix:</strong> Click the status bar text that says
+            <em>"Column profiling based on top 1000 rows"</em> (bottom-left of the
+            Power Query window) and switch to
+            <strong>"Column profiling based on entire data set"</strong>.
+            Do this on every new project before any profiling.
+          </p>
+          <p>
+            For Fact_Orders (600 rows) the difference is minimal. For production datasets
+            with millions of rows this switch is critical.
+          </p>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Reading Distinct vs. Unique Count</div>
+          <p>
+            Column Distribution shows two counts above the chart:
+          </p>
+          <ul>
+            <li><strong>Distinct:</strong> How many different values exist (including duplicates). <code>ProductCode</code> in raw Fact_Orders shows ~90 distinct values even though there are only 30 products — the casing variants inflate this count.</li>
+            <li><strong>Unique:</strong> How many values appear exactly once. If Distinct ≠ Unique, there are repeated values. If Distinct = row count, every value is unique (good for primary key columns like OrderID — unless there are duplicates).</li>
+          </ul>
+        </div>
+
+        <div class="callout callout-example">
+          <div class="callout-head">📊 RR EngineerWorks Profiling Findings</div>
+          <p>Here is what profiling reveals about the raw tables — before any transformation:</p>
+          <table class="data-table">
+            <thead><tr><th>Table</th><th>Column</th><th>Profile finding</th><th>Action needed</th></tr></thead>
+            <tbody>
+              <tr><td>Fact_Orders</td><td>OrderDate</td><td>Column Quality: 100% Valid — but type is Text, not Date</td><td>Change type using UK locale</td></tr>
+              <tr><td>Fact_Orders</td><td>ProductCode</td><td>Column Distribution: ~90 distinct values (should be 30)</td><td>Standardise casing and format</td></tr>
+              <tr><td>Fact_Orders</td><td>RegionID</td><td>Column Quality: ~4.7% Empty</td><td>Replace null with "Unknown"</td></tr>
+              <tr><td>Dim_Customers</td><td>City</td><td>Column Distribution: city names appear 2–3× under different casings</td><td>Capitalize Each Word (Text.Proper)</td></tr>
+              <tr><td>Fact_Production</td><td>PlannedUnits</td><td>Column Quality: ~36% Error (type conversion failed)</td><td>Delete Changed Type step; fix text rows; re-type</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout callout-key">
+          <div class="callout-head">⭐ Key Takeaway</div>
+          <p>
+            Always switch profiling to "entire data set" and always check all three
+            profiling views before starting any transform. Five minutes of profiling
+            prevents hours of chasing phantom data quality bugs in DAX measures.
+          </p>
+        </div>
+      </section>
+
+      <!-- ================================================
+           TOPIC 8 — Query Parameters & Reusability
+           ================================================ -->
+      <section class="topic-section" id="parameters">
+        <div class="topic-header">
+          <div class="topic-num">8</div>
+          <h2 class="topic-title">Query Parameters &amp; Reusability</h2>
+        </div>
+        <div class="topic-rule"></div>
+
+        <div class="block">
+          <div class="block-label">Definition</div>
+          <p>
+            A <strong>query parameter</strong> is a named, typed variable that can be
+            referenced anywhere in your Power Query M code. Instead of hardcoding
+            a file path like <code>"C:\Users\raushan\Downloads\..."</code>, you store it
+            in a parameter called <code>FilePath_Dataset</code> and reference that
+            parameter in your Source step. Change the parameter once → all queries that
+            use it update automatically.
+          </p>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Creating a Parameter</div>
+          <p>
+            <strong>Home → Manage Parameters → New Parameter</strong>. Give it:
+          </p>
+          <ul>
+            <li><strong>Name:</strong> descriptive, PascalCase — e.g. <code>FilePath_Dataset</code></li>
+            <li><strong>Type:</strong> Text (for file paths), Date, Number, etc.</li>
+            <li><strong>Current Value:</strong> the actual file path or value</li>
+            <li><strong>Suggested Values:</strong> optionally list valid options</li>
+          </ul>
+          <p>
+            In the Source step M code, replace the hardcoded path with the parameter
+            name: <code>= Excel.Workbook(File.Contents(FilePath_Dataset), true)</code>
+          </p>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Why Parameters Matter for Maintainability</div>
+          <p>
+            When a colleague opens your .pbix file on their machine, or when you deploy
+            to a different environment, the file path will be different. Without a
+            parameter, every query that references the file needs to be updated manually.
+            With a parameter, you update one value and everything refreshes.
+          </p>
+          <p>
+            Parameters are also used for <strong>incremental refresh</strong>
+            (RangeStart / RangeEnd parameters), <strong>environment switching</strong>
+            (dev vs prod database names), and <strong>what-if analysis</strong> (a
+            threshold parameter that filters data above/below a value).
+          </p>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Query Groups — Organising Large Projects</div>
+          <p>
+            In the Queries pane, right-click any query → <strong>Move to Group → New
+            Group</strong>. Create groups like <strong>Fact Tables</strong>,
+            <strong>Dimension Tables</strong>, <strong>Helper Queries</strong>, and
+            <strong>Parameters</strong>. This keeps the Queries pane readable when you
+            have 15+ queries.
+          </p>
+        </div>
+
+        <div class="callout callout-key">
+          <div class="callout-head">⭐ Key Takeaway</div>
+          <p>
+            Any hardcoded value that might change (file path, server name, date range)
+            should be a parameter. It takes two minutes to create and saves hours of
+            debugging when the environment changes.
+          </p>
+        </div>
+      </section>
+
+      <!-- ================================================
+           TOPIC 9 — HANDS-ON LABS
+           ================================================ -->
+      <section class="topic-section" id="lab-transform">
+        <div class="topic-header">
+          <div class="topic-num">9</div>
+          <h2 class="topic-title">Hands-On: Clean the RR EngineerWorks Dataset</h2>
+        </div>
+        <div class="topic-rule"></div>
+
+        <p>
+          You now have both the knowledge and the issues log. In these six labs you will
+          resolve every data quality issue identified in Module 2 — in the correct order
+          for a professional Power Query workflow. Open your saved
+          <code>RR_EngineerWorks_v2.pbix</code> and click
+          <strong>Transform Data</strong> to enter Power Query Editor before starting.
+        </p>
+
+        <!-- ─── Lab 3A: Workspace Setup ─── -->
+        <div class="lab-box">
+          <div class="lab-head">
+            <span class="lab-head-icon">⚙️</span>
+            <div class="lab-head-text">
+              <div class="lab-head-title">Lab 3A — Workspace Setup</div>
+              <div class="lab-head-sub">5 minutes &nbsp;|&nbsp; Do this once before all other labs</div>
+            </div>
+          </div>
+          <div class="lab-body">
+
+            <div class="step">
+              <div class="step-n">1</div>
+              <div class="step-body">
+                <div class="step-title">Enable all three profiling views</div>
+                <p>In the <strong>View</strong> ribbon, tick:</p>
+                <ul>
+                  <li><strong>Column Quality</strong></li>
+                  <li><strong>Column Distribution</strong></li>
+                  <li><strong>Column Profile</strong></li>
+                  <li><strong>Formula Bar</strong> (if not already visible)</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="step-n">2</div>
+              <div class="step-body">
+                <div class="step-title">Switch profiling to entire dataset</div>
+                <p>
+                  Look at the bottom-left status bar of Power Query Editor. If it says
+                  <em>"Column profiling based on top 1000 rows"</em>, click it and
+                  select <strong>"Column profiling based on entire data set"</strong>.
+                </p>
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="step-n">3</div>
+              <div class="step-body">
+                <div class="step-title">Organise queries into groups</div>
+                <p>
+                  In the Queries pane, right-click <strong>Fact_Orders</strong> → Move
+                  to Group → New Group → name it <strong>Fact Tables</strong>. Move
+                  <strong>Fact_Production</strong> to the same group.
+                </p>
+                <p>
+                  Create a second group called <strong>Dimension Tables</strong> and
+                  move <strong>Dim_Regions</strong>, <strong>Dim_Products</strong>,
+                  <strong>Dim_Customers</strong> into it.
+                </p>
+                <p>
+                  Create a third group called <strong>Reference</strong> and move
+                  <strong>Targets_Wide</strong>, <strong>HR_Directory</strong>, and
+                  <strong>Dim_Date</strong> into it.
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ─── Lab 3B: Clean Fact_Orders ─── -->
+        <div class="lab-box">
+          <div class="lab-head">
+            <span class="lab-head-icon">🔧</span>
+            <div class="lab-head-text">
+              <div class="lab-head-title">Lab 3B — Clean Fact_Orders (6 Fixes)</div>
+              <div class="lab-head-sub">~45 minutes &nbsp;|&nbsp; The main cleaning lab — take your time here</div>
+            </div>
+          </div>
+          <div class="lab-body">
+
+            <div class="step">
+              <div class="step-n">1</div>
+              <div class="step-body">
+                <div class="step-title">Delete the auto-generated Changed Type step</div>
+                <p>
+                  Click <strong>Fact_Orders</strong> in the Queries pane. In the Applied
+                  Steps panel on the right, you will see <code>Source</code> and
+                  <code>Changed Type</code>.
+                </p>
+                <p>
+                  Click the <strong>Changed Type</strong> step → click the
+                  <strong>✕</strong> to its left to delete it. The data preview will
+                  now show all columns as type <code>ABC</code> (text). That is fine —
+                  we'll re-apply correct types at the end.
+                </p>
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="step-n">2</div>
+              <div class="step-body">
+                <div class="step-title">Fix 1 — Remove duplicate rows</div>
+                <p>
+                  Click the <strong>OrderID</strong> column header to select it.
+                  Then: <strong>Home → Remove Rows → Remove Duplicates</strong>.
+                </p>
+                <p>
+                  Check the row count in the bottom-left status bar.
+                  It should drop from <strong>600 → 585 rows</strong>.
+                </p>
+                <p>The Applied Step added: <code>Removed Duplicates</code></p>
+                <p>
+                  The M generated:
+                </p>
+                <pre><code>= Table.Distinct(#"Source", {"OrderID"})</code></pre>
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="step-n">3</div>
+              <div class="step-body">
+                <div class="step-title">Fix 2 — Standardise ProductCode format</div>
+                <p>
+                  The column contains <code>PRD-001</code> (correct), <code>prd-001</code>
+                  (lowercase), <code>PRD001</code> (no dash), and <code>Prd-001</code>
+                  (wrong case). We need everything as <code>PRD-001</code>.
+                </p>
+                <p><strong>Step A — Uppercase everything:</strong>
+                  Select the <strong>ProductCode</strong> column →
+                  <strong>Transform → Format → UPPERCASE</strong>.
+                  This converts <code>prd-001</code> → <code>PRD-001</code>
+                  and <code>Prd-001</code> → <code>PRD-001</code>. ✓
+                </p>
+                <p><strong>Step B — Fix the no-dash variant:</strong>
+                  <strong>Transform → Replace Values</strong> →
+                  Value to Find: <code>PRD0</code> → Replace With: <code>PRD-0</code>
+                  → OK.
+                  This converts <code>PRD001</code> → <code>PRD-001</code>. ✓
+                </p>
+                <p>
+                  After both steps, check Column Distribution on ProductCode — it should
+                  now show exactly <strong>30 distinct values</strong>, one per product.
+                </p>
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="step-n">4</div>
+              <div class="step-body">
+                <div class="step-title">Fix 3 — Standardise CustomerID format</div>
+                <p>
+                  The <strong>CustomerID</strong> column mixes three formats:
+                  <code>C001</code> (correct), <code>CUST-001</code> (wrong prefix),
+                  and bare integers like <code>1</code> (no prefix, no padding). All
+                  must normalise to <code>C{NNN}</code> so this column joins cleanly to
+                  <code>Dim_Customers.CustomerID</code> in Module 4.
+                </p>
+                <p>
+                  <strong>Step A — Remove the "CUST-" prefix:</strong><br>
+                  Select the <strong>CustomerID</strong> column →
+                  <strong>Transform → Replace Values</strong> →
+                  Value to Find: <code>CUST-</code> → Replace With: <code>C</code> → OK.<br>
+                  This converts <code>CUST-001</code> → <code>C001</code>. ✓
+                </p>
+                <p>
+                  <strong>Step B — Convert bare integers to C-format:</strong><br>
+                  <strong>Add Column → Custom Column</strong>. Name it
+                  <code>CustomerID_Fixed</code>. Enter this expression:
+                </p>
+                <pre><code>= if Text.StartsWith([CustomerID], "C")
+  then [CustomerID]
+  else "C" &amp; Text.PadStart([CustomerID], 3, "0")</code></pre>
+                <p>
+                  This leaves <code>C001</code> unchanged, and converts <code>1</code>
+                  → <code>C001</code>, <code>23</code> → <code>C023</code>. ✓
+                </p>
+                <p>
+                  <strong>Step C — Replace the original column:</strong><br>
+                  Right-click the original <strong>CustomerID</strong> column header →
+                  <strong>Remove</strong>. Then double-click
+                  <strong>CustomerID_Fixed</strong> and rename it to
+                  <code>CustomerID</code>. Drag the column left to restore its original
+                  position (second column after OrderID), or use
+                  <strong>Transform → Move → To Beginning</strong> and then reorder.
+                </p>
+                <p>
+                  <strong>Verify:</strong> Column Distribution on CustomerID should now
+                  show at most 80 distinct values, all matching the <code>C{NNN}</code>
+                  pattern (e.g. <code>C001</code>–<code>C080</code>).
+                </p>
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="step-n">5</div>
+              <div class="step-body">
+                <div class="step-title">Fix 4 — Fix OrderDate mixed formats</div>
+                <p>
+                  The OrderDate column contains three types of values: proper date
+                  objects, UK-format text strings (<code>01/05/2024</code>), and ISO
+                  text strings (<code>2024-05-01</code>). Power Query needs to be told
+                  which locale to use for the text strings.
+                </p>
+                <p>
+                  Click the <strong>type icon</strong> (ABC) in the OrderDate column
+                  header → select <strong>Using Locale…</strong>
+                </p>
+                <p>
+                  In the dialog: Data Type = <strong>Date</strong>, Locale = <strong>English
+                  (United Kingdom)</strong> → OK.
+                </p>
+                <p>
+                  This tells Power Query that <code>01/05/2024</code> means 1 May 2024
+                  (DD/MM/YYYY, UK) not January 5th (US). ISO format
+                  (<code>2024-05-01</code>) is parsed correctly regardless of locale.
+                </p>
+                <p>
+                  After this step: Column Quality should show 100% Valid (green) on
+                  OrderDate. The type icon should change to a calendar icon.
+                </p>
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="step-n">6</div>
+              <div class="step-body">
+                <div class="step-title">Fix 5 — Replace null RegionID with "Unknown"</div>
+                <p>
+                  Click the <strong>RegionID</strong> column. Column Quality shows ~4.7%
+                  Empty (about 28 rows).
+                </p>
+                <p>
+                  <strong>Transform → Replace Values</strong>. In the dialog, leave
+                  "Value To Find" blank and tick <strong>"Replace null values"</strong>
+                  (or type <code>null</code>). Set Replace With to <code>Unknown</code>.
+                  → OK.
+                </p>
+                <p>
+                  Column Quality for RegionID should now show 100% Valid (no Empty %).
+                </p>
+                <p>
+                  <strong>Note:</strong> These orders have an unidentified region.
+                  Using "Unknown" preserves the rows in the dataset and makes this
+                  group visible in reports — the management team can then investigate
+                  the root cause. Silently dropping 28 rows would hide the problem.
+                </p>
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="step-n">7</div>
+              <div class="step-body">
+                <div class="step-title">Fix 6 — Trim SalesRepName</div>
+                <p>
+                  Select the <strong>SalesRepName</strong> column.
+                  <strong>Transform → Format → Trim</strong>.
+                </p>
+                <p>
+                  This removes leading and trailing spaces. Column Distribution should now
+                  show fewer distinct values — the names with leading spaces were being
+                  counted as separate values from the clean versions. After trimming, you
+                  should see exactly <strong>15 distinct sales rep names</strong>.
+                </p>
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="step-n">8</div>
+              <div class="step-body">
+                <div class="step-title">Fix 7 — Verify and recalculate TotalAmount</div>
+                <p>
+                  About 8% of <code>TotalAmount</code> values in the source data are
+                  incorrect. Rather than trying to identify which rows are wrong, we
+                  recalculate the column from its component parts — the same formula the
+                  source system should have used.
+                </p>
+                <p>
+                  <strong>Add Column → Custom Column</strong>. Name it
+                  <code>TotalAmount_Correct</code>. Expression:
+                </p>
+                <pre><code>= [Quantity] * [UnitPrice] * (1 - [DiscountPct])</code></pre>
+                <p>
+                  Scan Column Distribution on both <code>TotalAmount</code> and
+                  <code>TotalAmount_Correct</code> — approximately 8% of rows will show
+                  different values, confirming the source data quality issue.
+                </p>
+                <p>
+                  Replace the original column:
+                </p>
+                <ul>
+                  <li>Right-click the <strong>TotalAmount</strong> column header → <strong>Remove</strong></li>
+                  <li>Double-click <strong>TotalAmount_Correct</strong> → rename to <code>TotalAmount</code></li>
+                </ul>
+                <p>
+                  All subsequent modules will use this recalculated, correct value.
+                </p>
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="step-n">9</div>
+              <div class="step-body">
+                <div class="step-title">Fix 8 — Set all column types correctly</div>
+                <p>
+                  Now that the data is clean, set types precisely. Select multiple columns
+                  and set their types using the column header type icon or
+                  <strong>Transform → Data Type</strong>:
+                </p>
+                <ul>
+                  <li><strong>OrderID:</strong> Text (it's a code, not a number to add)</li>
+                  <li><strong>OrderDate:</strong> Date (already set in Fix 4)</li>
+                  <li><strong>CustomerID, ProductCode, RegionID, SalesRepName, OrderStatus, SalesChannel:</strong> Text</li>
+                  <li><strong>Quantity:</strong> Whole Number (Int64)</li>
+                  <li><strong>UnitPrice, DiscountPct, TotalAmount:</strong> Decimal Number</li>
+                </ul>
+                <p>
+                  After setting types: verify Column Quality shows 100% Valid on all
+                  numeric columns. Any remaining errors indicate rows that still have
+                  non-numeric values — investigate before removing.
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Verify Fact_Orders -->
+        <div class="verify-box">
+          <div class="verify-title">✓ Verify Fact_Orders Before Continuing</div>
+          <ul class="verify-list">
+            <li>Row count = 585 (was 600 before deduplication)</li>
+            <li>OrderDate column type icon = calendar (Date), Column Quality = 100% Valid</li>
+            <li>CustomerID Column Distribution = at most 80 distinct values, all in <code>C{NNN}</code> format</li>
+            <li>ProductCode Column Distribution = exactly 30 distinct values</li>
+            <li>RegionID Column Quality = 100% Valid (no Empty %)</li>
+            <li>SalesRepName Column Distribution = exactly 15 distinct values (no leading-space variants)</li>
+            <li>TotalAmount column type = Decimal Number, Column Quality = 100% Valid (recalculated from source)</li>
+          </ul>
+        </div>
+
+        <!-- ─── Lab 3C: Clean Dim_Products ─── -->
+        <div class="lab-box">
+          <div class="lab-head">
+            <span class="lab-head-icon">📦</span>
+            <div class="lab-head-text">
+              <div class="lab-head-title">Lab 3C — Clean Dim_Products (Split the Combined Column)</div>
+              <div class="lab-head-sub">~15 minutes</div>
+            </div>
+          </div>
+          <div class="lab-body">
+
+            <div class="step">
+              <div class="step-n">1</div>
+              <div class="step-body">
+                <div class="step-title">Delete the auto Changed Type step</div>
+                <p>
+                  Click <strong>Dim_Products</strong> in the Queries pane. Delete the
+                  <code>Changed Type</code> Applied Step.
+                </p>
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="step-n">2</div>
+              <div class="step-body">
+                <div class="step-title">Split Category_SubCategory on "|"</div>
+                <p>
+                  Select the <strong>Category_SubCategory</strong> column.
+                  <strong>Transform → Split Column → By Delimiter</strong>.
+                </p>
+                <p>
+                  In the dialog: Delimiter = <strong>Custom</strong>, type
+                  <code>|</code> → Split At = <strong>Each occurrence of the
+                  delimiter</strong> → OK.
+                </p>
+                <p>
+                  Power BI creates two new columns:
+                  <code>Category_SubCategory.1</code> and
+                  <code>Category_SubCategory.2</code>.
+                </p>
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="step-n">3</div>
+              <div class="step-body">
+                <div class="step-title">Rename the two new columns</div>
+                <p>
+                  Double-click <strong>Category_SubCategory.1</strong> in the column
+                  header and rename it to <code>Category</code>.
+                </p>
+                <p>
+                  Double-click <strong>Category_SubCategory.2</strong> and rename it
+                  to <code>SubCategory</code>.
+                </p>
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="step-n">4</div>
+              <div class="step-body">
+                <div class="step-title">Set column types</div>
+                <p>
+                  <strong>ProductCode, ProductName, Category, SubCategory, Status:</strong> Text<br>
+                  <strong>UnitCost, ListPrice:</strong> Decimal Number
+                </p>
+                <p>
+                  Verify: 30 rows, Category column shows "Electronics", "Machinery",
+                  "Safety", "Services" as distinct values. SubCategory shows detailed
+                  values like "Sensors", "Controllers", "Actuators" etc.
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ─── Lab 3D: Clean Dim_Customers ─── -->
+        <div class="lab-box">
+          <div class="lab-head">
+            <span class="lab-head-icon">👥</span>
+            <div class="lab-head-text">
+              <div class="lab-head-title">Lab 3D — Clean Dim_Customers (Casing &amp; Spaces)</div>
+              <div class="lab-head-sub">~20 minutes</div>
+            </div>
+          </div>
+          <div class="lab-body">
+
+            <div class="step">
+              <div class="step-n">1</div>
+              <div class="step-body">
+                <div class="step-title">Delete the auto Changed Type step</div>
+                <p>Click <strong>Dim_Customers</strong>. Delete <code>Changed Type</code>.</p>
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="step-n">2</div>
+              <div class="step-body">
+                <div class="step-title">Trim CompanyName (remove leading/trailing spaces)</div>
+                <p>
+                  Select <strong>CompanyName</strong> →
+                  <strong>Transform → Format → Trim</strong>.
+                </p>
+                <p>
+                  Column Distribution on CompanyName should show fewer distinct values
+                  after this step — the leading/trailing space variants of the same company
+                  name collapse into one.
+                </p>
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="step-n">3</div>
+              <div class="step-body">
+                <div class="step-title">Fix ContactName casing (UPPERCASE/lowercase → Title Case)</div>
+                <p>
+                  Select <strong>ContactName</strong> →
+                  <strong>Transform → Format → Capitalize Each Word</strong>.
+                </p>
+                <p>
+                  This converts <code>ANITA DESAI</code> → <code>Anita Desai</code> and
+                  <code>robert marshall</code> → <code>Robert Marshall</code>.
+                </p>
+                <p>
+                  Check Column Distribution: distinct values should reduce significantly
+                  as variants of the same name collapse into one.
+                </p>
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="step-n">4</div>
+              <div class="step-body">
+                <div class="step-title">Fix City casing (same approach)</div>
+                <p>
+                  Select <strong>City</strong> →
+                  <strong>Transform → Format → Capitalize Each Word</strong>.
+                </p>
+                <p>
+                  <code>LONDON</code> → <code>London</code>, <code>manchester</code>
+                  → <code>Manchester</code>. Column Distribution on City should now show
+                  each city appearing multiple times (one per customer) rather than the
+                  same city in three different cases.
+                </p>
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="step-n">5</div>
+              <div class="step-body">
+                <div class="step-title">Handle blank Phone values (optional)</div>
+                <p>
+                  Column Quality on Phone shows ~25% Empty. Blank phones are valid —
+                  some customers simply haven't provided one. Leave them as null rather
+                  than replacing with a placeholder like "N/A". In DAX, you can use
+                  <code>ISBLANK()</code> to check for missing phones where needed.
+                </p>
+                <p>
+                  <strong>Document this decision in a comment in the query:</strong>
+                  Right-click <strong>Dim_Customers</strong> in the Queries pane →
+                  <strong>Properties</strong> → add a Description:
+                  "Phone column: ~25% null — intentional, no substitute value assigned."
+                </p>
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="step-n">6</div>
+              <div class="step-body">
+                <div class="step-title">Set all column types</div>
+                <p>
+                  All columns: <strong>Text</strong> (CustomerID, CompanyName,
+                  ContactName, City, Country, RegionID, Segment, Phone, Email).
+                </p>
+                <p>
+                  Verify: 80 rows, ContactName Column Distribution shows person-name
+                  patterns in Title Case, City shows consistent capitalisation.
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ─── Lab 3E: Fix Fact_Production ─── -->
+        <div class="lab-box">
+          <div class="lab-head">
+            <span class="lab-head-icon">🏭</span>
+            <div class="lab-head-text">
+              <div class="lab-head-title">Lab 3E — Fix Fact_Production (Text-to-Number Columns)</div>
+              <div class="lab-head-sub">~15 minutes &nbsp;|&nbsp; Classic "delete auto-type first" scenario</div>
+            </div>
+          </div>
+          <div class="lab-body">
+
+            <div class="step">
+              <div class="step-n">1</div>
+              <div class="step-body">
+                <div class="step-title">Click Fact_Production and observe the errors</div>
+                <p>
+                  Select <strong>Fact_Production</strong>. Look at
+                  <strong>PlannedUnits</strong> and <strong>ActualUnits</strong> in the
+                  preview. Column Quality shows a significant Error % in red — these are
+                  the rows where the auto-type step tried to convert a text string like
+                  <code>"340"</code> into an integer and failed (because it's stored as
+                  text, not a number).
+                </p>
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="step-n">2</div>
+              <div class="step-body">
+                <div class="step-title">Delete the Changed Type step</div>
+                <p>
+                  In Applied Steps, delete <code>Changed Type</code>.
+                  All columns now show as <code>ABC</code> (text). The error cells
+                  in PlannedUnits and ActualUnits disappear — the raw text values
+                  are now visible again as <code>"340"</code>, <code>"125"</code>, etc.
+                </p>
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="step-n">3</div>
+              <div class="step-body">
+                <div class="step-title">Convert PlannedUnits and ActualUnits: text → integer</div>
+                <p>
+                  <kbd>Ctrl+Click</kbd> to select both <strong>PlannedUnits</strong>
+                  and <strong>ActualUnits</strong> columns simultaneously.
+                  Click the <strong>type icon (ABC)</strong> in either selected column
+                  header → <strong>Whole Number</strong>.
+                </p>
+                <p>
+                  Because the text values are simply digits (<code>"340"</code>), they
+                  convert cleanly to integers. Column Quality should show 100% Valid
+                  on both columns.
+                </p>
+                <p>
+                  <strong>If you still see errors:</strong> Right-click one of the error
+                  cells → <strong>Replace Errors</strong> → set to
+                  <code>null</code> (a null production figure is better than an error).
+                  Then change type.
+                </p>
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="step-n">4</div>
+              <div class="step-body">
+                <div class="step-title">Set all column types</div>
+                <p>
+                  <strong>ProductionID, Plant, ProductCode, ProductionMonth:</strong> Text<br>
+                  <strong>PlannedUnits, ActualUnits, ShiftCount:</strong> Whole Number<br>
+                  <strong>DefectRate_Pct:</strong> Decimal Number
+                </p>
+                <p>
+                  For <strong>ProductionMonth</strong> (stored as text like
+                  <code>"2024-01-01"</code>): click the type icon → <strong>Date</strong>.
+                  ISO-format strings (YYYY-MM-DD) are unambiguous and need no locale setting.
+                </p>
+                <p>
+                  Verify: 288 rows, PlannedUnits Column Quality = 100% Valid (green).
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ─── Lab 3F: Unpivot Targets_Wide ─── -->
+        <div class="lab-box">
+          <div class="lab-head">
+            <span class="lab-head-icon">↔️</span>
+            <div class="lab-head-text">
+              <div class="lab-head-title">Lab 3F — Unpivot &amp; Reshape Targets_Wide → Fact_Targets</div>
+              <div class="lab-head-sub">~25 minutes &nbsp;|&nbsp; The conceptually richest transformation in this module</div>
+            </div>
+          </div>
+          <div class="lab-body">
+
+            <p style="color:var(--text-secondary);font-size:14px;margin-bottom:16px;">
+              <strong>The problem:</strong> Targets_Wide has months as columns
+              (<code>Jan_2024</code>, <code>Feb_2024</code>, …). This wide format cannot
+              be related to a date table — there is no single "Month" column to join on.
+              We need to reshape it to <em>tall format</em>: one row per region per month,
+              with a single Month column and a single TargetAmount column.
+              This operation is called <strong>Unpivot</strong>.
+            </p>
+
+            <div class="step">
+              <div class="step-n">1</div>
+              <div class="step-body">
+                <div class="step-title">Rename the query from Targets_Wide to Fact_Targets</div>
+                <p>
+                  Right-click <strong>Targets_Wide</strong> in the Queries pane →
+                  <strong>Rename</strong> → type <code>Fact_Targets</code> → Enter.
+                </p>
+                <p>
+                  After transformation this will be a proper fact table — one row per
+                  region per month — so the <code>Fact_</code> prefix is correct.
+                </p>
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="step-n">2</div>
+              <div class="step-body">
+                <div class="step-title">Delete the auto Changed Type step</div>
+                <p>Delete the <code>Changed Type</code> Applied Step.</p>
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="step-n">3</div>
+              <div class="step-body">
+                <div class="step-title">Select RegionName and Unpivot Other Columns</div>
+                <p>
+                  Click the <strong>RegionName</strong> column header to select it.
+                  Then: <strong>Transform → Unpivot Columns → Unpivot Other Columns</strong>.
+                </p>
+                <p>
+                  This tells Power Query: "Keep RegionName fixed. Turn every other column
+                  (Jan_2024, Feb_2024, …) into rows."
+                </p>
+                <p>
+                  Result: The table goes from <strong>10 rows × 13 columns</strong>
+                  to <strong>120 rows × 3 columns</strong>:
+                  <code>RegionName</code>, <code>Attribute</code>, <code>Value</code>.
+                </p>
+                <p>
+                  The Attribute column contains <code>"Jan_2024"</code>,
+                  <code>"Feb_2024"</code>, etc. The Value column contains the target
+                  amounts.
+                </p>
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="step-n">4</div>
+              <div class="step-body">
+                <div class="step-title">Rename Attribute → Month and Value → TargetAmount</div>
+                <p>Double-click <strong>Attribute</strong> → rename to <code>Month</code>.</p>
+                <p>Double-click <strong>Value</strong> → rename to <code>TargetAmount</code>.</p>
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="step-n">5</div>
+              <div class="step-body">
+                <div class="step-title">Build a Date column from the Month text</div>
+                <p>
+                  The Month column contains <code>"Jan_2024"</code>. We need a proper
+                  date (first of each month) to join against the date table later.
+                </p>
+                <p>
+                  <strong>Add Column → Custom Column</strong>. Name it
+                  <code>MonthStart</code>. Enter this expression:
+                </p>
+                <pre><code>= Date.From("01-" &amp; Text.Replace([Month], "_", "-"))</code></pre>
+                <p>
+                  This turns <code>"Jan_2024"</code> into <code>"01-Jan-2024"</code>
+                  and then converts it to a Date: <code>01/01/2024</code>.
+                </p>
+                <p>
+                  Change the <strong>MonthStart</strong> column type to <strong>Date</strong>.
+                </p>
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="step-n">6</div>
+              <div class="step-body">
+                <div class="step-title">Fix the RegionName mismatch</div>
+                <p>
+                  Column Distribution on RegionName shows
+                  <code>"Europe - International"</code> as one of the 10 region names.
+                  In <strong>Dim_Regions</strong>, the equivalent entry for R09 is simply
+                  <code>"Europe"</code>. The mismatch is the dash-and-descriptive suffix in
+                  Targets_Wide vs. the plain regional name in Dim_Regions.
+                </p>
+                <p>
+                  These two tables will need to join on RegionName in Module 4. Fix the
+                  mismatch now so the join works:
+                </p>
+                <p>
+                  <strong>Transform → Replace Values</strong><br>
+                  Value to Find: <code>Europe - International</code><br>
+                  Replace With: <code>Europe</code><br>
+                  → OK.
+                </p>
+                <p>
+                  <strong>Verify:</strong> Fact_Targets.RegionName should now contain
+                  exactly the same 10 distinct values as Dim_Regions.RegionName
+                  (North England, South England, East England, West England, Midlands,
+                  Scotland, Wales, Northern Ireland, Europe, Rest of World).
+                </p>
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="step-n">7</div>
+              <div class="step-body">
+                <div class="step-title">Set column types and verify</div>
+                <p>
+                  <strong>RegionName, Month:</strong> Text<br>
+                  <strong>TargetAmount:</strong> Whole Number (or Decimal if targets have decimal precision)<br>
+                  <strong>MonthStart:</strong> Date (already set in Step 5)
+                </p>
+                <p>
+                  <strong>Verify:</strong> 120 rows (10 regions × 12 months), MonthStart
+                  column shows proper dates from 2024-01-01 to 2024-12-01.
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Reveal: Unpivot explained visually -->
+        <div class="callout callout-note" style="margin-top: -8px; margin-bottom: 24px;">
+          <div class="callout-head">💡 What Unpivot Actually Does</div>
+          <p><strong>Before unpivot (wide — 1 row per region):</strong></p>
+          <table class="data-table" style="margin:8px 0;">
+            <thead><tr><th>RegionName</th><th>Jan_2024</th><th>Feb_2024</th><th>Mar_2024</th></tr></thead>
+            <tbody>
+              <tr><td>North England</td><td>95,000</td><td>88,000</td><td>102,000</td></tr>
+            </tbody>
+          </table>
+          <p style="margin-top:8px;"><strong>After unpivot (tall — 1 row per region per month):</strong></p>
+          <table class="data-table" style="margin:8px 0;">
+            <thead><tr><th>RegionName</th><th>Month</th><th>TargetAmount</th></tr></thead>
+            <tbody>
+              <tr><td>North England</td><td>Jan_2024</td><td>95,000</td></tr>
+              <tr><td>North England</td><td>Feb_2024</td><td>88,000</td></tr>
+              <tr><td>North England</td><td>Mar_2024</td><td>102,000</td></tr>
+            </tbody>
+          </table>
+          <p style="margin-top:8px;">The tall format is the only one that can join to a date dimension table and produce correct time intelligence calculations.</p>
+        </div>
+
+        <!-- ─── Lab 3G: HR_Directory decision ─── -->
+        <div class="lab-box">
+          <div class="lab-head">
+            <span class="lab-head-icon">🔗</span>
+            <div class="lab-head-text">
+              <div class="lab-head-title">Lab 3G — The Disconnected Table Decision (HR_Directory)</div>
+              <div class="lab-head-sub">~10 minutes &nbsp;|&nbsp; An important design decision, not a technical fix</div>
+            </div>
+          </div>
+          <div class="lab-body">
+
+            <div class="step">
+              <div class="step-n">1</div>
+              <div class="step-body">
+                <div class="step-title">Confirm the disconnection</div>
+                <p>
+                  Click <strong>HR_Directory</strong>. Review the columns:
+                  <code>EmployeeID</code>, <code>FullName</code>,
+                  <code>Department</code>, <code>JobTitle</code>,
+                  <code>HireDate</code>, <code>AnnualSalary_GBP</code>,
+                  <code>ManagerName</code>, <code>OfficeLocation</code>.
+                </p>
+                <p>
+                  None of these columns match a primary or foreign key in any other
+                  table. <code>OfficeLocation</code> is a city name — it could partially
+                  match Dim_Customers.City, but that join would be meaningless.
+                  <code>ManagerName</code> is free text with no equivalent in any other
+                  table.
+                </p>
+                <p>
+                  This is a genuinely disconnected table. It cannot be meaningfully
+                  related to the sales or production model without additional data
+                  (such as a SalesRep-to-EmployeeID mapping table).
+                </p>
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="step-n">2</div>
+              <div class="step-body">
+                <div class="step-title">The three options — choose one</div>
+                <p>For a disconnected table you always have three choices:</p>
+                <table class="data-table">
+                  <thead><tr><th>Option</th><th>When to use</th><th>How</th></tr></thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>A — Exclude from model load</strong></td>
+                      <td>The table is irrelevant to current analysis. Keep the query for documentation but don't load it.</td>
+                      <td>Right-click query → uncheck <strong>Enable Load</strong>. Query stays in Power Query Editor but doesn't appear in Data or Model view.</td>
+                    </tr>
+                    <tr>
+                      <td><strong>B — Fix the join key</strong></td>
+                      <td>A mapping table exists (or can be created) that links EmployeeID to SalesRepName.</td>
+                      <td>Create a mapping table query → Merge HR_Directory on EmployeeID → use the matched SalesRepName as the join key.</td>
+                    </tr>
+                    <tr>
+                      <td><strong>C — Use as a standalone report table</strong></td>
+                      <td>HR wants its own HR reports that don't cross with sales data.</td>
+                      <td>Load it as a standalone table — it creates no relationships but can be used in visuals that only show HR data.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="step-n">3</div>
+              <div class="step-body">
+                <div class="step-title">Apply Option A — Disable load for now</div>
+                <p>
+                  Right-click <strong>HR_Directory</strong> in the Queries pane →
+                  uncheck <strong>Enable Load</strong>. A dialog warns that this will
+                  remove the table from the model — click <strong>Continue</strong>.
+                </p>
+                <p>
+                  The query name will now appear in <em>italics</em> in the Queries
+                  pane — this is the visual indicator that a query exists but does not
+                  load into the model.
+                </p>
+                <p>
+                  <strong>Note for the capstone:</strong> If your chosen scenario is
+                  HR Workforce Insights (Module 10), you'll revisit this query and
+                  implement Option B by creating a SalesRep-to-Employee mapping.
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Final apply -->
+        <div class="lab-box">
+          <div class="lab-head">
+            <span class="lab-head-icon">✅</span>
+            <div class="lab-head-text">
+              <div class="lab-head-title">Final Step — Close &amp; Apply + Save</div>
+              <div class="lab-head-sub">5 minutes</div>
+            </div>
+          </div>
+          <div class="lab-body">
+
+            <div class="step">
+              <div class="step-n">1</div>
+              <div class="step-body">
+                <div class="step-title">Review your Applied Steps list for every active query</div>
+                <p>
+                  Before applying, click through each active query and verify the Applied
+                  Steps list looks sensible — no steps that reference deleted columns,
+                  no unexpected Error steps, no step names like
+                  "Changed Type1" that indicate duplicate auto-steps.
+                </p>
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="step-n">2</div>
+              <div class="step-body">
+                <div class="step-title">Click Close &amp; Apply</div>
+                <p>
+                  <strong>Home → Close &amp; Apply</strong>. Power BI will execute every
+                  Applied Step in every active query and load the clean tables into the
+                  model. A "Loading" spinner appears per query. Total load time should
+                  be under 5 seconds for this dataset.
+                </p>
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="step-n">3</div>
+              <div class="step-body">
+                <div class="step-title">Verify in Data view</div>
+                <p>
+                  Switch to <strong>Data view</strong> (table icon on the left sidebar).
+                  Click through each table and confirm:
+                </p>
+                <ul>
+                  <li><strong>Fact_Orders:</strong> 585 rows, OrderDate shows dates, ProductCode all <code>PRD-NNN</code> format</li>
+                  <li><strong>Dim_Products:</strong> 30 rows, separate Category and SubCategory columns</li>
+                  <li><strong>Dim_Customers:</strong> 80 rows, ContactName in Title Case, City in Title Case</li>
+                  <li><strong>Fact_Production:</strong> 288 rows, PlannedUnits and ActualUnits as numbers</li>
+                  <li><strong>Fact_Targets:</strong> 120 rows, MonthStart as a Date column</li>
+                  <li><strong>HR_Directory:</strong> Should NOT appear in Data view (load disabled)</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="step-n">4</div>
+              <div class="step-body">
+                <div class="step-title">Save as RR_EngineerWorks_v3.pbix</div>
+                <p>
+                  <strong>File → Save As</strong> → name it
+                  <code>RR_EngineerWorks_v3.pbix</code>. This is your clean, typed,
+                  ready-to-model dataset — the starting point for Module 4.
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Full verify checklist -->
+        <div class="verify-box">
+          <div class="verify-title">✓ Module 3 Complete Verification</div>
+          <ul class="verify-list">
+            <li>Fact_Orders: 585 rows, Date type on OrderDate, CustomerID all <code>C{NNN}</code> format, 30 distinct ProductCodes, no null RegionIDs, TotalAmount recalculated from source</li>
+            <li>Dim_Products: 30 rows, Category and SubCategory are separate columns</li>
+            <li>Dim_Customers: 80 rows, CompanyName trimmed, ContactName and City in consistent Title Case</li>
+            <li>Fact_Production: 288 rows, PlannedUnits and ActualUnits are Whole Number type with no errors, ProductionMonth is Date type</li>
+            <li>Fact_Targets: 120 rows, MonthStart is a Date column, RegionName matches Dim_Regions exactly (includes "Europe" for R09, not "Europe - International")</li>
+            <li>HR_Directory: does not appear in Data view (Enable Load = false)</li>
+            <li>Dim_Date and Dim_Regions: unchanged and loaded (we'll build Dim_Date properly in Module 6)</li>
+            <li>File saved as <code>RR_EngineerWorks_v3.pbix</code></li>
+          </ul>
+        </div>
+
+      </section><!-- /lab-transform -->
+
+      <!-- ================================================
+           MARK COMPLETE
+           ================================================ -->
+      <div class="complete-zone" id="complete-zone">
+        <div class="complete-zone-title">Finished all 7 labs? The data is clean — mark it done.</div>
+        <button class="btn-complete" id="btn-complete">Mark Module 3 Complete</button>
+        <p class="complete-hint">Your progress is saved in this browser session.</p>
+        <p class="complete-done-msg">✓ Module 3 complete — clean data, ready to model!</p>
+      </div>
+
+      <nav class="page-nav">
+        <a href="module2.html" class="page-nav-btn">← Module 2: Connecting to Sources</a>
+        <a href="module4.html" class="page-nav-btn primary">Module 4: Data Modelling →</a>
+      </nav>
+
+    </main>
+
+    <footer>
+      <span>
+        <strong>Power BI Data Analysis for Engineers</strong> &nbsp;—&nbsp;
+        <span class="footer-brand">RR Skillverse</span>
+      </span>
+      <span>by Raushan Ranjan, MCT &nbsp;|&nbsp; © 2026</span>
+    </footer>
+  </div>
+
+  <script>
+    window.CURRENT_MODULE_ID = 3;
+  </script>
+  <script src="js/handbook.js"></script>
+</body>
+</html>

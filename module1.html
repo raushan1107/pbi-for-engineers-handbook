@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 1: Power BI Foundations | Power BI Data Analysis for Engineers</title>
+  <link rel="stylesheet" href="css/handbook.css">
+</head>
+<body>
+
+  <!-- Confetti canvas (rendered above everything except overlay) -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- Completion overlay -->
+  <div class="completion-overlay" id="completion-overlay">
+    <div class="completion-card">
+      <div class="completion-emoji">🎉</div>
+      <div class="completion-title">Module 1 Complete!</div>
+      <div class="completion-message">You now understand the Power BI landscape and the analytical workflow that structures this entire course. On to Module 2.</div>
+      <button class="btn-overlay-close" id="overlay-close">Continue →</button>
+    </div>
+  </div>
+
+  <!-- Sidebar backdrop (mobile) -->
+  <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+  <!-- ===== TOP BAR ===== -->
+  <header class="topbar">
+    <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <a href="index.html" class="topbar-brand">
+      <div class="brand-icon">PB</div>
+      <span>Power BI for Engineers</span>
+    </a>
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input
+        type="search"
+        class="search-input"
+        id="search-input"
+        placeholder="Search modules and topics…"
+        autocomplete="off"
+        spellcheck="false"
+      >
+      <div class="search-results" id="search-results"></div>
+    </div>
+    <div class="topbar-right">
+      <span class="topbar-byline">by Raushan Ranjan, MCT</span>
+    </div>
+  </header>
+
+  <!-- ===== SIDEBAR (rendered by JS) ===== -->
+  <nav class="sidebar" id="sidebar"></nav>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <div class="main-layout">
+    <main class="page-content">
+
+      <!-- Page header -->
+      <div class="page-header">
+        <span class="module-badge">Module 1</span>
+        <h1 class="page-title">Power BI Foundations &amp; the Analytics Workflow</h1>
+        <p class="page-subtitle">
+          Before you connect a single data source, you need a clear mental model of what
+          Power BI is, why each of its components exists, and how data flows from a raw
+          spreadsheet to an interactive executive dashboard. This module builds that foundation.
+        </p>
+        <div class="module-meta">
+          <span class="meta-pill">⏱ <strong>~1.5 hours</strong></span>
+          <span class="meta-pill">📋 <strong>5 topics</strong> + 1 hands-on orientation lab</span>
+          <span class="meta-pill">🎯 <strong>Workflow stage:</strong> Explore (orientation)</span>
+        </div>
+      </div>
+
+      <!-- ================================================
+           TOPIC 1 — BI Concepts & Power BI's Role
+           ================================================ -->
+      <section class="topic-section" id="bi-concepts">
+        <div class="topic-header">
+          <div class="topic-num">1</div>
+          <h2 class="topic-title">Business Intelligence Concepts &amp; Power BI's Role</h2>
+        </div>
+        <div class="topic-rule"></div>
+
+        <div class="block">
+          <div class="block-label">Definition</div>
+          <p>
+            <strong>Business Intelligence (BI)</strong> is a technology-driven process for
+            collecting, structuring, and analysing business data in order to support
+            faster, better-informed decisions. <strong>Power BI</strong> is Microsoft's
+            end-to-end BI platform — it handles every stage of that process inside one
+            connected toolset.
+          </p>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Why It Matters</div>
+          <p>
+            Most organisations are not short of data — they're short of <em>decisions
+            backed by data</em>. Teams export the same SQL table to Excel every Monday
+            morning, manually paste it into a PowerPoint, and email it around. By the
+            time the deck lands in the meeting room the numbers are already stale. And
+            if anyone asks "what does this mean for EMEA specifically?" there is no answer
+            — because the Excel file doesn't have that slice.
+          </p>
+          <p>
+            Power BI replaces that entire manual cycle with a refreshable, filterable,
+            shareable analytics solution. The analyst stops being the person who runs
+            the report and becomes the person who <em>built the system that runs it
+            automatically.</em>
+          </p>
+        </div>
+
+        <div class="callout callout-analogy">
+          <div class="callout-head">🔧 Analogy — Factory Control Room</div>
+          <p>
+            Individual machines on a production floor generate readings — temperature,
+            pressure, throughput rate — but those raw sensor values mean nothing until
+            a central control panel synthesises them into a unified, actionable view.
+            Power BI is that control panel for your business data. The machines are your
+            data sources; the control panel is your semantic model and report canvas.
+          </p>
+        </div>
+
+        <div class="callout callout-example">
+          <div class="callout-head">📊 RR EngineerWorks Example</div>
+          <p>
+            RR EngineerWorks — the fictional manufacturing company used throughout this
+            handbook — tracks sales orders in an Excel file, production output in a SQL
+            Server database, regional targets in a SharePoint list, and headcount in a
+            separate HR spreadsheet. A manager currently copies all four sources into a
+            master workbook every Monday — a two-hour, error-prone process. By the end
+            of Module 9 you will have a single Power BI report that refreshes these
+            sources overnight and surfaces every KPI the business needs in seconds.
+          </p>
+        </div>
+
+        <div class="callout callout-key">
+          <div class="callout-head">⭐ Key Takeaway</div>
+          <p>
+            Power BI doesn't just chart data. It replaces an entire manual reporting
+            workflow with a connected, refreshable, shareable analytics solution. The
+            value is not in the charts — it's in eliminating the Monday-morning copy-paste.
+          </p>
+        </div>
+      </section>
+
+      <!-- ================================================
+           TOPIC 2 — The Power BI Ecosystem
+           ================================================ -->
+      <section class="topic-section" id="ecosystem">
+        <div class="topic-header">
+          <div class="topic-num">2</div>
+          <h2 class="topic-title">The Power BI Ecosystem</h2>
+        </div>
+        <div class="topic-rule"></div>
+
+        <div class="block">
+          <div class="block-label">Definition</div>
+          <p>
+            Power BI is a <strong>family of tools</strong>, not a single application.
+            Understanding which component does what is the difference between knowing
+            where to build something and being confused about why it "looks different
+            after I published it."
+          </p>
+        </div>
+
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Component</th>
+              <th>Role</th>
+              <th>Where it lives</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Power BI Desktop</strong></td>
+              <td>Connect to data sources, transform data (Power Query), build the semantic model, design report pages. This is where you spend 80% of development time.</td>
+              <td>Free Windows app (powerbi.microsoft.com)</td>
+            </tr>
+            <tr>
+              <td><strong>Power BI Service</strong></td>
+              <td>Publish, share, schedule refresh, manage security, collaborate in workspaces, create dashboards. The cloud platform your audience uses.</td>
+              <td>app.powerbi.com (browser)</td>
+            </tr>
+            <tr>
+              <td><strong>Power BI Mobile</strong></td>
+              <td>Consume reports and dashboards on the go. Optimised views for phones and tablets.</td>
+              <td>iOS, Android, Windows apps</td>
+            </tr>
+            <tr>
+              <td><strong>On-premises Data Gateway</strong></td>
+              <td>Bridges the Service to data sources that live inside your corporate network — SQL Server, local files, SharePoint on-prem. Required for scheduled refresh of on-prem data.</td>
+              <td>Software installed on a server in your network</td>
+            </tr>
+            <tr>
+              <td><strong>Workspaces</strong></td>
+              <td>Shared folders in the Service for team collaboration. Contains reports, datasets (semantic models), dashboards, and dataflows.</td>
+              <td>Power BI Service</td>
+            </tr>
+            <tr>
+              <td><strong>Dashboards</strong></td>
+              <td>Single-page pin-boards assembled from tiles taken from multiple reports. Great for at-a-glance executive views. Created in the Service, not Desktop.</td>
+              <td>Power BI Service</td>
+            </tr>
+            <tr>
+              <td><strong>Reports</strong></td>
+              <td>Multi-page, interactive documents built in Desktop and published to the Service. The primary deliverable in this course.</td>
+              <td>Desktop (build) → Service (publish)</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="block">
+          <div class="block-label">Why It Matters</div>
+          <p>
+            The most common confusion in Power BI is caused by not knowing which
+            component owns which capability. For example: you cannot create Row-Level
+            Security roles in the Service (you define them in Desktop). You cannot
+            pin visuals to a Dashboard from Desktop (only from the Service).
+            A quick mental map prevents hours of frustrated searching.
+          </p>
+        </div>
+
+        <div class="callout callout-analogy">
+          <div class="callout-head">🔧 Analogy — Professional Publishing Workflow</div>
+          <p>
+            Think of Desktop as your <strong>InDesign workspace</strong> — where you
+            write, design, and lay things out. The Service is the <strong>online
+            publication platform</strong> — where readers access the finished work.
+            Mobile is the <strong>reader's phone app</strong>. The Gateway is the
+            <strong>secure content-sync bridge</strong> that keeps your local asset
+            files in sync with the platform overnight.
+          </p>
+        </div>
+
+        <div class="callout callout-example">
+          <div class="callout-head">📊 RR EngineerWorks Example</div>
+          <p>
+            You will build the entire RR EngineerWorks analytics solution in
+            <strong>Desktop</strong> throughout Modules 2–8. In Module 9 you will
+            <strong>publish</strong> it to the Service, configure a nightly
+            <strong>scheduled refresh</strong> via the Gateway (because the SQL Server
+            production data is on-premises), and create an <strong>App</strong> so the
+            management team receives a clean, read-only view of the reports.
+          </p>
+        </div>
+
+        <div class="callout callout-key">
+          <div class="callout-head">⭐ Key Takeaway</div>
+          <p>
+            <strong>Desktop = Build. Service = Share. Mobile = Consume. Gateway = Refresh
+            on-premises data.</strong> Memorise this. Most "why isn't this working?"
+            questions answer themselves once you know which tool owns which action.
+          </p>
+        </div>
+      </section>
+
+      <!-- ================================================
+           TOPIC 3 — Architecture & Data Flow
+           ================================================ -->
+      <section class="topic-section" id="architecture">
+        <div class="topic-header">
+          <div class="topic-num">3</div>
+          <h2 class="topic-title">Architecture &amp; Data Flow</h2>
+        </div>
+        <div class="topic-rule"></div>
+
+        <div class="block">
+          <div class="block-label">Definition</div>
+          <p>
+            The Power BI <strong>data flow</strong> describes the journey that raw data
+            makes from its original source to the end user's screen. It has five
+            distinct stages, each with its own tool and purpose:
+          </p>
+        </div>
+
+        <table class="data-table">
+          <thead>
+            <tr><th>#</th><th>Stage</th><th>Tool</th><th>What happens here</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td><strong>Data Sources</strong></td>
+              <td>External systems</td>
+              <td>Raw data lives here — Excel files, SQL Server tables, SharePoint lists, APIs, cloud databases.</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td><strong>Power Query (ETL)</strong></td>
+              <td>Desktop</td>
+              <td>Extract, Transform, Load. Remove duplicates, fix date formats, unpivot tables, split columns, merge queries. Data is cleaned <em>before</em> entering the model.</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td><strong>Semantic Model</strong></td>
+              <td>Desktop</td>
+              <td>The in-memory model. Tables are connected with relationships, hierarchies are defined, DAX measures are created. This is the "single source of truth."</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td><strong>Report Canvas</strong></td>
+              <td>Desktop</td>
+              <td>Visuals — charts, cards, tables, maps, slicers — built on top of the model. Interactivity is configured here (drill-down, tooltips, bookmarks).</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td><strong>Power BI Service</strong></td>
+              <td>Service / Gateway</td>
+              <td>Published reports consumed by stakeholders. Refresh is scheduled, Row-Level Security is assigned, dashboards and Apps are created.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="block">
+          <div class="block-label">Why It Matters</div>
+          <p>
+            Understanding the pipeline tells you <em>where</em> to look when things go
+            wrong. Wrong row count in a visual? Is the problem at the source, in
+            Power Query, or in a DAX measure? Slow report? Is it the data volume,
+            the model design, or the visuals? A pipeline mental model lets you
+            diagnose in minutes rather than hours.
+          </p>
+          <p>
+            It also tells you <em>where to fix problems.</em> The golden rule: fix
+            data quality issues at the earliest possible stage. A missing column that
+            can be added to the SQL view is better addressed at Stage 1 than patched
+            with a DAX workaround at Stage 3.
+          </p>
+        </div>
+
+        <div class="callout callout-analogy">
+          <div class="callout-head">🔧 Analogy — Water Treatment Plant</div>
+          <p>
+            Raw water (source data) enters the plant → passes through filtration and
+            treatment stages (Power Query) → is stored in clean holding tanks
+            (semantic model) → piped to homes as clean, drinkable water (visuals and
+            reports) → metered and billed (Service analytics and governance).
+          </p>
+          <p>
+            If the water at the tap smells, you don't fix the tap — you investigate
+            the treatment stage or the source. Same principle applies in Power BI.
+          </p>
+        </div>
+
+        <div class="callout callout-example">
+          <div class="callout-head">📊 RR EngineerWorks Data Flow</div>
+          <p><strong>Stage 1 — Sources:</strong> Fact_Orders.xlsx, SQL Server production DB, SharePoint targets list, HR spreadsheet.</p>
+          <p><strong>Stage 2 — Power Query:</strong> Fix inconsistent date formats in Fact_Orders, unpivot Targets_Wide (months as columns → rows), remove duplicate order rows, trim customer name casing.</p>
+          <p><strong>Stage 3 — Semantic Model:</strong> Star schema — Fact_Orders at centre, surrounded by Dim_Products, Dim_Customers, Dim_Regions, Dim_Date. DAX measures for Total Sales, Sales vs Target, YTD Revenue.</p>
+          <p><strong>Stage 4 — Report Canvas:</strong> Sales Performance page, Production Overview page, Management Summary page with drill-through and bookmarks.</p>
+          <p><strong>Stage 5 — Service:</strong> Published to "RR EngineerWorks" workspace. Nightly refresh via Gateway. Row-Level Security by region for regional managers.</p>
+        </div>
+
+        <div class="callout callout-key">
+          <div class="callout-head">⭐ Key Takeaway</div>
+          <p>
+            Power BI is a pipeline. A mistake at any stage propagates into every stage
+            downstream. Fix problems at their source — always. The five stages also map
+            directly to the five-step analytics workflow introduced in the next topic.
+          </p>
+        </div>
+      </section>
+
+      <!-- ================================================
+           TOPIC 4 — The Analytics Workflow
+           ================================================ -->
+      <section class="topic-section" id="analytics-workflow">
+        <div class="topic-header">
+          <div class="topic-num">4</div>
+          <h2 class="topic-title">The Analytics Workflow: Explore → Transform → Model → Visualize → Publish</h2>
+        </div>
+        <div class="topic-rule"></div>
+
+        <div class="block">
+          <div class="block-label">Definition</div>
+          <p>
+            The <strong>five-stage analytics workflow</strong> is the repeatable process
+            that structures every module in this handbook. It is also the sequence you
+            will follow for every new Power BI project in your career:
+          </p>
+        </div>
+
+        <table class="data-table">
+          <thead>
+            <tr><th>Stage</th><th>Question you're answering</th><th>Tool</th><th>Covered in</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>1. Explore</strong></td>
+              <td>What data do I have? What's wrong with it? What am I trying to answer?</td>
+              <td>Desktop — Navigator, Data preview</td>
+              <td>Modules 1–2</td>
+            </tr>
+            <tr>
+              <td><strong>2. Transform</strong></td>
+              <td>How do I clean and reshape the data into analysis-ready form?</td>
+              <td>Desktop — Power Query Editor</td>
+              <td>Module 3</td>
+            </tr>
+            <tr>
+              <td><strong>3. Model</strong></td>
+              <td>How do these tables relate to each other? What calculations do I need?</td>
+              <td>Desktop — Model view, DAX</td>
+              <td>Modules 4–6</td>
+            </tr>
+            <tr>
+              <td><strong>4. Visualize</strong></td>
+              <td>How do I present the answers clearly for my audience?</td>
+              <td>Desktop — Report canvas</td>
+              <td>Modules 7–8</td>
+            </tr>
+            <tr>
+              <td><strong>5. Publish</strong></td>
+              <td>How do I share this, keep it fresh, and protect sensitive data?</td>
+              <td>Service + Gateway + Desktop (RLS)</td>
+              <td>Module 9</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="block">
+          <div class="block-label">Why This Structure Matters</div>
+          <p>
+            Most Power BI problems are caused by <em>skipping stages</em>. Jumping to
+            Visualize before the model is solid means re-building report pages every
+            time a relationship changes. Ignoring data quality in Explore means DAX
+            measures that work in some filters and silently return wrong numbers in
+            others.
+          </p>
+          <p>
+            This workflow is a <strong>forcing function</strong>: each stage has clear
+            inputs and clear outputs. You don't start Modelling until Transformation is
+            complete and verified. You don't start Visualising until the model answers
+            your business questions correctly in the Data view.
+          </p>
+        </div>
+
+        <div class="callout callout-analogy">
+          <div class="callout-head">🔧 Analogy — Building a House</div>
+          <p>
+            <strong>Explore</strong> = survey the land and draw up requirements with the
+            client. <strong>Transform</strong> = pour the foundation and frame the
+            structure. <strong>Model</strong> = run the electrical and plumbing.
+            <strong>Visualize</strong> = interior design, fixtures, finishes.
+            <strong>Publish</strong> = open the doors to the occupants.
+          </p>
+          <p>
+            You cannot hang wallpaper if the walls aren't built yet. And you don't want
+            to discover the plumbing is in the wrong place after the tiles are laid.
+          </p>
+        </div>
+
+        <div class="callout callout-example">
+          <div class="callout-head">📊 RR EngineerWorks Workflow Map</div>
+          <p>Here is exactly how this handbook maps to the workflow for the RR EngineerWorks project:</p>
+          <ul>
+            <li><strong>Explore:</strong> Modules 1–2 — understand the business context and connect to all 8 source tables.</li>
+            <li><strong>Transform:</strong> Module 3 — clean Fact_Orders, unpivot Targets_Wide, fix HR_Directory join key.</li>
+            <li><strong>Model:</strong> Modules 4–6 — build the star schema, write DAX measures, add time intelligence.</li>
+            <li><strong>Visualize:</strong> Modules 7–8 — Sales, Production, and Management report pages with AI analytics.</li>
+            <li><strong>Publish:</strong> Module 9 — workspace, scheduled refresh, RLS by region.</li>
+            <li><strong>Capstone:</strong> Module 10 — run the full workflow end-to-end on a scenario of your choice.</li>
+          </ul>
+        </div>
+
+        <div class="callout callout-key">
+          <div class="callout-head">⭐ Key Takeaway</div>
+          <p>
+            Speed in Power BI comes from doing each stage properly the first time, not
+            from rushing to get something on the canvas. A well-modelled dataset takes
+            twenty minutes to visualise. A poorly-modelled one takes days to patch.
+          </p>
+        </div>
+      </section>
+
+      <!-- ================================================
+           TOPIC 5 — Hands-On Lab: Exploring Power BI Desktop
+           ================================================ -->
+      <section class="topic-section" id="lab-explore">
+        <div class="topic-header">
+          <div class="topic-num">5</div>
+          <h2 class="topic-title">Hands-On: Exploring Power BI Desktop</h2>
+        </div>
+        <div class="topic-rule"></div>
+
+        <p>
+          This orientation lab gets you comfortable with the Power BI Desktop interface
+          before you load any real data. You will tour all three views, understand each
+          pane's purpose, and do a first-look preview of the RR EngineerWorks dataset
+          without transforming anything yet. Transformation starts in Module 3.
+        </p>
+
+        <!-- Dataset download -->
+        <div class="callout callout-note" style="margin-bottom: 8px;">
+          <div class="callout-head">📥 Get the Practice Dataset</div>
+          <p>
+            Download the RR EngineerWorks workbook now — you'll need it from Module 2
+            onwards. Keep it in an easy-to-find folder (e.g.
+            <code>C:\PBI4Engineers\Data\</code>).
+          </p>
+          <br>
+          <a href="assets/RR_EngineerWorks_Dataset.xlsx" class="btn-download" download>
+            ⬇&nbsp; Download RR_EngineerWorks_Dataset.xlsx
+          </a>
+        </div>
+
+        <!-- Lab steps -->
+        <div class="lab-box">
+          <div class="lab-head">
+            <span class="lab-head-icon">🖥️</span>
+            <div class="lab-head-text">
+              <div class="lab-head-title">Lab 1A — Power BI Desktop Orientation</div>
+              <div class="lab-head-sub">Estimated time: 20 minutes &nbsp;|&nbsp; No data source needed yet</div>
+            </div>
+          </div>
+          <div class="lab-body">
+
+            <div class="step">
+              <div class="step-n">1</div>
+              <div class="step-body">
+                <div class="step-title">Install Power BI Desktop (if not already installed)</div>
+                <p>
+                  Open the Microsoft Store on your Windows machine, search
+                  <strong>"Power BI Desktop"</strong>, and click <strong>Install</strong>.
+                  Alternatively, go to <em>powerbi.microsoft.com → Downloads → Power BI Desktop</em>
+                  and run the installer. The app is free — no licence required for this course.
+                </p>
+                <p>
+                  <strong>Version check:</strong> Open Desktop → click <strong>Help</strong> in the
+                  ribbon → <strong>About</strong>. You should see a build from 2024 or later.
+                  If yours is older than 12 months, update it — some features in later modules
+                  (AI visuals, visual calculations) require a recent build.
+                </p>
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="step-n">2</div>
+              <div class="step-body">
+                <div class="step-title">Launch Power BI Desktop and dismiss the splash screen</div>
+                <p>
+                  On first launch you'll see a splash/welcome screen offering to connect
+                  to a sample dataset or sign in. Click the <strong>✕</strong> in the
+                  top-right corner of the splash screen to close it. You are now looking
+                  at an empty Power BI Desktop canvas.
+                </p>
+                <p>
+                  <strong>Sign in (optional for this module):</strong> You do not need to
+                  sign in until Module 9 when you publish to the Service. You can skip the
+                  sign-in prompt for now.
+                </p>
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="step-n">3</div>
+              <div class="step-body">
+                <div class="step-title">Tour the three views — Report, Data, and Model</div>
+                <p>
+                  Look at the <strong>left-side icons</strong> — three stacked icons that
+                  switch between Desktop's three main views:
+                </p>
+                <ul>
+                  <li>
+                    <strong>Report view (page icon)</strong> — The default view. This is
+                    the canvas where you drag and drop visuals, configure filters, and
+                    design report pages. Think of it as the "front end."
+                  </li>
+                  <li>
+                    <strong>Data view (table icon)</strong> — Shows the actual data rows
+                    in each loaded table. Use this to verify that transformations worked
+                    correctly and that calculated columns contain expected values. It is
+                    empty until you load data.
+                  </li>
+                  <li>
+                    <strong>Model view (diagram icon)</strong> — A diagram of all loaded
+                    tables and the relationships between them. This is where you build
+                    your star schema. Also empty until data is loaded.
+                  </li>
+                </ul>
+                <p>Click each icon now to switch between them and get a feel for the layout.</p>
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="step-n">4</div>
+              <div class="step-body">
+                <div class="step-title">Identify the key panes in Report view</div>
+                <p>
+                  Switch back to <strong>Report view</strong>. On the right side you will
+                  see two panels:
+                </p>
+                <ul>
+                  <li>
+                    <strong>Visualizations pane</strong> — All available chart types.
+                    Click a visual type to add it to the canvas. Below the chart icons
+                    you will see <em>Build visual</em>, <em>Format visual</em>, and
+                    <em>Analytics</em> tabs — these appear once a visual is selected.
+                  </li>
+                  <li>
+                    <strong>Data (Fields) pane</strong> — Lists every table and column
+                    in your model. After you load data, you drag fields from here into
+                    the Visualizations pane to populate charts.
+                  </li>
+                </ul>
+                <p>
+                  On the left side you will see <strong>Filters pane</strong> —
+                  page-level, report-level, and visual-level filters go here.
+                </p>
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="step-n">5</div>
+              <div class="step-body">
+                <div class="step-title">Explore the ribbon — Home, Insert, Modelling, View, Optimize, Help</div>
+                <p>
+                  The ribbon at the top mirrors the workflow stages:
+                </p>
+                <ul>
+                  <li><strong>Home</strong> — Where you start: <em>Get Data</em>, <em>Transform Data</em> (opens Power Query), <em>Publish</em>.</li>
+                  <li><strong>Insert</strong> — Add text boxes, images, buttons, shapes to report pages.</li>
+                  <li><strong>Modelling</strong> — Create measures, calculated columns, calculated tables; manage relationships; set up RLS roles.</li>
+                  <li><strong>View</strong> — Toggle panes, switch themes, enable the Performance Analyzer.</li>
+                  <li><strong>Optimize</strong> — Performance mode settings (introduced in 2024 builds).</li>
+                  <li><strong>Help</strong> — Version info, links to documentation, guided learning.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="step-n">6</div>
+              <div class="step-body">
+                <div class="step-title">Do a first-look preview of the RR EngineerWorks dataset (Navigator only)</div>
+                <p>
+                  Now load a preview of the dataset without applying any transforms.
+                  Click <strong>Home → Get Data → Excel Workbook</strong>. Navigate to
+                  the downloaded <code>RR_EngineerWorks_Dataset.xlsx</code> file and click
+                  <strong>Open</strong>.
+                </p>
+                <p>
+                  The <strong>Navigator</strong> dialog opens. You will see a folder
+                  tree of all sheets in the workbook. Click each sheet name to preview
+                  its data in the right pane. <strong>Do not check any boxes yet</strong>
+                  — we are looking only.
+                </p>
+                <p>As you browse, look for the following deliberate issues (you'll fix these in Module 3):</p>
+                <ul>
+                  <li><strong>Fact_Orders</strong> — mixed date formats in the <code>OrderDate</code> column (some DD/MM/YYYY, some YYYY-MM-DD). Inconsistent product code casing (<code>PRD-001</code> vs <code>prd-001</code>). A few obvious duplicate rows.</li>
+                  <li><strong>Targets_Wide</strong> — months as separate columns (<code>Jan_2024</code>, <code>Feb_2024</code>, …) rather than rows. This wide format cannot join to a date table.</li>
+                  <li><strong>HR_Directory</strong> — uses <code>ManagerName</code> (free text) instead of an employee ID. There is no numeric key that links to any other table — this table is intentionally disconnected.</li>
+                  <li><strong>Dim_Products</strong> — a combined <code>Category_SubCategory</code> column that needs splitting.</li>
+                </ul>
+                <p>
+                  Once you have browsed all 8 sheets, click <strong>Cancel</strong>
+                  (not Load). We will return to this dialog properly in Module 2.
+                </p>
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="step-n">7</div>
+              <div class="step-body">
+                <div class="step-title">Save your file as a starting point</div>
+                <p>
+                  Click <strong>File → Save</strong>. Name the file
+                  <code>RR_EngineerWorks_v1.pbix</code> and save it to
+                  <code>C:\PBI4Engineers\</code> (or wherever you prefer). This
+                  empty file will be your starting point for Module 2.
+                </p>
+                <p>
+                  <strong>Note:</strong> A <code>.pbix</code> file contains the entire
+                  Power BI project — data model, visuals, queries, and report pages —
+                  in a single portable file. Think of it as your "project file."
+                </p>
+              </div>
+            </div>
+
+          </div><!-- /lab-body -->
+        </div><!-- /lab-box -->
+
+        <!-- Verify checklist -->
+        <div class="verify-box">
+          <div class="verify-title">✓ Verify Before Moving On</div>
+          <ul class="verify-list">
+            <li>I can switch between Report, Data, and Model views without hesitation.</li>
+            <li>I can locate Get Data, Transform Data, and Publish in the Home ribbon.</li>
+            <li>I know the difference between the Visualizations pane and the Data/Fields pane.</li>
+            <li>I can see all 8 sheets in the RR EngineerWorks Navigator and identify at least two deliberate data quality issues.</li>
+            <li>My <code>RR_EngineerWorks_v1.pbix</code> file is saved locally and ready for Module 2.</li>
+          </ul>
+        </div>
+
+        <!-- Lab 1B — What You'll Build (Preview) -->
+        <div class="lab-box">
+          <div class="lab-head">
+            <span class="lab-head-icon">🎯</span>
+            <div class="lab-head-text">
+              <div class="lab-head-title">Preview — What You Will Build in This Course</div>
+              <div class="lab-head-sub">No actions needed — this is a visual roadmap of your destination</div>
+            </div>
+          </div>
+          <div class="lab-body">
+            <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 16px;">
+              By the end of Module 9, the RR EngineerWorks project will have:
+            </p>
+            <table class="data-table">
+              <thead><tr><th>Deliverable</th><th>Built in</th><th>Purpose</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td>8 cleaned, shaped tables in Power Query</td>
+                  <td>Module 3</td>
+                  <td>Analysis-ready data with no nulls, consistent formats, and correct types</td>
+                </tr>
+                <tr>
+                  <td>Star schema with 5 relationships</td>
+                  <td>Module 4</td>
+                  <td>Fact_Orders linked to all dimension tables via clean foreign keys</td>
+                </tr>
+                <tr>
+                  <td>15+ DAX measures</td>
+                  <td>Modules 5–6</td>
+                  <td>Total Sales, Margin %, Sales vs Target, YTD Revenue, YoY Growth, and more</td>
+                </tr>
+                <tr>
+                  <td>3-page interactive report</td>
+                  <td>Modules 7–8</td>
+                  <td>Sales Performance, Production Overview, Management Summary with drill-through</td>
+                </tr>
+                <tr>
+                  <td>Published to Power BI Service</td>
+                  <td>Module 9</td>
+                  <td>Nightly refresh, Row-Level Security by region, shared App for stakeholders</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </section><!-- /lab-explore -->
+
+      <!-- ================================================
+           MARK COMPLETE
+           ================================================ -->
+      <div class="complete-zone" id="complete-zone">
+        <div class="complete-zone-title">Finished Module 1? Mark it complete to track your progress.</div>
+        <button class="btn-complete" id="btn-complete">
+          Mark Module 1 Complete
+        </button>
+        <p class="complete-hint">Your progress is saved in this browser session.</p>
+        <p class="complete-done-msg">✓ Module 1 complete — great start!</p>
+      </div>
+
+      <!-- Page navigation -->
+      <nav class="page-nav">
+        <span class="page-nav-spacer"></span>
+        <a href="module2.html" class="page-nav-btn primary">
+          Module 2: Connecting to Data Sources →
+        </a>
+      </nav>
+
+    </main>
+
+    <footer>
+      <span>
+        <strong>Power BI Data Analysis for Engineers</strong> &nbsp;—&nbsp;
+        <span class="footer-brand">RR Skillverse</span>
+      </span>
+      <span>by Raushan Ranjan, MCT &nbsp;|&nbsp; © 2026</span>
+    </footer>
+  </div>
+
+  <script>
+    window.CURRENT_MODULE_ID = 1;
+  </script>
+  <script src="js/handbook.js"></script>
+</body>
+</html>

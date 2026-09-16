@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 4: Data Modelling &amp; Semantic Design | Power BI Data Analysis for Engineers</title>
+  <link rel="stylesheet" href="css/handbook.css">
+</head>
+<body>
+
+  <canvas id="confetti-canvas"></canvas>
+
+  <div class="completion-overlay" id="completion-overlay">
+    <div class="completion-card">
+      <div class="completion-emoji">🎉</div>
+      <div class="completion-title">Module 4 Complete!</div>
+      <div class="completion-message">Your star schema is live — seven relationships, a dedicated measures table, and clean hierarchies. This is the foundation every DAX measure you write in Modules 5 and 6 will build on.</div>
+      <button class="btn-overlay-close" id="overlay-close">Continue →</button>
+    </div>
+  </div>
+
+  <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+  <header class="topbar">
+    <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <a href="index.html" class="topbar-brand">
+      <div class="brand-icon">PB</div>
+      <span>Power BI for Engineers</span>
+    </a>
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="search" class="search-input" id="search-input"
+             placeholder="Search modules and topics…" autocomplete="off" spellcheck="false">
+      <div class="search-results" id="search-results"></div>
+    </div>
+    <div class="topbar-right">
+      <span class="topbar-byline">by Raushan Ranjan, MCT</span>
+    </div>
+  </header>
+
+  <nav class="sidebar" id="sidebar"></nav>
+
+  <div class="main-layout">
+    <main class="page-content">
+
+      <div class="page-header">
+        <span class="module-badge">Module 4</span>
+        <h1 class="page-title">Data Modelling &amp; Semantic Design</h1>
+        <p class="page-subtitle">
+          Clean data is necessary but not sufficient. A well-designed semantic model is what
+          turns seven separate tables into a coherent analytical system — one where every
+          measure filters correctly, every visual drills intuitively, and every report
+          developer shares the same definitions. This module builds the star schema that
+          every DAX expression in Modules 5 and 6 will depend on.
+        </p>
+        <div class="module-meta">
+          <span class="meta-pill">⏱ <strong>~2.5 hours</strong></span>
+          <span class="meta-pill">📋 <strong>7 topics</strong> + 1 lab</span>
+          <span class="meta-pill">🎯 <strong>Workflow stage:</strong> Model</span>
+          <span class="meta-pill">🔗 <strong>Builds 7 relationships</strong></span>
+        </div>
+      </div>
+
+      <!-- ================================================
+           TOPIC 1 — Semantic Model
+           ================================================ -->
+      <section class="topic-section" id="semantic-model">
+        <div class="topic-header">
+          <div class="topic-num">1</div>
+          <h2 class="topic-title">What Is a Semantic Model?</h2>
+        </div>
+        <div class="topic-rule"></div>
+
+        <div class="block">
+          <div class="block-label">Definition</div>
+          <p>
+            A <strong>semantic model</strong> (also called a data model or dataset in Power BI
+            Service) is a layer that sits between your raw tables and your report visuals.
+            It defines <em>how tables relate to each other</em>, <em>which calculations
+            are official</em>, and <em>what the data means in business terms</em> —
+            not just what it is in technical terms.
+          </p>
+          <p>
+            Without a semantic model, every report developer writes their own SUM or AVERAGE
+            and interprets "sales" differently. With one, everyone queries the same
+            <code>Total Sales</code> measure and gets the same number from the same definition.
+          </p>
+        </div>
+
+        <div class="block">
+          <div class="block-label">What a Semantic Model Contains</div>
+          <table class="data-table">
+            <thead><tr><th>Component</th><th>What it does</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Tables</strong></td><td>The cleaned, typed data from Power Query (our seven tables after Module 3)</td></tr>
+              <tr><td><strong>Relationships</strong></td><td>Links between tables — defines how filters flow from one table to another</td></tr>
+              <tr><td><strong>Measures</strong></td><td>Named DAX calculations (Total Sales, Variance %, etc.) shared across all reports</td></tr>
+              <tr><td><strong>Hierarchies</strong></td><td>Drill paths for visuals (Year → Quarter → Month → Date; Category → SubCategory → Product)</td></tr>
+              <tr><td><strong>Visibility rules</strong></td><td>Which columns are hidden from report view (FK columns, raw keys), which are exposed</td></tr>
+              <tr><td><strong>Descriptions</strong></td><td>Human-readable labels on columns and measures that appear in tooltips</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Why Engineers Should Care</div>
+          <p>
+            Engineers are accustomed to defining system interfaces carefully — the contract
+            between a sensor and a data pipeline, or between a module and its API, is explicit
+            and versioned. A semantic model serves the same role for analytics: it is the
+            published contract between your data and the people who build reports on it.
+            Changes to the model are deliberate, documented, and reviewed — not ad hoc.
+          </p>
+        </div>
+      </section>
+
+      <!-- ================================================
+           TOPIC 2 — Fact & Dimension Tables
+           ================================================ -->
+      <section class="topic-section" id="fact-dim">
+        <div class="topic-header">
+          <div class="topic-num">2</div>
+          <h2 class="topic-title">Fact &amp; Dimension Tables</h2>
+        </div>
+        <div class="topic-rule"></div>
+
+        <div class="block">
+          <div class="block-label">Fact Tables</div>
+          <p>
+            A <strong>fact table</strong> records <em>events</em> — transactions, measurements,
+            or observations. Each row is one event. Fact tables are typically wide (many columns),
+            tall (many rows), and contain numeric measures you want to aggregate plus foreign keys
+            that link to dimension tables.
+          </p>
+          <p>
+            In our model we have three fact tables:
+          </p>
+          <table class="data-table">
+            <thead><tr><th>Table</th><th>Rows</th><th>What each row represents</th><th>Key numeric measures</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>Fact_Orders</strong></td>
+                <td>585</td>
+                <td>One sales order line</td>
+                <td>Quantity, UnitPrice, DiscountPct, TotalAmount</td>
+              </tr>
+              <tr>
+                <td><strong>Fact_Production</strong></td>
+                <td>288</td>
+                <td>One month's production run at one plant for one product</td>
+                <td>PlannedUnits, ActualUnits, DefectRate_Pct, ShiftCount</td>
+              </tr>
+              <tr>
+                <td><strong>Fact_Targets</strong></td>
+                <td>120</td>
+                <td>One region's sales target for one month</td>
+                <td>Target</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Dimension Tables</div>
+          <p>
+            A <strong>dimension table</strong> describes <em>who, what, where, and when</em>.
+            Each row is a unique entity (a product, a customer, a date). Dimensions are
+            narrow (fewer columns) and short (fewer rows). They hold the descriptive
+            attributes that give your aggregations context — "sales by region", "defects by
+            product category", "orders per customer segment".
+          </p>
+          <table class="data-table">
+            <thead><tr><th>Table</th><th>Rows</th><th>What each row represents</th><th>Key descriptors</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>Dim_Products</strong></td>
+                <td>30</td>
+                <td>One unique product</td>
+                <td>ProductName, Category, SubCategory, UnitCost, ListPrice, Status</td>
+              </tr>
+              <tr>
+                <td><strong>Dim_Customers</strong></td>
+                <td>80</td>
+                <td>One unique customer account</td>
+                <td>CompanyName, ContactName, City, Country, Segment</td>
+              </tr>
+              <tr>
+                <td><strong>Dim_Regions</strong></td>
+                <td>10</td>
+                <td>One geographic region</td>
+                <td>RegionName, Territory, Country, RegionalManager</td>
+              </tr>
+              <tr>
+                <td><strong>Dim_Date</strong></td>
+                <td>5 (scaffold)</td>
+                <td>One calendar date</td>
+                <td>Year, Quarter, Month, MonthName, Day, IsWeekend, FiscalYear</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="block-note">
+            <strong>Note:</strong> Dim_Date currently holds only 5 scaffold rows. You will
+            replace it with a full 366-row calendar (2024 is a leap year) using DAX's
+            <code>CALENDARAUTO</code> function in Module 6. The relationship you build
+            in this module will carry over automatically.
+          </p>
+        </div>
+
+        <div class="block">
+          <div class="block-label">One Table That's Neither</div>
+          <p>
+            <strong>HR_Directory</strong> was loaded in Module 2 and its load was disabled
+            in Module 3. It has no matching key in any other table (EmployeeID appears
+            only in HR_Directory) and is therefore disconnected. It does not participate
+            in the model and does not appear in Data view or Field list.
+          </p>
+        </div>
+      </section>
+
+      <!-- ================================================
+           TOPIC 3 — Star Schema
+           ================================================ -->
+      <section class="topic-section" id="star-schema">
+        <div class="topic-header">
+          <div class="topic-num">3</div>
+          <h2 class="topic-title">Star vs Snowflake Schema</h2>
+        </div>
+        <div class="topic-rule"></div>
+
+        <div class="block">
+          <div class="block-label">The Star Schema</div>
+          <p>
+            In a <strong>star schema</strong>, each fact table sits at the centre and
+            connects directly to denormalized dimension tables. The result looks like a
+            star — one hub, many spokes. All filtering happens through a single join hop
+            between a dimension and a fact.
+          </p>
+          <p>
+            Star schemas are the standard for Power BI and other columnar analytical
+            engines because they are <em>fast</em> (fewer joins), <em>simple to query</em>
+            (one hop from any dimension to any fact), and <em>unambiguous</em> (no
+            multi-path filter propagation).
+          </p>
+        </div>
+
+        <div class="block">
+          <div class="block-label">The Snowflake Schema (and When to Avoid It)</div>
+          <p>
+            In a <strong>snowflake schema</strong>, dimension tables are normalized — a
+            product dimension might reference a separate category dimension, which references
+            a separate department dimension. This saves storage in row-based OLTP systems
+            but hurts performance in columnar analytical engines.
+          </p>
+          <p>
+            <strong>In Power BI: flatten snowflake dimensions before loading.</strong>
+            If your source has a separate Category table, merge it into Dim_Products in
+            Power Query so that Dim_Products contains all product attributes in one table.
+            This is exactly why Module 3 split <code>Category_SubCategory</code> into two
+            separate columns within Dim_Products rather than creating a separate Category
+            table.
+          </p>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Our Model: Two Fact Tables Share Dimensions</div>
+          <p>
+            The RR EngineerWorks model has three fact tables that share the same dimension
+            tables. This pattern — sometimes called a <strong>conformed dimension</strong>
+            — means that "Total Sales by Region" and "Production Units by Region" both
+            filter through the same Dim_Regions table. Cross-filtering works consistently,
+            and you can create visuals that show both fact tables side-by-side on the
+            same region dimension.
+          </p>
+          <pre><code>Dim_Products ←──── Fact_Orders ────→ Dim_Customers
+                       │
+                 Dim_Regions ←────┘ (also via RegionID)
+                       │
+                 Dim_Date   ←────┘ (via OrderDate)
+
+             Fact_Production ──→ Dim_Products (shared)
+             Fact_Targets    ──→ Dim_Regions  (via RegionName — text join)
+             Fact_Targets    ──→ Dim_Date     (via MonthStart)</code></pre>
+        </div>
+      </section>
+
+      <!-- ================================================
+           TOPIC 4 — Relationships & Cardinality
+           ================================================ -->
+      <section class="topic-section" id="relationships">
+        <div class="topic-header">
+          <div class="topic-num">4</div>
+          <h2 class="topic-title">Relationships &amp; Cardinality</h2>
+        </div>
+        <div class="topic-rule"></div>
+
+        <div class="block">
+          <div class="block-label">Cardinality</div>
+          <p>
+            <strong>Cardinality</strong> describes how many rows on one side of a relationship
+            match rows on the other side.
+          </p>
+          <table class="data-table">
+            <thead><tr><th>Cardinality</th><th>Meaning</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>Many-to-One (*:1)</strong></td>
+                <td>Many rows in the fact table can reference one row in the dimension</td>
+                <td>Many orders → one customer</td>
+              </tr>
+              <tr>
+                <td><strong>One-to-One (1:1)</strong></td>
+                <td>Each row on both sides is unique</td>
+                <td>Rare in analytical models; often indicates tables should be merged</td>
+              </tr>
+              <tr>
+                <td><strong>Many-to-Many (*:*)</strong></td>
+                <td>Duplicate keys on both sides</td>
+                <td>Usually a data quality problem — fix the data first</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>
+            All seven relationships in our model will be <strong>Many-to-One</strong> —
+            the fact table is on the many side, the dimension is on the one side. Power BI
+            detects cardinality automatically when you create a relationship; if it shows
+            Many-to-Many, that is a signal that the join column has duplicates in the
+            dimension table (a data quality issue to investigate).
+          </p>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Cross-Filter Direction</div>
+          <p>
+            Cross-filter direction controls <em>how filters flow</em> across a relationship
+            when a visual or measure applies a filter.
+          </p>
+          <table class="data-table">
+            <thead><tr><th>Direction</th><th>Behaviour</th><th>Recommendation</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>Single</strong></td>
+                <td>Filters flow from the dimension (one side) to the fact (many side) only</td>
+                <td>Default — use this for all relationships</td>
+              </tr>
+              <tr>
+                <td><strong>Both (Bidirectional)</strong></td>
+                <td>Filters flow in both directions — a fact filter can slice a dimension</td>
+                <td>Avoid unless required. Causes ambiguous filter paths and performance issues. Implement with CROSSFILTER() in DAX instead.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Active vs Inactive Relationships</div>
+          <p>
+            Power BI allows only <strong>one active relationship</strong> between any two
+            tables. Active relationships are shown as solid lines in Model view; inactive
+            relationships are dashed. Only active relationships participate automatically
+            in filtering.
+          </p>
+          <p>
+            We have two relationships from fact tables to Dim_Date (from Fact_Orders and
+            from Fact_Targets) and two relationships to Dim_Products (from Fact_Orders and
+            from Fact_Production). These are between <em>different fact tables</em>, so
+            there is no conflict — each pair of tables has at most one relationship.
+          </p>
+        </div>
+
+        <div class="block">
+          <div class="block-label">The Text-Join Relationship (Fact_Targets → Dim_Regions)</div>
+          <p>
+            Most relationships in our model join on integer or code columns (RegionID,
+            ProductCode, CustomerID). The Fact_Targets to Dim_Regions relationship is
+            different — it joins on <strong>RegionName (text)</strong>. This is why Module 3
+            Lab 3F replaced <code>"Europe - International"</code> with <code>"Europe"</code>
+            in Fact_Targets — without that fix, the join column wouldn't match Dim_Regions
+            and the relationship would leave one region's targets unmatched.
+          </p>
+          <p>
+            Text-join relationships are slightly slower than integer joins in large models,
+            but for 120-row Fact_Targets it makes no practical difference. The alternative
+            would be to add a RegionID column to Fact_Targets, but that would require
+            adding a lookup to the source data — more complex than a simple replace.
+          </p>
+        </div>
+      </section>
+
+      <!-- ================================================
+           TOPIC 5 — Date Table
+           ================================================ -->
+      <section class="topic-section" id="date-table">
+        <div class="topic-header">
+          <div class="topic-num">5</div>
+          <h2 class="topic-title">Creating a Date Table</h2>
+        </div>
+        <div class="topic-rule"></div>
+
+        <div class="block">
+          <div class="block-label">Why a Date Table is Mandatory</div>
+          <p>
+            DAX's time intelligence functions (<code>TOTALYTD</code>, <code>DATESINPERIOD</code>,
+            <code>SAMEPERIODLASTYEAR</code>, etc.) only work if your model has a proper
+            <strong>Date table</strong> — a table where:
+          </p>
+          <ul>
+            <li>Every date in the range has exactly one row (no gaps)</li>
+            <li>The date range covers all dates in any fact table's date column</li>
+            <li>The table is explicitly <em>marked as a Date table</em> in Power BI</li>
+          </ul>
+          <p>
+            Without a marked Date table, Power BI cannot correctly calculate year-to-date
+            totals, prior-period comparisons, or rolling windows — even if you have a
+            date column in your fact table.
+          </p>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Our Approach: CALENDARAUTO in Module 6</div>
+          <p>
+            The dataset includes a <code>Dim_Date</code> sheet with 5 scaffold rows showing
+            the expected schema. In Module 6, you will replace those rows with a full
+            calendar using DAX's <code>CALENDARAUTO()</code> function — which automatically
+            spans all dates referenced across all loaded fact tables.
+          </p>
+          <p>
+            For RR EngineerWorks, OrderDate ranges from 1 Jan 2024 to 31 Dec 2024, and
+            MonthStart in Fact_Targets covers the same year. <code>CALENDARAUTO</code>
+            will generate all 366 dates (2024 is a leap year). The relationship you create
+            in this module will work immediately with the scaffold and will carry over
+            unchanged when you replace the table in Module 6.
+          </p>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Dim_Date Columns (Scaffold Schema)</div>
+          <table class="data-table">
+            <thead><tr><th>Column</th><th>Type</th><th>Example</th><th>Purpose</th></tr></thead>
+            <tbody>
+              <tr><td>DateKey</td><td>Whole Number</td><td>20240101</td><td>Integer surrogate key (YYYYMMDD)</td></tr>
+              <tr><td>Date</td><td>Date</td><td>01/01/2024</td><td>Join column — linked to fact table date columns</td></tr>
+              <tr><td>Year</td><td>Whole Number</td><td>2024</td><td>Annual aggregation</td></tr>
+              <tr><td>Quarter</td><td>Whole Number</td><td>1</td><td>Quarterly aggregation (1–4)</td></tr>
+              <tr><td>QuarterName</td><td>Text</td><td>Q1</td><td>Display label</td></tr>
+              <tr><td>Month</td><td>Whole Number</td><td>1</td><td>Monthly sort key</td></tr>
+              <tr><td>MonthName</td><td>Text</td><td>January</td><td>Display label</td></tr>
+              <tr><td>Day</td><td>Whole Number</td><td>1</td><td>Day of month</td></tr>
+              <tr><td>DayOfWeek</td><td>Text</td><td>Monday</td><td>Weekday label</td></tr>
+              <tr><td>IsWeekend</td><td>Whole Number</td><td>0</td><td>Weekend flag (0=weekday, 1=weekend)</td></tr>
+              <tr><td>FiscalYear</td><td>Text</td><td>FY2024</td><td>Fiscal year label</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ================================================
+           TOPIC 6 — Model Optimization
+           ================================================ -->
+      <section class="topic-section" id="model-opt">
+        <div class="topic-header">
+          <div class="topic-num">6</div>
+          <h2 class="topic-title">Model Optimization</h2>
+        </div>
+        <div class="topic-rule"></div>
+
+        <div class="block">
+          <div class="block-label">Hide, Don't Delete</div>
+          <p>
+            Foreign key columns (RegionID in Fact_Orders, ProductCode in Fact_Orders,
+            etc.) are needed for the relationship to function but should not appear in
+            report visuals — users should filter by Dim_Regions[RegionName], not by
+            Fact_Orders[RegionID]. Right-click a column → <strong>Hide in report view</strong>
+            to remove it from the Fields pane without deleting it from the model.
+          </p>
+          <p>
+            Hidden columns still participate in relationships and can be used in DAX
+            expressions. They just don't clutter the Fields pane for report developers.
+          </p>
+        </div>
+
+        <div class="block">
+          <div class="block-label">The _Measures Table</div>
+          <p>
+            By default, measures are stored in the table where they were created. After a
+            few dozen measures, the Fields pane becomes hard to navigate. The convention
+            is to create a dedicated empty table named <code>_Measures</code> and store
+            all measures there. The underscore prefix sorts it to the top of the Fields pane.
+          </p>
+          <p>
+            The table is created via <strong>Home → Enter Data</strong>: give it the name
+            <code>_Measures</code>, leave the data grid empty (one blank row is fine),
+            and click <strong>Load</strong>. The table appears in the model with no columns
+            exposed — just a container for your measures.
+          </p>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Naming Conventions in the Model</div>
+          <table class="data-table">
+            <thead><tr><th>Object type</th><th>Convention</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td>Dimension tables</td><td>Prefix <code>Dim_</code></td><td>Dim_Products</td></tr>
+              <tr><td>Fact tables</td><td>Prefix <code>Fact_</code></td><td>Fact_Orders</td></tr>
+              <tr><td>Measures table</td><td>Prefix <code>_</code> (sorts to top)</td><td>_Measures</td></tr>
+              <tr><td>Measures</td><td>Title Case, descriptive</td><td>Total Sales, Sales vs Target %</td></tr>
+              <tr><td>Calculated columns</td><td>Title Case noun phrase</td><td>Profit Margin, Full Name</td></tr>
+              <tr><td>Hidden columns</td><td>No change needed — hiding is sufficient</td><td>RegionID (hidden)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ================================================
+           TOPIC 7 — Hierarchies
+           ================================================ -->
+      <section class="topic-section" id="hierarchies">
+        <div class="topic-header">
+          <div class="topic-num">7</div>
+          <h2 class="topic-title">Building Hierarchies</h2>
+        </div>
+        <div class="topic-rule"></div>
+
+        <div class="block">
+          <div class="block-label">What Hierarchies Do</div>
+          <p>
+            A <strong>hierarchy</strong> defines a drill-down path for visuals. When a
+            hierarchy is attached to a visual's axis, the user can click a data point to
+            "drill into" the next level. Without an explicit hierarchy, Power BI requires
+            the user to manually swap out the axis field.
+          </p>
+          <p>
+            Hierarchies live in dimension tables. They do not change the underlying data —
+            they are metadata that Power BI uses to expose the drill path in the visual UX.
+          </p>
+        </div>
+
+        <div class="block">
+          <div class="block-label">Two Hierarchies for Our Model</div>
+          <table class="data-table">
+            <thead><tr><th>Hierarchy</th><th>Table</th><th>Levels (top → bottom)</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>Product Hierarchy</strong></td>
+                <td>Dim_Products</td>
+                <td>Category → SubCategory → ProductName</td>
+              </tr>
+              <tr>
+                <td><strong>Date Hierarchy</strong></td>
+                <td>Dim_Date</td>
+                <td>Year → Quarter → Month → Date</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="block-note">
+            The Date Hierarchy is created on Dim_Date's existing columns (Year, Quarter,
+            Month, Date). Even with only 5 scaffold rows now, the hierarchy structure is
+            valid. When Module 6 replaces Dim_Date with 366 rows, the hierarchy works
+            immediately.
+          </p>
+        </div>
+
+        <div class="block">
+          <div class="block-label">How to Create a Hierarchy</div>
+          <p>
+            In Model view or Data view, right-click the top-level column → <strong>Create
+            hierarchy</strong>. Power BI creates a hierarchy node named
+            <code>Column Name Hierarchy</code>. Rename it. Then drag subsequent columns
+            onto the hierarchy node to add levels — or right-click each column →
+            <strong>Add to hierarchy</strong>.
+          </p>
+        </div>
+      </section>
+
+      <!-- ================================================
+           TOPIC 8 — Lab 4: Build the Semantic Model
+           ================================================ -->
+      <section class="topic-section" id="lab-model">
+        <div class="topic-header">
+          <div class="topic-num">8</div>
+          <h2 class="topic-title">Hands-On: Build the Semantic Model</h2>
+        </div>
+        <div class="topic-rule"></div>
+
+        <p>
+          You will build the complete star schema for RR EngineerWorks: seven relationships,
+          a measures table, two hierarchies, and a set of hidden FK columns. Every instruction
+          in this lab has been verified against the actual dataset columns from Module 3.
+        </p>
+
+        <!-- ---- Lab 4A ---- -->
+        <div class="lab-box" id="lab-4a">
+          <div class="lab-title">Lab 4A — Build the Star Schema (7 Relationships)</div>
+
+          <div class="step">
+            <div class="step-n">1</div>
+            <div class="step-body">
+              <div class="step-title">Open your Module 3 file and navigate to Model view</div>
+              <p>
+                Open <code>RR_EngineerWorks_v3.pbix</code>. On the left sidebar of Power BI
+                Desktop, click the <strong>Model view</strong> icon (the three connected boxes).
+                You should see all seven loaded tables arranged as a cloud of separate boxes:
+                Fact_Orders, Dim_Products, Dim_Customers, Dim_Regions, Dim_Date,
+                Fact_Production, and Fact_Targets. They will not be connected yet.
+              </p>
+              <p class="block-note">
+                HR_Directory does not appear because its load is disabled (Module 3 Lab 3G).
+              </p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-n">2</div>
+            <div class="step-body">
+              <div class="step-title">Relationship 1 — Fact_Orders → Dim_Products</div>
+              <p>
+                Drag <strong>Fact_Orders[ProductCode]</strong> onto
+                <strong>Dim_Products[ProductCode]</strong>. The Manage Relationship dialog
+                opens. Confirm:
+              </p>
+              <ul>
+                <li>Cardinality: <strong>Many to One (*:1)</strong> — Fact_Orders is Many, Dim_Products is One</li>
+                <li>Cross filter direction: <strong>Single</strong></li>
+                <li>Active: <strong>checked</strong></li>
+              </ul>
+              <p>Click <strong>OK</strong>. A solid line now connects the two tables.</p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-n">3</div>
+            <div class="step-body">
+              <div class="step-title">Relationship 2 — Fact_Orders → Dim_Customers</div>
+              <p>
+                Drag <strong>Fact_Orders[CustomerID]</strong> onto
+                <strong>Dim_Customers[CustomerID]</strong>. Confirm cardinality Many-to-One,
+                direction Single, Active checked. Click <strong>OK</strong>.
+              </p>
+              <div class="verify-box">
+                <div class="verify-title">✓ Checkpoint</div>
+                <ul class="verify-list">
+                  <li>Cardinality shows Many-to-One. If it shows Many-to-Many, CustomerID still has non-<code>C{NNN}</code> values — go back to Module 3 Lab 3B Fix 3 and re-run Close &amp; Apply.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-n">4</div>
+            <div class="step-body">
+              <div class="step-title">Relationship 3 — Fact_Orders → Dim_Regions</div>
+              <p>
+                Drag <strong>Fact_Orders[RegionID]</strong> onto
+                <strong>Dim_Regions[RegionID]</strong>. Confirm Many-to-One, Single, Active.
+                Click <strong>OK</strong>.
+              </p>
+              <p class="block-note">
+                <strong>Note:</strong> Fact_Orders has ~5% null RegionIDs (28 rows) — these
+                orders had no region recorded in the source data. They appear in Fact_Orders
+                but will not match any row in Dim_Regions. Power BI handles this correctly
+                by treating them as "blank" in any region-sliced visual — not as an error.
+              </p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-n">5</div>
+            <div class="step-body">
+              <div class="step-title">Relationship 4 — Fact_Orders → Dim_Date</div>
+              <p>
+                Drag <strong>Fact_Orders[OrderDate]</strong> onto
+                <strong>Dim_Date[Date]</strong>. Confirm Many-to-One, Single, Active.
+                Click <strong>OK</strong>.
+              </p>
+              <p class="block-note">
+                <strong>If you see a type mismatch warning:</strong> the Dim_Date scaffold
+                may have loaded the Date column as Text (the Excel cells are formatted
+                <code>DD/MM/YYYY</code>). Open Power Query: select the <strong>Dim_Date</strong>
+                query → click the <em>ABC</em> icon on the <strong>Date</strong> column
+                header → <strong>Date</strong> → in the locale prompt choose
+                <strong>English (United Kingdom)</strong> → OK → Close &amp; Apply. Then
+                create the relationship.
+              </p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-n">6</div>
+            <div class="step-body">
+              <div class="step-title">Relationship 5 — Fact_Production → Dim_Products</div>
+              <p>
+                Drag <strong>Fact_Production[ProductCode]</strong> onto
+                <strong>Dim_Products[ProductCode]</strong>. Confirm Many-to-One, Single,
+                Active. Click <strong>OK</strong>.
+              </p>
+              <p>
+                Dim_Products now connects to two fact tables: Fact_Orders and
+                Fact_Production. This is a conformed dimension — the same product catalogue
+                drives both sales and production analysis.
+              </p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-n">7</div>
+            <div class="step-body">
+              <div class="step-title">Relationship 6 — Fact_Targets → Dim_Regions (text join)</div>
+              <p>
+                Drag <strong>Fact_Targets[RegionName]</strong> onto
+                <strong>Dim_Regions[RegionName]</strong>. Confirm Many-to-One, Single, Active.
+                Click <strong>OK</strong>.
+              </p>
+              <p>
+                This is a text-to-text join, not an ID join. It works because Module 3
+                Lab 3F replaced <code>"Europe - International"</code> with <code>"Europe"</code>
+                in Fact_Targets — so all 10 RegionName values in Fact_Targets now exactly
+                match the 10 RegionName values in Dim_Regions.
+              </p>
+              <div class="verify-box">
+                <div class="verify-title">✓ Checkpoint</div>
+                <ul class="verify-list">
+                  <li>Cardinality shows Many-to-One. If it shows Many-to-Many, Fact_Targets[RegionName] has values not in Dim_Regions[RegionName]. Open Power Query → Fact_Targets → check Column Distribution on RegionName for any value other than the 10 expected region names.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-n">8</div>
+            <div class="step-body">
+              <div class="step-title">Relationship 7 — Fact_Targets → Dim_Date</div>
+              <p>
+                Drag <strong>Fact_Targets[MonthStart]</strong> onto
+                <strong>Dim_Date[Date]</strong>. Confirm Many-to-One, Single, Active.
+                Click <strong>OK</strong>.
+              </p>
+              <p>
+                All 7 relationships are now in place. In Model view, your diagram should
+                show a clear star pattern: three fact tables at the centre, each connected
+                to the shared dimensions.
+              </p>
+            </div>
+          </div>
+
+          <div class="verify-box">
+            <div class="verify-title">✓ Lab 4A Complete — Relationship Verification</div>
+            <ul class="verify-list">
+              <li>Model view shows 7 solid relationship lines (all active)</li>
+              <li>No dashed lines (no inactive relationships)</li>
+              <li>No relationship warnings or ambiguity errors in the status bar</li>
+              <li>All cardinalities show Many-to-One (*:1)</li>
+              <li>All cross-filter directions are Single</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- ---- Lab 4B ---- -->
+        <div class="lab-box" id="lab-4b">
+          <div class="lab-title">Lab 4B — Create the _Measures Table</div>
+
+          <div class="step">
+            <div class="step-n">1</div>
+            <div class="step-body">
+              <div class="step-title">Create the table via Enter Data</div>
+              <p>
+                On the <strong>Home</strong> tab, click <strong>Enter Data</strong>. A dialog
+                opens with a blank grid. At the top, change the table name from
+                <code>Table</code> to <code>_Measures</code>. Leave the grid completely empty
+                (click away from any cell to deselect). Click <strong>Load</strong>.
+              </p>
+              <p>
+                Power BI creates an empty table named <code>_Measures</code>. It appears
+                at the top of the Fields pane (the underscore prefix sorts it before all
+                other names).
+              </p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-n">2</div>
+            <div class="step-body">
+              <div class="step-title">Verify the table is ready for measures</div>
+              <p>
+                In the Fields pane, expand <strong>_Measures</strong>. It should be empty —
+                no columns, no rows. In Module 5, every DAX measure you create will be
+                placed here by selecting <code>_Measures</code> as the Home Table in the
+                New Measure dialog.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ---- Lab 4C ---- -->
+        <div class="lab-box" id="lab-4c">
+          <div class="lab-title">Lab 4C — Build Hierarchies</div>
+
+          <div class="step">
+            <div class="step-n">1</div>
+            <div class="step-body">
+              <div class="step-title">Create the Product Hierarchy in Dim_Products</div>
+              <p>
+                In the Fields pane (or in Model view), expand <strong>Dim_Products</strong>.
+                Right-click <strong>Category</strong> → <strong>Create hierarchy</strong>.
+                A new node appears named <code>Category Hierarchy</code>.
+              </p>
+              <p>
+                Rename it: right-click the new hierarchy node → <strong>Rename</strong>
+                → type <code>Product Hierarchy</code> → Enter.
+              </p>
+              <p>
+                Now add the next two levels:
+              </p>
+              <ul>
+                <li>Right-click <strong>SubCategory</strong> → <strong>Add to hierarchy</strong> → <strong>Product Hierarchy</strong></li>
+                <li>Right-click <strong>ProductName</strong> → <strong>Add to hierarchy</strong> → <strong>Product Hierarchy</strong></li>
+              </ul>
+              <p>
+                The hierarchy now shows three levels: Category → SubCategory → ProductName.
+              </p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-n">2</div>
+            <div class="step-body">
+              <div class="step-title">Create the Date Hierarchy in Dim_Date</div>
+              <p>
+                Expand <strong>Dim_Date</strong> in the Fields pane. Right-click
+                <strong>Year</strong> → <strong>Create hierarchy</strong>. Rename it to
+                <code>Date Hierarchy</code>.
+              </p>
+              <p>
+                Add the next three levels:
+              </p>
+              <ul>
+                <li>Right-click <strong>Quarter</strong> → <strong>Add to hierarchy</strong> → <strong>Date Hierarchy</strong></li>
+                <li>Right-click <strong>MonthName</strong> → <strong>Add to hierarchy</strong> → <strong>Date Hierarchy</strong></li>
+                <li>Right-click <strong>Date</strong> → <strong>Add to hierarchy</strong> → <strong>Date Hierarchy</strong></li>
+              </ul>
+              <p>
+                The hierarchy levels are: Year → Quarter → MonthName → Date.
+              </p>
+              <p class="block-note">
+                <strong>MonthName vs Month:</strong> We use MonthName ("January", "February")
+                in the hierarchy for display labels. The Month column (integer 1–12) is useful
+                for sorting — right-click MonthName → Sort by column → Month. This ensures
+                months sort correctly instead of alphabetically. Set this sort-by on Dim_Date
+                now, before building visuals in Module 7.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ---- Lab 4D ---- -->
+        <div class="lab-box" id="lab-4d">
+          <div class="lab-title">Lab 4D — Optimize the Model (Hide FK Columns)</div>
+
+          <div class="step">
+            <div class="step-n">1</div>
+            <div class="step-body">
+              <div class="step-title">Hide foreign key columns from Fact_Orders</div>
+              <p>
+                In the Fields pane, right-click each of the following columns and choose
+                <strong>Hide in report view</strong>:
+              </p>
+              <ul>
+                <li><strong>Fact_Orders[ProductCode]</strong> — FK to Dim_Products</li>
+                <li><strong>Fact_Orders[CustomerID]</strong> — FK to Dim_Customers</li>
+                <li><strong>Fact_Orders[RegionID]</strong> — FK to Dim_Regions</li>
+                <li><strong>Fact_Orders[OrderDate]</strong> — FK to Dim_Date (users filter through Dim_Date's Date Hierarchy)</li>
+              </ul>
+              <p>
+                Hidden columns show with a grey eye icon in Model view and disappear from
+                the Fields pane in Report view.
+              </p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-n">2</div>
+            <div class="step-body">
+              <div class="step-title">Hide foreign key columns from Fact_Production and Fact_Targets</div>
+              <p>
+                Right-click and hide:
+              </p>
+              <ul>
+                <li><strong>Fact_Production[ProductCode]</strong> — FK to Dim_Products</li>
+                <li><strong>Fact_Production[ProductionMonth]</strong> — date FK to Dim_Date</li>
+                <li><strong>Fact_Targets[RegionName]</strong> — text FK to Dim_Regions</li>
+                <li><strong>Fact_Targets[MonthStart]</strong> — date FK to Dim_Date</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-n">3</div>
+            <div class="step-body">
+              <div class="step-title">Hide technical columns from Dim_Date and Dim_Customers</div>
+              <p>
+                These columns exist in the model but are not useful for report authors:
+              </p>
+              <ul>
+                <li><strong>Dim_Date[DateKey]</strong> — integer surrogate key, not needed in visuals</li>
+                <li><strong>Dim_Customers[RegionID]</strong> — the customer's home region. We analyse orders by region via Fact_Orders[RegionID], not by customer home region. Hiding prevents confusion.</li>
+                <li><strong>Dim_Products[UnitCost]</strong> — not exposed to report authors (internal cost data). Leave ListPrice visible.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-n">4</div>
+            <div class="step-body">
+              <div class="step-title">Set Sort by Column for MonthName</div>
+              <p>
+                In the Fields pane, click <strong>Dim_Date[MonthName]</strong> to select it
+                (it will appear highlighted in the Column Tools ribbon). In the
+                <strong>Column Tools</strong> ribbon that appears at the top, find
+                <strong>Sort by Column</strong> and select <strong>Month</strong> from the
+                dropdown. This ensures that when MonthName is used in a visual, months
+                sort January → December rather than alphabetically.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ---- Final Verify ---- -->
+        <div class="lab-box" id="lab-4e">
+          <div class="lab-title">Lab 4E — Verify and Save</div>
+
+          <div class="step">
+            <div class="step-n">1</div>
+            <div class="step-body">
+              <div class="step-title">Inspect the model in Model view</div>
+              <p>
+                Switch to <strong>Model view</strong>. Arrange the tables so the three fact
+                tables are in the centre and the four dimensions surround them. Confirm:
+              </p>
+              <ul>
+                <li>7 solid relationship lines (no dashed lines)</li>
+                <li>Each relationship shows the <strong>*</strong> on the fact side and <strong>1</strong> on the dimension side</li>
+                <li>The arrow on each relationship points from dimension to fact (single direction)</li>
+                <li><code>_Measures</code> is visible in the field list but has no columns or rows</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-n">2</div>
+            <div class="step-body">
+              <div class="step-title">Quick visual test in Report view</div>
+              <p>
+                Switch to <strong>Report view</strong>. Create a temporary
+                <strong>Table visual</strong>:
+              </p>
+              <ul>
+                <li>Add <strong>Dim_Regions[RegionName]</strong> to the visual</li>
+                <li>Add <strong>Fact_Orders[TotalAmount]</strong> (which auto-aggregates as Sum)</li>
+              </ul>
+              <p>
+                You should see 10 rows (one per region) plus a Total row. If you see blank
+                values for all regions, the Fact_Orders → Dim_Regions relationship is not
+                working — double-check the RegionID join in the Manage Relationships dialog.
+              </p>
+              <p>
+                Delete this test visual when done (<strong>Select</strong> it → <strong>Delete</strong>).
+              </p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-n">3</div>
+            <div class="step-body">
+              <div class="step-title">Save as RR_EngineerWorks_v4.pbix</div>
+              <p>
+                <strong>File → Save As</strong> → name it
+                <code>RR_EngineerWorks_v4.pbix</code>. This file is the starting point for
+                Module 5 (DAX Foundations).
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Full verify checklist -->
+        <div class="verify-box">
+          <div class="verify-title">✓ Module 4 Complete Verification</div>
+          <ul class="verify-list">
+            <li>Model view: 7 active relationships, all Many-to-One, all Single direction</li>
+            <li>Fact_Orders connects to: Dim_Products (ProductCode), Dim_Customers (CustomerID), Dim_Regions (RegionID), Dim_Date (OrderDate)</li>
+            <li>Fact_Production connects to: Dim_Products (ProductCode)</li>
+            <li>Fact_Targets connects to: Dim_Regions (RegionName — text join), Dim_Date (MonthStart)</li>
+            <li><code>_Measures</code> table exists, is empty, and appears at the top of the Fields pane</li>
+            <li>Dim_Products: Product Hierarchy (Category → SubCategory → ProductName) exists</li>
+            <li>Dim_Date: Date Hierarchy (Year → Quarter → MonthName → Date) exists; MonthName sorted by Month</li>
+            <li>FK columns hidden: Fact_Orders[ProductCode, CustomerID, RegionID, OrderDate], Fact_Production[ProductCode, ProductionMonth], Fact_Targets[RegionName, MonthStart], Dim_Date[DateKey], Dim_Customers[RegionID], Dim_Products[UnitCost]</li>
+            <li>Test visual: Dim_Regions[RegionName] × Fact_Orders[TotalAmount] shows 10 region rows with non-blank values</li>
+            <li>File saved as <code>RR_EngineerWorks_v4.pbix</code></li>
+          </ul>
+        </div>
+
+      </section><!-- /lab-model -->
+
+      <!-- ================================================
+           MARK COMPLETE
+           ================================================ -->
+      <div class="complete-zone" id="complete-zone">
+        <div class="complete-zone-title">Star schema built — mark Module 4 complete.</div>
+        <button class="btn-complete" id="btn-complete">Mark Module 4 Complete</button>
+        <p class="complete-hint">Your progress is saved in this browser session.</p>
+        <p class="complete-done-msg">✓ Module 4 complete — model is ready for DAX!</p>
+      </div>
+
+      <nav class="page-nav">
+        <a href="module3.html" class="page-nav-btn">← Module 3: Power Query</a>
+        <a href="module5.html" class="page-nav-btn primary">Module 5: DAX Foundations →</a>
+      </nav>
+
+    </main>
+
+    <footer>
+      <span>
+        <strong>Power BI Data Analysis for Engineers</strong> &nbsp;—&nbsp;
+        <span class="footer-brand">RR Skillverse</span>
+      </span>
+      <span>by Raushan Ranjan, MCT &nbsp;|&nbsp; © 2026</span>
+    </footer>
+  </div>
+
+  <script>
+    window.CURRENT_MODULE_ID = 4;
+  </script>
+  <script src="js/handbook.js"></script>
+</body>
+</html>

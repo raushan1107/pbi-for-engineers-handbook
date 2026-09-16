@@ -1,0 +1,10 @@
+# Internal development documents — not part of the published site
+HANDBOOK_CONTEXT.md
+AUDIT_REPORT.md
+RESOURCES_NOTES.md
+assets/generate_dataset.py
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*.tmp
